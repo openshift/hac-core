@@ -15,8 +15,7 @@ const App = (props) => {
     registry.register({ notifications: notificationsReducer });
     insights.chrome.init();
 
-    // TODO change this to your appname
-    insights.chrome.identifyApp('starter');
+    insights.chrome.identifyApp('hac');
     const unregister = insights.chrome.on('APP_NAVIGATION', (event) =>
       history.push(`/${event.navId}`)
     );
