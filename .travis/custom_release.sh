@@ -4,7 +4,7 @@ set -x
 
 if [[ "${TRAVIS_BRANCH}" = "master" || "${TRAVIS_BRANCH}" = "main" ]]
 then
-    for env in ci qa
+    for env in ci qa stage
     do
         echo "PUSHING ${env}-beta"
         rm -rf ./dist/.git
@@ -13,7 +13,7 @@ then
 
 elif [[ "${TRAVIS_BRANCH}" = "master-stable" || "${TRAVIS_BRANCH}" = "main-stable" ]]
 then
-    for env in ci qa
+    for env in ci qa stage
     do
         echo "PUSHING ${env}-stable"
         rm -rf ./dist/.git
