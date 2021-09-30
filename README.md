@@ -1,16 +1,35 @@
-[![Build Status](https://travis-ci.org/RedHatInsights/frontend-starter-app.svg?branch=master)](https://travis-ci.org/RedHatInsights/frontend-starter-app)
+[![Build Status](https://travis-ci.com/RedHatInsights/hac-core-frontend.svg?branch=master)](https://travis-ci.com/RedHatInsights/hac-core-frontend)
 
-# frontend-starter-app
+# hac-core-frontend
 
 React.js starter app for Red Hat Insights products that includes Patternfly 4 and shared Red Hat cloud service frontend components.
 
 ## Getting started
+
+You can choose from either webpack proxy (simple to use) or more config heavy legacy insights-proxy
+
+### Run with webpack proxy
 
 1. ```npm install```
 
 2. ```npm run start:proxy``` / ```npm run start:beta:proxy```
 
 Update `config/dev.webpack.config.js` according to your application URL. [Read more](https://github.com/RedHatInsights/frontend-components/tree/master/packages/config#useproxy).
+
+### Run with insights proxy
+
+[Insights Proxy](https://github.com/RedHatInsights/insights-proxy) is optional to run the hac-core frontend application.
+```
+SPANDX_CONFIG="$(pwd)/hac-core-frontend/profiles/local-frontend.js" bash insights-proxy/scripts/run.sh
+```
+
+Open new terminal and run the app
+
+1. ```npm install```
+
+2. ```npm run start```
+    - starts webpack bundler and serves the files with webpack dev server
+
 
 ### Testing
 

@@ -1,5 +1,5 @@
 {
-  "name": "frontend-starter-app",
+  "name": "hac-core",
   "version": "1.1.0",
   "private": false,
   "engines": {
@@ -16,6 +16,8 @@
     "lint:sass": "stylelint 'src/**/*.scss' --config .stylelintrc.json",
     "nightly": "npm run deploy",
     "start": "webpack serve --config config/dev.webpack.config.js",
+    "start:proxy": "PROXY=true BETA=true webpack serve --config config/dev.webpack.config.js",
+    "start:proxy:beta": "PROXY=true BETA=true webpack serve --config config/dev.webpack.config.js",
     "start:beta": "BETA=true npm start",
     "start:standalone": "STANDALONE=true npm start",
     "test": "jest",
@@ -27,6 +29,7 @@
     "@redhat-cloud-services/frontend-components": "^3.3.3",
     "@redhat-cloud-services/frontend-components-notifications": "^3.2.2",
     "@redhat-cloud-services/frontend-components-utilities": "^3.2.4",
+    "babel-loader": "^8.2.2",
     "classnames": "^2.3.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
@@ -61,6 +64,6 @@
     "webpack-bundle-analyzer": "4.4.2"
   },
   "insights": {
-    "appname": "starter"
+    "appname": "hac-core"
   }
 }
