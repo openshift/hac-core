@@ -7,7 +7,7 @@ const SamplePage = lazy(() =>
   import(/* webpackChunkName: "SamplePage" */ './Routes/SamplePage/SamplePage')
 );
 
-export const Routes = () => (
+export const Routes: React.FC = () => (
   <Suspense
     fallback={
       <Bullseye>

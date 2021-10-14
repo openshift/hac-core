@@ -9,12 +9,14 @@ import {
   PageHeaderTitle,
 } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
+
 import './sample-page.scss';
+
 const SamplePage = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    insights?.chrome?.appAction?.('sample-page');
+    window.insights?.chrome?.appAction?.('sample-page');
   }, []);
 
   const handleAlert = () => {

@@ -7,16 +7,16 @@ import { getRegistry } from '@redhat-cloud-services/frontend-components-utilitie
 import NotificationsPortal from '@redhat-cloud-services/frontend-components-notifications/NotificationPortal';
 import { notificationsReducer } from '@redhat-cloud-services/frontend-components-notifications/redux';
 
-const App = (props) => {
+const App: React.FC = () => {
   const history = useHistory();
 
   useEffect(() => {
     const registry = getRegistry();
     registry.register({ notifications: notificationsReducer });
-    insights.chrome.init();
+    window.insights?.chrome?.init();
 
-    insights.chrome.identifyApp('hac');
-    const unregister = insights.chrome.on('APP_NAVIGATION', (event) =>
+    window.insights?.chrome.identifyApp('hac');
+    const unregister = window.insights?.chrome.on('APP_NAVIGATION', (event) =>
       history.push(`/${event.navId}`)
     );
     return () => {
@@ -27,7 +27,7 @@ const App = (props) => {
   return (
     <Fragment>
       <NotificationsPortal />
-      <Routes childProps={props} />
+      <Routes  />
     </Fragment>
   );
 };
