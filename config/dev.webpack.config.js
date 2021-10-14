@@ -7,10 +7,15 @@ const insightsProxy = {
   ...(process.env.BETA && { deployment: 'beta/apps' }),
 };
 
+const environment = process.env.ENVIRONMENT || 'stage';
+const betaOrStable = process.env.BETA ? 'beta' : 'stable';
+// for accessing prod-beta change this to 'prod-beta'
+const env = `${environment}-${betaOrStable}`;
+
 const webpackProxy = {
   deployment: process.env.BETA ? 'beta/apps' : 'apps',
   useProxy: true,
-  env: `stage-${process.env.BETA ? 'beta' : 'stable'}`, // for accessing prod-beta change this to 'prod-beta'
+  env,
   appUrl: process.env.BETA ? '/beta/hac' : '/hac',
   standalone: Boolean(process.env.STANDALONE),
   routes: {
