@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import * as React from 'react';
 import { useHistory } from 'react-router-dom';
 import { Routes } from './Routes';
 import './App.scss';
@@ -10,7 +10,7 @@ import { notificationsReducer } from '@redhat-cloud-services/frontend-components
 const App: React.FC = () => {
   const history = useHistory();
 
-  useEffect(() => {
+  React.useEffect(() => {
     const registry = getRegistry();
     registry.register({ notifications: notificationsReducer });
     window.insights?.chrome?.init();
@@ -25,10 +25,10 @@ const App: React.FC = () => {
   }, []);
 
   return (
-    <Fragment>
+    <React.Fragment>
       <NotificationsPortal />
-      <Routes  />
-    </Fragment>
+      <Routes />
+    </React.Fragment>
   );
 };
 

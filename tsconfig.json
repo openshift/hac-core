@@ -4,19 +4,28 @@
     "baseUrl": ".",
     "module": "esnext",
     "moduleResolution": "node",
-    "outDir": "./dist/",
+    "outDir": "./dist/build/",
     "target": "es2016",
     "jsx": "react",
     "allowJs": true,
     "experimentalDecorators": true,
     "sourceMap": true,
     "noUnusedLocals": true,
+    "paths": {
+      "@console/mount/*": ["src/poc-code/console-mount/*"],
+      "@console/plugin-sdk": ["src/poc-code/console-plugin-sdk"],
+      "@console/plugin-sdk/*": ["src/poc-code/console-plugin-sdk/*"],
+      "@console/dynamic-plugin-sdk": ["src/poc-code/console-dynamic-plugin-sdk"],
+      "@console/dynamic-plugin-sdk/*": ["src/poc-code/console-dynamic-plugin-sdk/*"]
+    },
     "typeRoots": ["node_modules/@types", "@types"],
+    "types": ["node", "jest"],
     "allowSyntheticDefaultImports": true
   },
   "exclude": [
     "**/node_modules",
     "**/dist",
+    "**/console-dynamic-plugin-sdk/scripts"
   ],
   "include": ["**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.json"]
 }

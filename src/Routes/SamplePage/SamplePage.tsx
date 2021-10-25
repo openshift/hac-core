@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import * as React from 'react';
 import { withRouter } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -15,7 +15,7 @@ import './sample-page.scss';
 const SamplePage = () => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  React.useEffect(() => {
     window.insights?.chrome?.appAction?.('sample-page');
   }, []);
 
