@@ -1,6 +1,7 @@
 const { resolve } = require('path');
 const config = require('@redhat-cloud-services/frontend-components-config');
 const commonPlugins = require('./plugins');
+const mergeTsConfigAliases = require('./mergeTsConfigAliases');
 
 const insightsProxy = {
   https: false,
@@ -39,7 +40,7 @@ const { config: webpackConfig, plugins } = config({
 
 plugins.push(...commonPlugins);
 
-module.exports = {
+module.exports = mergeTsConfigAliases({
   ...webpackConfig,
   plugins,
-};
+});

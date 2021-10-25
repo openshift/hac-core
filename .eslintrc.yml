@@ -4,3 +4,5 @@ globals:
   shallow: readonly
   render: 'readonly'
   mount: 'readonly'
+plugins:
+  - '@typescript-eslint'

@@ -1,14 +1,11 @@
-import React, { Suspense, lazy } from 'react';
+import * as React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
 
 import { Bullseye, Spinner } from '@patternfly/react-core';
-
-const SamplePage = lazy(() =>
-  import(/* webpackChunkName: "SamplePage" */ './Routes/SamplePage/SamplePage')
-);
+import EmptyRoute from '@console/mount/src/components/foundation/static-routes/EmptyRoute';
 
 export const Routes: React.FC = () => (
-  <Suspense
+  <React.Suspense
     fallback={
       <Bullseye>
         <Spinner />
@@ -16,10 +13,10 @@ export const Routes: React.FC = () => (
     }
   >
     <Switch>
-      <Route path="/" component={SamplePage} />
+      <Route path="/" component={EmptyRoute} />
       <Route>
         <Redirect to="/" />
       </Route>
     </Switch>
-  </Suspense>
+  </React.Suspense>
 );
