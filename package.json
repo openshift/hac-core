@@ -58,6 +58,7 @@
   "devDependencies": {
     "@redhat-cloud-services/eslint-config-redhat-cloud-services": "^1.2.1",
     "@redhat-cloud-services/frontend-components-config": "^4.3.5",
+    "@scalprum/core": "^0.0.12",
     "@types/classnames": "^2.3.1",
     "@types/jest": "21.x",
     "@types/react-redux": "7.x",

@@ -3,9 +3,27 @@ import { initConsolePlugins } from '@console/dynamic-plugin-sdk/src/runtime/plug
 import { /* ActivePlugin, */ PluginStore } from '@console/plugin-sdk';
 import { useReduxStore } from '../../redux';
 import { getEnabledDynamicPluginNames } from './utils';
+import { loadDynamicPlugin } from '@console/dynamic-plugin-sdk/src/runtime/plugin-loader';
 
-const IncludePlugins: React.FC = () => {
+type PluginProps = {
+  enabledPlugins?: any,
+  onPluginRegister?: Function,
+}
+
+const IncludePlugins = ({ enabledPlugins, onPluginRegister = () => undefined }: PluginProps) => {
+  const [pluginStore, setPluginStore] = React.useState<PluginStore>();
   const store = useReduxStore();
+
+  React.useEffect(() => {
+    if (pluginStore) {
+      enabledPlugins && enabledPlugins.forEach(async (item) => {
+        const manifest = await (await fetch(`/api/plugins/${item}/plugin-manifest.json`)).json();
+        loadDynamicPlugin(`/api/plugins/${item}/`, manifest).then((pluginName) => {
+          pluginStore.setDynamicPluginEnabled(pluginName, true);
+        });
+      });
+    }
+  }, [pluginStore]);
 
   React.useEffect(() => {
     if (store) {
@@ -18,7 +36,8 @@ const IncludePlugins: React.FC = () => {
       const dynamicPluginNames = getEnabledDynamicPluginNames();
       const pluginStore = new PluginStore(activePlugins, dynamicPluginNames);
 
-      initConsolePlugins(pluginStore, store);
+      initConsolePlugins(pluginStore, store, onPluginRegister);
+      setPluginStore(pluginStore);
     }
   }, [store]);
 

@@ -67,6 +67,7 @@ export const getPluginEntryCallback = (
   pluginStore: any, //PluginStore,
   overrideSharedModulesCallback: typeof overrideSharedModules,
   resolveEncodedCodeRefsCallback: typeof resolveEncodedCodeRefs,
+  onPluginRegister: Function
 ) => (pluginID: string, entryModule: RemoteEntryModule) => {
   if (!pluginMap.has(pluginID)) {
     console.error(`Received callback for unknown plugin ${pluginID}`);
@@ -100,13 +101,16 @@ export const getPluginEntryCallback = (
   );
 
   pluginStore.addDynamicPlugin(pluginID, pluginData.manifest, resolvedExtensions);
+
+  onPluginRegister({ container: entryModule, scopeName: pluginID });
 };
 
-export const registerPluginEntryCallback = (pluginStore: any/*PluginStore*/) => {
+export const registerPluginEntryCallback = (pluginStore: any/*PluginStore*/, onPluginRegister: Function) => {
   window.loadPluginEntry = getPluginEntryCallback(
     pluginStore,
     overrideSharedModules,
     resolveEncodedCodeRefs,
+    onPluginRegister
   );
 };
 

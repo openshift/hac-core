@@ -6,6 +6,8 @@ import { translateExtension } from '../utils/extension-i18n';
 // import useTranslationExt from '../utils/useTranslationExt';
 import { subscribeToExtensions } from './pluginSubscriptionService';
 
+export const useForceRender = () => React.useReducer((s: boolean) => !s, false)[1] as VoidFunction;
+
 /**
  * React hook for consuming Console extensions.
  *
@@ -45,7 +47,7 @@ export const useExtensions = <E extends Extension>(
     throw new Error('You must pass at least one type guard to useExtensions');
   }
 
-  const forceRender = () => {}; // useForceRender();
+  const forceRender = useForceRender();
 
   const isMountedRef = React.useRef(true);
   const unsubscribeRef = React.useRef<VoidFunction>(null);

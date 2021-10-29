@@ -13,8 +13,16 @@ const fedModulePlugin = require('@redhat-cloud-services/frontend-components-conf
 // const virtualModules = new VirtualModulesPlugin();
 
 const plugins = [
-  fedModulePlugin({ root: resolve(__dirname, '../') }),
-  // new ConsoleActivePluginsModule(resolvePluginPackages(), virtualModules),
+  fedModulePlugin({
+    root: resolve(__dirname, '../'),
+    debug: true,
+    exposes: {
+      // Application root
+      './RootApp': resolve(__dirname, '../src/AppEntry'),
+      // System detail
+      './Navigation': resolve(__dirname, '../src/Navigation'),
+    },
+  }),
 ];
 
 // Save 20kb of bundle size in prod
