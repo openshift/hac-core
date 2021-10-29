@@ -16,9 +16,11 @@ const App: React.FC = () => {
     window.insights?.chrome?.init();
 
     window.insights?.chrome.identifyApp('hac');
-    const unregister = window.insights?.chrome.on('APP_NAVIGATION', (event) =>
-      history.push(`/${event.navId}`)
-    );
+    const unregister = window.insights?.chrome.on('APP_NAVIGATION', (event) => {
+      if (event.domEvent) {
+        history.push(`${event.domEvent.href.replace('/hac', '')}`);
+      }
+    });
     return () => {
       unregister();
     };

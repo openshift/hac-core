@@ -19,7 +19,11 @@ const webpackProxy = {
   env,
   appUrl: process.env.BETA ? '/beta/hac' : '/hac',
   standalone: Boolean(process.env.STANDALONE),
+  ...(process.env.INSIGHTS_CHROME && {
+    localChrome: process.env.INSIGHTS_CHROME,
+  }),
   routes: {
+    '/api/plugins/console-demo-plugin': { host: 'http://localhost:9000' },
     ...(process.env.API_PORT && {
       '/api/hac': { host: `http://localhost:${process.env.API_PORT}` },
     }),

@@ -8,3 +8,5 @@ declare interface Window {
     }
   }
 }
+
+declare const __webpack_init_sharing__: Function;

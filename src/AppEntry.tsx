@@ -7,21 +7,23 @@ import { getBaseName } from '@redhat-cloud-services/frontend-components-utilitie
 import logger from 'redux-logger';
 import { IncludePlugins } from '@console/mount/src/components/plugins';
 // import MainAppContent from '@console/mount/src/components/foundation/MainAppContent';
+import { activePlugins } from './Utils/constants';
 
 window.SERVER_FLAGS = {
-  consolePlugins: [],
+  consolePlugins: activePlugins,
 };
 
 const AppEntry = () => (
   <Provider
-    store={init(process.env.NODE_ENV !== 'production' ? logger : []).getStore()}
+    store={init(
+      process.env.NODE_ENV !== 'production' ? logger : []
+    ).getStore()}
   >
     <Router basename={getBaseName(window.location.pathname, 1)}>
-      <IncludePlugins />
-      {/*<MainAppContent />*/}
+      <IncludePlugins enabledPlugins={activePlugins} />
       <App />
     </Router>
   </Provider>
-);
+)
 
 export default AppEntry;
