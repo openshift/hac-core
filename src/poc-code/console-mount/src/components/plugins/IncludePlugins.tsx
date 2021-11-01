@@ -6,9 +6,9 @@ import { getEnabledDynamicPluginNames } from './utils';
 import { loadDynamicPlugin } from '@console/dynamic-plugin-sdk/src/runtime/plugin-loader';
 
 type PluginProps = {
-  enabledPlugins?: any,
-  onPluginRegister?: Function,
-}
+  enabledPlugins?: any;
+  onPluginRegister?: Function;
+};
 
 const IncludePlugins = ({ enabledPlugins, onPluginRegister = () => undefined }: PluginProps) => {
   const [pluginStore, setPluginStore] = React.useState<PluginStore>();
@@ -16,30 +16,31 @@ const IncludePlugins = ({ enabledPlugins, onPluginRegister = () => undefined }: 
 
   React.useEffect(() => {
     if (pluginStore) {
-      enabledPlugins && enabledPlugins.forEach(async (item) => {
-        const manifest = await (await fetch(`/api/plugins/${item}/plugin-manifest.json`)).json();
-        loadDynamicPlugin(`/api/plugins/${item}/`, manifest).then((pluginName) => {
-          pluginStore.setDynamicPluginEnabled(pluginName, true);
+      enabledPlugins &&
+        enabledPlugins.forEach(async (item) => {
+          const manifest = await (await fetch(`/api/plugins/${item}/plugin-manifest.json`)).json();
+          loadDynamicPlugin(`/api/plugins/${item}/`, manifest).then((pluginName) => {
+            pluginStore.setDynamicPluginEnabled(pluginName, true);
+          });
         });
-      });
     }
-  }, [pluginStore]);
+  }, [enabledPlugins, pluginStore]);
 
   React.useEffect(() => {
     if (store) {
       const activePlugins = [];
-        // process.env.NODE_ENV !== 'test'
-        //   ? /* eslint-disable global-require, @typescript-eslint/no-require-imports */
-        //     // eslint-disable-next-line import/no-unresolved
-        //     (require('@console/active-plugins').default as ActivePlugin[])
-        //   : [];
+      // process.env.NODE_ENV !== 'test'
+      //   ? /* eslint-disable global-require, @typescript-eslint/no-require-imports */
+      //     // eslint-disable-next-line import/no-unresolved
+      //     (require('@console/active-plugins').default as ActivePlugin[])
+      //   : [];
       const dynamicPluginNames = getEnabledDynamicPluginNames();
-      const pluginStore = new PluginStore(activePlugins, dynamicPluginNames);
+      const initialPluginStore = new PluginStore(activePlugins, dynamicPluginNames);
 
-      initConsolePlugins(pluginStore, store, onPluginRegister);
-      setPluginStore(pluginStore);
+      initConsolePlugins(initialPluginStore, store, onPluginRegister);
+      setPluginStore(initialPluginStore);
     }
-  }, [store]);
+  }, [onPluginRegister, store]);
 
   return null;
 };

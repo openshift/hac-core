@@ -24,7 +24,7 @@ const App: React.FC = () => {
     return () => {
       unregister();
     };
-  }, []);
+  }, [history]);
 
   return (
     <React.Fragment>
