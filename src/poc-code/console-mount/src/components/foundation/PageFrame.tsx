@@ -18,11 +18,7 @@ const PageFrame: React.FC<PageFrameProps> = ({ children }) => {
       <Page
         header={<Masthead navOpen={navOpen} onNavToggle={setNavOpen} />}
         sidebar={<Navigation navOpen={navOpen} />}
-        skipToContent={
-          <SkipToContent href={`${location.pathname}${location.search}#content`}>
-            Skip to Content
-          </SkipToContent>
-        }
+        skipToContent={<SkipToContent href={`${location.pathname}${location.search}#content`}>Skip to Content</SkipToContent>}
       >
         <React.Suspense fallback={<PageLoader />}>{children}</React.Suspense>
       </Page>

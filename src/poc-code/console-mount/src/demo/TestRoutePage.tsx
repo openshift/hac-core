@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { EmptyState, EmptyStateIcon, EmptyStateBody, Title } from '@patternfly/react-core';
-import { UnityIcon } from '@patternfly/react-icons';
+import UnityIcon from '@patternfly/react-icons/dist/js/icons/unity-icon';
 import { Link } from 'react-router-dom';
 
 const TestRoutePage: React.FC = () => {

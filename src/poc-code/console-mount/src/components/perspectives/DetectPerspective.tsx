@@ -15,11 +15,7 @@ const DetectPerspective: React.FC<DetectPerspectiveProps> = ({ children }) => {
   const [activePerspective, setActivePerspective] = React.useState<PerspectiveType>(null);
   useMaintainDefaultPerspective(setActivePerspective);
 
-  return (
-    <PerspectiveContext.Provider value={{ activePerspective, setActivePerspective }}>
-      {children}
-    </PerspectiveContext.Provider>
-  );
+  return <PerspectiveContext.Provider value={{ activePerspective, setActivePerspective }}>{children}</PerspectiveContext.Provider>;
 };
 
 export default DetectPerspective;

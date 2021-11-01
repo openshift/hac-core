@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { QuestionIcon, ReactIcon } from '@patternfly/react-icons';
+import QuestionIcon from '@patternfly/react-icons/dist/js/icons/question-icon';
+import ReactIcon from '@patternfly/react-icons/dist/js/icons/react-icon';
 
 export const testIcon = <QuestionIcon />;
 

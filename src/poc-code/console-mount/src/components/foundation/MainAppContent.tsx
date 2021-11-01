@@ -1,9 +1,5 @@
 import * as React from 'react';
-import {
-  ContextProvider,
-  isContextProvider,
-  useResolvedExtensions,
-} from '@console/dynamic-plugin-sdk';
+import { ContextProvider, isContextProvider, useResolvedExtensions } from '@console/dynamic-plugin-sdk';
 import useReduxReducerExtensions from '../../redux/useReduxReducerExtensions';
 import { PageLoader } from '../loading';
 import { DetectPerspective } from '../perspectives';
@@ -13,11 +9,7 @@ import EnhancedProvider from './EnhancedProvider';
 
 const MainAppContent: React.FC = () => {
   const reduxExtensionsLoaded = useReduxReducerExtensions();
-  const [contextProviderExtensions, contextProvidersLoaded] = useResolvedExtensions<
-    ContextProvider
-  >(isContextProvider);
-
-  console.debug(contextProviderExtensions);
+  const [contextProviderExtensions, contextProvidersLoaded] = useResolvedExtensions<ContextProvider>(isContextProvider);
 
   if (!reduxExtensionsLoaded || !contextProvidersLoaded) {
     return <PageLoader />;
@@ -25,7 +17,7 @@ const MainAppContent: React.FC = () => {
 
   const content = (
     // <PageFrame>
-      <AppRoutes />
+    <AppRoutes />
     // </PageFrame>
   );
 

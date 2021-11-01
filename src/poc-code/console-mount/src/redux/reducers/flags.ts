@@ -10,7 +10,7 @@ const flags = (state: FLAGS, action): FLAGS => {
 
   switch (action.type) {
     case 'setFlag':
-      return state[action.payload.flag] = action.payload.value;
+      return (state[action.payload.flag] = action.payload.value);
     default:
       return state;
   }

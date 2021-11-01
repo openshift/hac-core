@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import compact from 'lodash/compact';
 
 /** TODO: Copied right now -- duplicate definition */
 const getURLSearchParams = () => {
@@ -24,6 +24,6 @@ export const getEnabledDynamicPluginNames = () => {
     return [];
   }
 
-  const disabledPluginNames = _.compact(disabledPlugins.split(','));
+  const disabledPluginNames = compact(disabledPlugins.split(','));
   return allPluginNames.filter((pluginName) => !disabledPluginNames.includes(pluginName));
 };

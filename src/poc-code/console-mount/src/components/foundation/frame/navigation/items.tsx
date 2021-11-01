@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { NavItem, NavItemSeparator } from '@patternfly/react-core';
 // import * as classNames from 'classnames';
-import * as _ from 'lodash';
+import startsWith from 'lodash/startsWith';
+import some from 'lodash/some';
+import castArray from 'lodash/castArray';
 import { connect } from 'react-redux';
 import { Link, LinkProps } from 'react-router-dom';
 import {
@@ -21,15 +23,12 @@ import NavSection from './NavSection';
 
 export const ALL_NAMESPACES_KEY = '#ALL_NS#';
 export const formatNamespacedRouteForResource = (resource, namespace) =>
-  namespace === ALL_NAMESPACES_KEY
-    ? `/k8s/all-namespaces/${resource}`
-    : `/k8s/ns/${namespace}/${resource}`;
+  namespace === ALL_NAMESPACES_KEY ? `/k8s/all-namespaces/${resource}` : `/k8s/ns/${namespace}/${resource}`;
 
 export const formatNamespacedRouteForHref = (href: string, namespace: string) =>
   namespace === ALL_NAMESPACES_KEY ? `${href}/all-namespaces` : `${href}/ns/${namespace}`;
 
-export const matchesPath = (resourcePath, prefix) =>
-  resourcePath === prefix || _.startsWith(resourcePath, `${prefix}/`);
+export const matchesPath = (resourcePath, prefix) => resourcePath === prefix || startsWith(resourcePath, `${prefix}/`);
 
 export const stripNS = (href) => {
   // href = stripBasePath(href);
@@ -56,7 +55,7 @@ class NavLink<P extends NavLinkProps> extends React.PureComponent<P> {
   }
 
   static startsWith(resourcePath: string, someStrings: string[]) {
-    return _.some(someStrings, (s) => resourcePath.startsWith(s));
+    return some(someStrings, (s) => resourcePath.startsWith(s));
   }
 
   render() {
@@ -102,7 +101,7 @@ class NavLink<P extends NavLinkProps> extends React.PureComponent<P> {
 export class HrefLink extends NavLink<HrefLinkProps> {
   static isActive(props, resourcePath) {
     const noNSHref = stripNS(props.href);
-    return resourcePath === noNSHref || _.startsWith(resourcePath, `${noNSHref}/`);
+    return resourcePath === noNSHref || startsWith(resourcePath, `${noNSHref}/`);
   }
 
   get to() {
@@ -145,26 +144,6 @@ export type NavLinkComponent<T extends NavLinkProps = NavLinkProps> = React.Comp
   isActive: (props: T, resourcePath: string, activeNamespace: string) => boolean;
 };
 
-export const createLink = (
-  item: LoadedExtension<PluginNavItem>,
-  rootNavLink = false,
-): React.ReactElement => {
-  if (isNavItem(item)) {
-    let Component: NavLinkComponent = null;
-    if (isHrefNavItem(item)) {
-      Component = HrefLink;
-    }
-    if (Component) {
-      const { id, name, ...props } = item.properties;
-      if (rootNavLink) {
-        return <RootNavLink name={name} id={id} key={item.uid} component={Component} {...props} />;
-      }
-      return <Component name={name} id={id} key={item.uid} {...props} />;
-    }
-  }
-  return undefined;
-};
-
 type RootNavLinkStateProps = {
   canRender: boolean;
   isActive: boolean;
@@ -193,16 +172,30 @@ const RootNavLinkInternal: React.FC<RootNavLinkProps & RootNavLinkStateProps> = 
   );
 };
 
-const rootNavLinkMapStateToProps = (
-  state: RootState,
-  { required }: RootNavLinkProps,
-): RootNavLinkStateProps => ({
-  canRender: required ? _.castArray(required).every((r) => state.FLAGS[r]) : true,
+const rootNavLinkMapStateToProps = (state: RootState, { required }: RootNavLinkProps): RootNavLinkStateProps => ({
+  canRender: required ? castArray(required).every((r) => state.FLAGS[r]) : true,
   activeNamespace: null,
   isActive: false,
 });
 
 export const RootNavLink = connect(rootNavLinkMapStateToProps)(RootNavLinkInternal);
+
+export const createLink = (item: LoadedExtension<PluginNavItem>, rootNavLink = false): React.ReactElement => {
+  if (isNavItem(item)) {
+    let Component: NavLinkComponent = null;
+    if (isHrefNavItem(item)) {
+      Component = HrefLink;
+    }
+    if (Component) {
+      const { id, name, ...props } = item.properties;
+      if (rootNavLink) {
+        return <RootNavLink name={name} id={id} key={item.uid} component={Component} {...props} />;
+      }
+      return <Component name={name} id={id} key={item.uid} {...props} />;
+    }
+  }
+  return undefined;
+};
 
 export type PluginNavItemsProps = {
   items: LoadedExtension<PluginNavSection | PluginNavItem | PluginNavSeparator>[];

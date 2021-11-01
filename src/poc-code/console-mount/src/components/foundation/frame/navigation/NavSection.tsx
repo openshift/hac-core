@@ -1,14 +1,10 @@
 import * as React from 'react';
 import { NavExpandable, NavGroup } from '@patternfly/react-core';
-import * as _ from 'lodash';
+import some from 'lodash/some';
+import find from 'lodash/find';
+import castArray from 'lodash/castArray';
 import { connect } from 'react-redux';
-import {
-  Perspective,
-  isPerspective,
-  NavItem,
-  isNavItem,
-  withActivePerspective,
-} from '@console/dynamic-plugin-sdk';
+import { Perspective, isPerspective, NavItem, isNavItem, withActivePerspective } from '@console/dynamic-plugin-sdk';
 import { LoadedExtension } from '@console/dynamic-plugin-sdk/src/types';
 import { withExtensions } from '@console/plugin-sdk';
 import { RootState } from '../../../../redux';
@@ -21,10 +17,7 @@ const flagPending = (flag: boolean) => flag === undefined;
 const basePathPattern = new RegExp(`^/?${window.SERVER_FLAGS.basePath}`);
 const stripBasePath = (path: string): string => path.replace(basePathPattern, '/');
 
-const navSectionStateToProps = (
-  state: RootState,
-  { required }: NavSectionProps,
-): NavSectionStateProps => {
+const navSectionStateToProps = (state: RootState, { required }: NavSectionProps): NavSectionStateProps => {
   const flags = state.FLAGS;
   const canRender = required ? flags[required] : true;
 
@@ -36,8 +29,7 @@ const navSectionStateToProps = (
   };
 };
 
-const findChildIndex = (id: string, Children: React.ReactElement[]) =>
-  Children.findIndex((c) => c.props.id === id);
+const findChildIndex = (id: string, Children: React.ReactElement[]) => Children.findIndex((c) => c.props.id === id);
 
 const mergePluginChild = (
   Children: React.ReactElement[],
@@ -142,17 +134,14 @@ class NavSectionInternal extends React.Component<Props, NavSectionState> {
   getNavItemExtensions = (perspective: string, title: string, id: string) => {
     const { navItemExtensions, perspectiveExtensions } = this.props;
 
-    const defaultPerspective = _.find(perspectiveExtensions, (p) => p.properties.default);
-    const isDefaultPerspective =
-      defaultPerspective && perspective === defaultPerspective.properties.id;
+    const defaultPerspective = find(perspectiveExtensions, (p) => p.properties.default);
+    const isDefaultPerspective = defaultPerspective && perspective === defaultPerspective.properties.id;
 
     return navItemExtensions.filter(
       (item) =>
         // check if the item is contributed to the current perspective,
         // or if no perspective specified, are we in the default perspective
-        (item.properties.perspective === perspective ||
-          (!item.properties.perspective && isDefaultPerspective)) &&
-        item.properties.section === id,
+        (item.properties.perspective === perspective || (!item.properties.perspective && isDefaultPerspective)) && item.properties.section === id,
     );
   };
 
@@ -165,11 +154,8 @@ class NavSectionInternal extends React.Component<Props, NavSectionState> {
     const { flags, activeNamespace } = this.props;
     const { name, required, disallowed, id } = c.props;
 
-    const requiredArray = required ? _.castArray(required) : [];
-    const requirementMissing = _.some(
-      requiredArray,
-      (flag) => flag && (flagPending(flags[flag]) || !flags[flag]),
-    );
+    const requiredArray = required ? castArray(required) : [];
+    const requirementMissing = some(requiredArray, (flag) => flag && (flagPending(flags[flag]) || !flags[flag]));
     if (requirementMissing) {
       return null;
     }
@@ -193,12 +179,7 @@ class NavSectionInternal extends React.Component<Props, NavSectionState> {
     childItems.forEach((item) => {
       const pluginChild = this.mapChild(createLink(item));
       if (pluginChild) {
-        mergePluginChild(
-          Children,
-          pluginChild,
-          item.properties.insertBefore,
-          item.properties.insertAfter,
-        );
+        mergePluginChild(Children, pluginChild, item.properties.insertBefore, item.properties.insertAfter);
       }
     });
 

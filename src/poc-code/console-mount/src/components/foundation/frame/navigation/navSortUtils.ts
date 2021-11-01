@@ -1,8 +1,4 @@
-import {
-  NavSection as PluginNavSection,
-  NavItem as PluginNavItem,
-  Separator,
-} from '@console/dynamic-plugin-sdk';
+import { NavSection as PluginNavSection, NavItem as PluginNavItem, Separator } from '@console/dynamic-plugin-sdk';
 import { LoadedExtension } from '@console/dynamic-plugin-sdk/src/types';
 
 const toArray = (val) => (val ? (Array.isArray(val) ? val : [val]) : []);
@@ -18,8 +14,7 @@ const itemDependsOnItem = (s1: NavItem, s2: NavItem): boolean => {
   return before.includes(s2.properties.id) || after.includes(s2.properties.id);
 };
 
-const isPositioned = (item: NavItem, allItems: NavItem[]): boolean =>
-  !!allItems.find((i) => itemDependsOnItem(item, i));
+const isPositioned = (item: NavItem, allItems: NavItem[]): boolean => !!allItems.find((i) => itemDependsOnItem(item, i));
 
 const findIndexForItem = (item: NavItem, currentItems: NavItem[]): number => {
   const { insertBefore, insertAfter } = item.properties;
@@ -69,18 +64,14 @@ const insertPositionedItems = (insertItems: NavItem[], currentItems: NavItem[]):
   insertPositionedItems(positionedItems, currentItems);
 };
 
-export const getSortedNavItems = (
-  navItems: LoadedExtension<NavItem>[],
-): LoadedExtension<NavItem>[] => {
+export const getSortedNavItems = (navItems: LoadedExtension<NavItem>[]): LoadedExtension<NavItem>[] => {
   const sortedItems = navItems.filter((item) => !isPositioned(item, navItems));
   const positionedItems = navItems.filter((item) => isPositioned(item, navItems));
   insertPositionedItems(positionedItems, sortedItems);
   return sortedItems;
 };
 
-export const sortExtensionItems = <E extends NavItem>(
-  extensionItems: LoadedExtension<E>[],
-): LoadedExtension<E>[] => {
+export const sortExtensionItems = <E extends NavItem>(extensionItems: LoadedExtension<E>[]): LoadedExtension<E>[] => {
   // Mapped by item id
   const mappedIds = extensionItems.reduce((mem, i) => {
     mem[i.properties.id] = i;
@@ -95,9 +86,7 @@ export const sortExtensionItems = <E extends NavItem>(
     const { insertBefore, insertAfter } = mappedIds[id].properties;
     const before = toArray(insertBefore);
     const after = toArray(insertAfter);
-    const dependencyIds = [...before, ...after].filter(
-      (i) => i !== id && !currentDependencies.includes(i),
-    );
+    const dependencyIds = [...before, ...after].filter((i) => i !== id && !currentDependencies.includes(i));
     return dependencyIds.reduce((acc, dependencyId) => {
       if (dependencyId) {
         // Add this dependency and its dependencies

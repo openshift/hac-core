@@ -5,9 +5,7 @@ import { useExtensions } from '@console/plugin-sdk';
 const useMaintainDefaultPerspective = (setActivePerspective: (perspectiveName: string) => void) => {
   const perspectiveExtensions = useExtensions<Perspective>(isPerspective);
 
-  const defaultPerspective = perspectiveExtensions.find(
-    (perspective) => perspective.properties.default,
-  );
+  const defaultPerspective = perspectiveExtensions.find((perspective) => perspective.properties.default);
   React.useEffect(() => {
     if (defaultPerspective) {
       setActivePerspective(defaultPerspective.properties.id);

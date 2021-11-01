@@ -1,3 +1,7 @@
+src/poc-code/console-plugin-sdk/*
+src/poc-code/console-dynamic-plugin-sdk/*
 node_modules/*
 static/*
 dist/*
+@types/*
+.eslintrc.js

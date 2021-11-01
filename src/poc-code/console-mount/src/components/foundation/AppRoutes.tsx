@@ -1,16 +1,14 @@
 import * as React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import {
-  isRoutePage as isDynamicRoutePage,
-  RoutePage as DynamicRoutePage,
-  useActivePerspective,
-} from '@console/dynamic-plugin-sdk';
+import { isRoutePage as isDynamicRoutePage, RoutePage as DynamicRoutePage, useActivePerspective } from '@console/dynamic-plugin-sdk';
 import { isRoutePage, LoadedExtension, RoutePage, useExtensions } from '@console/plugin-sdk';
 import EmptyRoute from './static-routes/EmptyRoute';
 
-const LazyDynamicRoute: React.FC<Omit<React.ComponentProps<typeof Route>, 'component'> & {
-  component: LoadedExtension<DynamicRoutePage>['properties']['component'];
-}> = ({ component, ...props }) => {
+const LazyDynamicRoute: React.FC<
+  Omit<React.ComponentProps<typeof Route>, 'component'> & {
+    component: LoadedExtension<DynamicRoutePage>['properties']['component'];
+  }
+> = ({ component, ...props }) => {
   const LazyComponent = React.useMemo(
     () =>
       React.lazy(async () => {
@@ -44,22 +42,13 @@ const getPluginPageRoutes = (
       }),
     ...dynamicRoutePages
       .filter((r) => !r.properties.perspective || r.properties.perspective === activePerspective)
-      .map((r) => (
-        <LazyDynamicRoute
-          exact={r.properties.exact}
-          path={r.properties.path}
-          component={r.properties.component}
-          key={r.uid}
-        />
-      )),
+      .map((r) => <LazyDynamicRoute exact={r.properties.exact} path={r.properties.path} component={r.properties.component} key={r.uid} />),
   ];
 
   const inactiveRoutes = [...routePages, ...dynamicRoutePages]
     .filter((r) => r.properties.perspective && r.properties.perspective !== activePerspective)
     .map((r) => {
-      const key = Array.from(r.properties.path)
-        .concat([r.properties.perspective])
-        .join(',');
+      const key = Array.from(r.properties.path).concat([r.properties.perspective]).join(',');
 
       return (
         <Route
@@ -81,13 +70,7 @@ const AppRoutes: React.FC = () => {
   const routePageExtensions = useExtensions<RoutePage>(isRoutePage);
   const dynamicRoutePages = useExtensions<DynamicRoutePage>(isDynamicRoutePage);
   const [pluginPageRoutes] = React.useMemo(
-    () =>
-      getPluginPageRoutes(
-        activePerspective,
-        setActivePerspective,
-        routePageExtensions,
-        dynamicRoutePages,
-      ),
+    () => getPluginPageRoutes(activePerspective, setActivePerspective, routePageExtensions, dynamicRoutePages),
     [activePerspective, setActivePerspective, routePageExtensions, dynamicRoutePages],
   );
 
