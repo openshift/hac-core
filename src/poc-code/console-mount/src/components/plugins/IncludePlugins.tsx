@@ -1,4 +1,5 @@
 import * as React from 'react';
+import noop from 'lodash/noop';
 import { initConsolePlugins } from '@console/dynamic-plugin-sdk/src/runtime/plugin-init';
 import { /* ActivePlugin, */ PluginStore } from '@console/plugin-sdk';
 import { useReduxStore } from '../../redux';
@@ -6,11 +7,11 @@ import { getEnabledDynamicPluginNames } from './utils';
 import { loadDynamicPlugin } from '@console/dynamic-plugin-sdk/src/runtime/plugin-loader';
 
 type PluginProps = {
-  enabledPlugins?: any;
+  enabledPlugins?: string[];
   onPluginRegister?: Function;
 };
 
-const IncludePlugins = ({ enabledPlugins, onPluginRegister = () => undefined }: PluginProps) => {
+const IncludePlugins = ({ enabledPlugins, onPluginRegister = noop }: PluginProps) => {
   const [pluginStore, setPluginStore] = React.useState<PluginStore>();
   const store = useReduxStore();
 
