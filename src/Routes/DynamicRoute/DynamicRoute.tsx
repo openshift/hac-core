@@ -22,7 +22,10 @@ const DynamicRoute: React.FC<DynamicRouteProps> = ({ location }) => {
     if (location) {
       const [, , app] = location.pathname?.split('/') || [];
       if (app) {
-        const { properties: currRoute, pluginName } = dynamicRoutePages.find(({ properties }) => properties.path === `/${app}`) || {};
+        const { properties: currRoute, pluginName } =
+          dynamicRoutePages.find(({ properties }) =>
+            Array.isArray(properties.path) ? properties.path.includes(`/${app}`) : properties.path === `/${app}`,
+          ) || {};
         if (currRoute) {
           setComponent(() =>
             React.lazy(async () => {
