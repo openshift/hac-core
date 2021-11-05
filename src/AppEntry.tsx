@@ -14,7 +14,7 @@ window.SERVER_FLAGS = {
 };
 
 const AppEntry = () => (
-  <Provider store={init(process.env.NODE_ENV !== 'production' ? logger : []).getStore()}>
+  <Provider store={init(process.env.NODE_ENV !== 'production' && logger).getStore()}>
     <Router basename={getBaseName(window.location.pathname, 1)}>
       <IncludePlugins enabledPlugins={activePlugins} />
       <App />
