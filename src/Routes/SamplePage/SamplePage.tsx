@@ -6,15 +6,17 @@ import { Button, StackItem, Stack, Title } from '@patternfly/react-core';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { PageHeader, PageHeaderTitle } from '@redhat-cloud-services/frontend-components/PageHeader';
 import { addNotification } from '@redhat-cloud-services/frontend-components-notifications/redux';
+import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 
 import './sample-page.scss';
 
 const SamplePage = () => {
   const dispatch = useDispatch();
+  const chrome = useChrome();
 
   React.useEffect(() => {
-    window.insights?.chrome?.appAction?.('sample-page');
-  }, []);
+    chrome?.appAction?.('sample-page');
+  }, [chrome]);
 
   const handleAlert = () => {
     dispatch(
