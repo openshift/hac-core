@@ -3,6 +3,9 @@ import * as React from 'react';
 import { DynamicPluginInfo } from '../store';
 import { subscribeToDynamicPlugins } from './pluginSubscriptionService';
 
+// Copied from '@console/shared/src/hooks/useForceRender'
+const useForceRender = () => React.useReducer((s: boolean) => !s, false)[1] as VoidFunction;
+
 /**
  * React hook for consuming Console dynamic plugin runtime information.
  *
@@ -23,7 +26,7 @@ import { subscribeToDynamicPlugins } from './pluginSubscriptionService';
  * @returns Console dynamic plugin runtime information.
  */
 export const useDynamicPluginInfo = (): [DynamicPluginInfo[], boolean] => {
-  const forceRender = () => {}; // useForceRender();
+  const forceRender = useForceRender();
 
   const isMountedRef = React.useRef(true);
   const unsubscribeRef = React.useRef<VoidFunction>(null);

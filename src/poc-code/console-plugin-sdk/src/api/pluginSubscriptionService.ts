@@ -1,5 +1,6 @@
 import * as _ from 'lodash';
 import { Store } from 'redux';
+// import { RootState } from '@console/internal/redux';
 import { isExtensionInUse, PluginStore, DynamicPluginInfo } from '../store';
 import { Extension, ExtensionTypeGuard, LoadedExtension } from '../typings';
 
@@ -25,17 +26,17 @@ const subscribe = <T>(sub: T, subList: T[], invokeListener: VoidFunction): VoidF
   };
 };
 
-export const initSubscriptionService = (pluginStore: PluginStore, reduxStore: Store<any>) => {
+export const initSubscriptionService = (pluginStore: PluginStore, reduxStore: Store/* <RootState> */) => {
   if (subscriptionServiceInitialized) {
     throw new Error('Subscription service is already initialized');
   }
 
   subscriptionServiceInitialized = true;
 
-  const getAllExtensions = () => pluginStore.getAllExtensions();
-  const getAllFlags = () => reduxStore.getState().FLAGS;
+  const getExtensionsInUse = () => pluginStore.getExtensionsInUse();
+  const getFlags = () => reduxStore.getState().FLAGS;
 
-  type FeatureFlags = ReturnType<typeof getAllFlags>;
+  type FeatureFlags = ReturnType<typeof getFlags>;
 
   const invokeExtensionListener = (
     sub: ExtensionSubscription,
@@ -58,7 +59,7 @@ export const initSubscriptionService = (pluginStore: PluginStore, reduxStore: St
   };
 
   onExtensionSubscriptionAdded = (sub) => {
-    invokeExtensionListener(sub, getAllExtensions(), getAllFlags());
+    invokeExtensionListener(sub, getExtensionsInUse(), getFlags());
   };
 
   onDynamicPluginListenerAdded = (listener) => {
@@ -73,8 +74,8 @@ export const initSubscriptionService = (pluginStore: PluginStore, reduxStore: St
       return;
     }
 
-    const nextExtensions = getAllExtensions();
-    const nextFlags = getAllFlags();
+    const nextExtensions = getExtensionsInUse();
+    const nextFlags = getFlags();
 
     if (_.isEqual(nextExtensions, lastExtensions) && nextFlags === lastFlags) {
       return;

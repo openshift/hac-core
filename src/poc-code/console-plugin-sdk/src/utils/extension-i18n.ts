@@ -15,7 +15,7 @@ export const getTranslationKey = (value: string) =>
  * Recursively updates the extension's properties, replacing all translatable string values
  * via the provided `t` function.
  */
-export const translateExtension = <E extends Extension>(extension: E, t: any): E => {
+export const translateExtension = <E extends Extension>(extension: E, t: (t: string) => string): E => {
   deepForOwn(extension.properties, isTranslatableString, (value, key, obj) => {
     obj[key] = t(value);
   });

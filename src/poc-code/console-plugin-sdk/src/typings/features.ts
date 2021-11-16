@@ -1,7 +1,7 @@
 // import { Dispatch } from 'react-redux';
 import { Action } from 'typesafe-actions';
 // import { K8sKind } from '@console/internal/module/k8s';
-import { Extension, /* AlwaysOnExtension */ } from './base';
+import { Extension/* , AlwaysOnExtension */ } from './base';
 
 namespace ExtensionProperties {
   // export interface ModelFeatureFlag {

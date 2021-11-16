@@ -23,7 +23,7 @@ namespace ExtensionProperties {
   //   /** Name of the resource tab inside detailsPage  */
   //   name: string;
   // };
-
+  //
   // export type ResourceListPage = ResourcePage<{
   //   /** See https://reacttraining.com/react-router/web/api/match */
   //   match: RouteComponentProps['match'];
@@ -39,7 +39,7 @@ namespace ExtensionProperties {
   //   /** Some Resources require ReferenceFor instead of ReferenceForModel */
   //   modelParser?: (obj: K8sResourceKind) => string;
   // };
-
+  //
   // export type ResourceDetailsPage = ResourcePage<{
   //   /** See https://reacttraining.com/react-router/web/api/match */
   //   match: RouteComponentProps['match'];
@@ -69,15 +69,15 @@ namespace ExtensionProperties {
 // export interface ResourceListPage extends Extension<ExtensionProperties.ResourceListPage> {
 //   type: 'Page/Resource/List';
 // }
-
+//
 // export interface ResourceDetailsPage extends Extension<ExtensionProperties.ResourceDetailsPage> {
 //   type: 'Page/Resource/Details';
 // }
-
+//
 export interface RoutePage extends Extension<ExtensionProperties.RoutePage> {
   type: 'Page/Route';
 }
-
+//
 // export interface ResourceTabPage<R extends K8sResourceCommon = K8sResourceCommon>
 //   extends Extension<ExtensionProperties.ResourceTabPage<R>> {
 //   type: 'Page/Resource/Tab';
@@ -92,7 +92,7 @@ export interface RoutePage extends Extension<ExtensionProperties.RoutePage> {
 // export const isResourceDetailsPage = (e: Extension): e is ResourceDetailsPage => {
 //   return e.type === 'Page/Resource/Details';
 // };
-
+//
 // export const isResourceTabPage = (e: Extension): e is ResourceTabPage => {
 //   return e.type === 'Page/Resource/Tab';
 // };
