@@ -5,7 +5,6 @@ import { PageLoader } from '../loading';
 import { DetectPerspective } from '../perspectives';
 import AppRoutes from './AppRoutes';
 import EnhancedProvider from './EnhancedProvider';
-// import PageFrame from './PageFrame';
 
 const MainAppContent: React.FC = () => {
   const reduxExtensionsLoaded = useReduxReducerExtensions();
@@ -15,11 +14,7 @@ const MainAppContent: React.FC = () => {
     return <PageLoader />;
   }
 
-  const content = (
-    // <PageFrame>
-    <AppRoutes />
-    // </PageFrame>
-  );
+  const content = <AppRoutes />;
 
   return (
     <DetectPerspective>

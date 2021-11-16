@@ -1,11 +1,11 @@
 /* eslint-disable no-console */
 
 import * as _ from 'lodash';
-// import { PluginStore } from '@console/plugin-sdk/src/store';
+import { PluginStore } from '@console/plugin-sdk/src/store';
 import { resolveEncodedCodeRefs } from '../coderefs/coderef-resolver';
 import { remoteEntryFile } from '../constants';
 import { ConsolePluginManifestJSON } from '../schema/plugin-manifest';
-import { overrideSharedModules } from '../shared-modules-override';
+import { initSharedPluginModules } from '../shared-modules-init';
 import { RemoteEntryModule } from '../types';
 import { resolveURL } from '../utils/url';
 import { fetchPluginManifest } from './plugin-manifest';
@@ -64,10 +64,9 @@ export const loadDynamicPlugin = (baseURL: string, manifest: ConsolePluginManife
   });
 
 export const getPluginEntryCallback = (
-  pluginStore: any, //PluginStore,
-  overrideSharedModulesCallback: typeof overrideSharedModules,
+  pluginStore: PluginStore,
+  initSharedPluginModulesCallback: typeof initSharedPluginModules,
   resolveEncodedCodeRefsCallback: typeof resolveEncodedCodeRefs,
-  onPluginRegister: Function
 ) => (pluginID: string, entryModule: RemoteEntryModule) => {
   if (!pluginMap.has(pluginID)) {
     console.error(`Received callback for unknown plugin ${pluginID}`);
@@ -84,9 +83,9 @@ export const getPluginEntryCallback = (
   pluginData.entryCallbackFired = true;
 
   try {
-    overrideSharedModulesCallback(entryModule);
+    initSharedPluginModulesCallback(entryModule);
   } catch (error) {
-    console.error(`Failed to override shared modules for plugin ${pluginID}`, error);
+    console.error(`Failed to initialize shared modules for plugin ${pluginID}`, error);
     return;
   }
 
@@ -101,16 +100,13 @@ export const getPluginEntryCallback = (
   );
 
   pluginStore.addDynamicPlugin(pluginID, pluginData.manifest, resolvedExtensions);
-
-  onPluginRegister({ container: entryModule, scopeName: pluginID });
 };
 
-export const registerPluginEntryCallback = (pluginStore: any/*PluginStore*/, onPluginRegister: Function) => {
+export const registerPluginEntryCallback = (pluginStore: PluginStore) => {
   window.loadPluginEntry = getPluginEntryCallback(
     pluginStore,
-    overrideSharedModules,
+    initSharedPluginModules,
     resolveEncodedCodeRefs,
-    onPluginRegister
   );
 };
 
@@ -121,7 +117,7 @@ export const loadPluginFromURL = async (baseURL: string) => {
 
 export const loadAndEnablePlugin = async (
   pluginName: string,
-  pluginStore: any, //PluginStore,
+  pluginStore: PluginStore,
   onError: VoidFunction = _.noop,
 ) => {
   const url = `${window.SERVER_FLAGS.basePath}api/plugins/${pluginName}/`;

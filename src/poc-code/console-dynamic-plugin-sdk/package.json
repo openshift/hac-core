@@ -7,7 +7,7 @@
   "scripts": {
     "clean": "rm -rf dist generated",
     "build": "npm run clean && npm run validate && npm run compile && npm run generate",
-    "compile": "for ext in '' '-internal' '-webpack' ; do npm run ts-node -p tsconfig${ext}.json ; done",
+    "compile": "for ext in '' '-webpack' ; do npm run ts-node -p tsconfig${ext}.json ; done",
     "generate": "npm run generate-schema && npm run generate-doc && npm run generate-pkg-assets",
     "generate-schema": "npm run ts-node scripts/generate-schema.ts",
     "generate-doc": "npm run ts-node scripts/generate-doc.ts",
@@ -22,7 +22,7 @@
     "fs-extra": "9.x",
     "ts-json-schema-generator": "0.91.0",
     "tsutils": "3.x",
-    "typescript": "~4.2.3",
-    "webpack": "5.0.0-beta.16"
+    "typescript": "4.2.x",
+    "webpack": "^5.62.1"
   }
 }

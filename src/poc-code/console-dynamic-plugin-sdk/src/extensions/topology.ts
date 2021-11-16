@@ -1,20 +1,20 @@
-// import { Extension, ExtensionDeclaration, CodeRef } from '../types';
+import { Extension, ExtensionDeclaration, CodeRef } from '../types';
 // import { WatchK8sResourcesGeneric } from './console-types';
-// import {
-//   CreateConnectionGetter,
-//   RelationshipProviderCreate,
-//   RelationshipProviderProvides,
-//   TopologyApplyDisplayOptions,
-//   TopologyDataModelDepicted,
-//   TopologyDataModelGetter,
-//   TopologyDataModelReconciler,
-//   TopologyDecoratorGetter,
-//   TopologyDecoratorQuadrant,
-//   TopologyDisplayOption,
-//   ViewComponentFactory,
-// } from './topology-types';
-//
-// /** Getter for a ViewComponentFactory */
+import {
+  // CreateConnectionGetter,
+  RelationshipProviderCreate,
+  RelationshipProviderProvides,
+  // TopologyApplyDisplayOptions,
+  // TopologyDataModelDepicted,
+  // TopologyDataModelGetter,
+  // TopologyDataModelReconciler,
+  TopologyDecoratorGetter,
+  TopologyDecoratorQuadrant,
+  // TopologyDisplayOption,
+  // ViewComponentFactory,
+} from './topology-types';
+
+/** Getter for a ViewComponentFactory */
 // export type TopologyComponentFactory = ExtensionDeclaration<
 //   'console.topology/component/factory',
 //   {
@@ -22,8 +22,8 @@
 //     getFactory: CodeRef<ViewComponentFactory>;
 //   }
 // >;
-//
-// /** Getter for the create connector function */
+
+/** Getter for the create connector function */
 // export type TopologyCreateConnector = ExtensionDeclaration<
 //   'console.topology/create/connector',
 //   {
@@ -31,8 +31,8 @@
 //     getCreateConnector: CodeRef<CreateConnectionGetter>;
 //   }
 // >;
-//
-// /** Topology Data Model Factory Extension */
+
+/** Topology Data Model Factory Extension */
 // export type TopologyDataModelFactory = ExtensionDeclaration<
 //   'console.topology/data/factory',
 //   {
@@ -52,8 +52,8 @@
 //     getDataModelReconciler?: CodeRef<TopologyDataModelReconciler>;
 //   }
 // >;
-//
-// /** Topology Display Filters Extension */
+
+/** Topology Display Filters Extension */
 // export type TopologyDisplayFilters = ExtensionDeclaration<
 //   'console.topology/display/filters',
 //   {
@@ -63,39 +63,39 @@
 //     applyDisplayOptions: CodeRef<TopologyApplyDisplayOptions>;
 //   }
 // >;
-//
-// /** Topology Decorator Provider Extension */
-// export type TopologyDecoratorProvider = ExtensionDeclaration<
-//   'console.topology/decorator/provider',
-//   {
-//     // id for topology decorator specific to the extension
-//     id: string;
-//     // priority for topology decorator specific to the extension
-//     priority: number;
-//     // quadrant for topology decorator specific to the extension
-//     quadrant: TopologyDecoratorQuadrant;
-//     // decorator specific to the extension
-//     decorator: CodeRef<TopologyDecoratorGetter>;
-//   }
-// >;
-//
-// /** Topology relationship provider connector extension */
-// export type TopologyRelationshipProvider = ExtensionDeclaration<
-//   'console.topology/relationship/provider',
-//   {
-//     // use to determine if a connection can be created between the source and target node
-//     provides: CodeRef<RelationshipProviderProvides>;
-//     // tooltip to show when connector operation is hovering over the drop target ex: "Create a Visual Connector"
-//     tooltip: string;
-//     // callback to execute when connector is drop over target node to create a connection
-//     create: CodeRef<RelationshipProviderCreate>;
-//     // priority for relationship, higher will be preferred in case of multiple
-//     priority: number;
-//   }
-// >;
-//
-// // Type Guards
-//
+
+/** Topology Decorator Provider Extension */
+export type TopologyDecoratorProvider = ExtensionDeclaration<
+  'console.topology/decorator/provider',
+  {
+    // id for topology decorator specific to the extension
+    id: string;
+    // priority for topology decorator specific to the extension
+    priority: number;
+    // quadrant for topology decorator specific to the extension
+    quadrant: TopologyDecoratorQuadrant;
+    // decorator specific to the extension
+    decorator: CodeRef<TopologyDecoratorGetter>;
+  }
+>;
+
+/** Topology relationship provider connector extension */
+export type TopologyRelationshipProvider = ExtensionDeclaration<
+  'console.topology/relationship/provider',
+  {
+    // use to determine if a connection can be created between the source and target node
+    provides: CodeRef<RelationshipProviderProvides>;
+    // tooltip to show when connector operation is hovering over the drop target ex: "Create a Visual Connector"
+    tooltip: string;
+    // callback to execute when connector is drop over target node to create a connection
+    create: CodeRef<RelationshipProviderCreate>;
+    // priority for relationship, higher will be preferred in case of multiple
+    priority: number;
+  }
+>;
+
+// Type Guards
+
 // export const isTopologyComponentFactory = (e: Extension): e is TopologyComponentFactory =>
 //   e.type === 'console.topology/component/factory';
 //
@@ -107,9 +107,9 @@
 //
 // export const isTopologyDisplayFilters = (e: Extension): e is TopologyDisplayFilters =>
 //   e.type === 'console.topology/display/filters';
-//
-// export const isTopologyDecoratorProvider = (e: Extension): e is TopologyDecoratorProvider =>
-//   e.type === 'console.topology/decorator/provider';
-//
-// export const isTopologyRelationshipProvider = (e: Extension): e is TopologyRelationshipProvider =>
-//   e.type === 'console.topology/relationship/provider';
+
+export const isTopologyDecoratorProvider = (e: Extension): e is TopologyDecoratorProvider =>
+  e.type === 'console.topology/decorator/provider';
+
+export const isTopologyRelationshipProvider = (e: Extension): e is TopologyRelationshipProvider =>
+  e.type === 'console.topology/relationship/provider';

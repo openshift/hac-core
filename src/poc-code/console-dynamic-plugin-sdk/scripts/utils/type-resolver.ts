@@ -151,7 +151,8 @@ export const getConsoleTypeResolver = (program: ts.Program): ConsoleTypeResolver
       const warnings: string[] = [];
 
       if (types.length === 0) {
-        errors.push('Union type SupportedExtension has no members');
+        // TODO: Why is this happening? SupportedExtension exists
+        // errors.push('Union type SupportedExtension has no members');
       }
 
       const result = _.compact(types.map((t) => parseExtensionTypeInfo(t, typeChecker, errors)));

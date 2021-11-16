@@ -37,7 +37,7 @@ export type OperatorStatusPriority = {
 
 export type PrometheusHealthHandler = (
   responses: { response: PrometheusResponse; error: any }[],
-  t?: any, //TFunction,
+  t?: any, // TFunction,
   additionalResource?: FirehoseResult<K8sResourceCommon | K8sResourceCommon[]>,
 ) => SubsystemHealth;
 
@@ -52,7 +52,7 @@ export type PrometheusActivityProps = {
 
 export type ResourceHealthHandler<R extends ResourcesObject> = (
   resourcesResult: WatchK8sResults<R>,
-  t?: any,
+  t?: any, //TFunction,
 ) => SubsystemHealth;
 
 export type SubsystemHealth = {

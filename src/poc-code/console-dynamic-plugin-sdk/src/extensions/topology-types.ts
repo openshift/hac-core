@@ -1,4 +1,4 @@
-// import * as React from 'react';
+import * as React from 'react';
 // import {
 //   Graph,
 //   Node,
@@ -9,11 +9,11 @@
 //   ModelKind,
 //   GraphElement,
 // } from '@patternfly/react-topology';
-// import { PrometheusAlert } from '../api/common-types';
-// import { K8sResourceCommon, K8sResourceKindReference, WatchK8sResults } from './console-types';
-//
-// export type Point = [number, number];
-//
+import { PrometheusAlert } from '../api/common-types';
+import { K8sResourceCommon/* , K8sResourceKindReference */, WatchK8sResults } from './console-types';
+
+export type Point = [number, number];
+
 // export interface OdcNodeModel extends NodeModel {
 //   resource?: K8sResourceCommon;
 //   resourceKind?: K8sResourceKindReference;
@@ -23,95 +23,95 @@
 //   resource?: K8sResourceCommon;
 //   resourceKind?: K8sResourceKindReference;
 // }
-//
-// export type TopologyResourcesObject = { [key: string]: K8sResourceCommon[] };
-//
-// export type TopologyDataResources = WatchK8sResults<TopologyResourcesObject>;
-//
+
+export type TopologyResourcesObject = { [key: string]: K8sResourceCommon[] };
+
+export type TopologyDataResources = WatchK8sResults<TopologyResourcesObject>;
+
 // export type TopologyDataModelGetter = (
 //   namespace: string,
 //   resources: TopologyDataResources,
 //   workloads: K8sResourceCommon[],
 // ) => Promise<Model>;
-//
-// export enum TopologyViewType {
-//   graph = 'graph',
-//   list = 'list',
-// }
+
+export enum TopologyViewType {
+  graph = 'graph',
+  list = 'list',
+}
 // export type ViewComponentFactory = (
 //   kind: ModelKind,
 //   type: string,
 //   view?: TopologyViewType,
 // ) => React.ComponentType<{ element: GraphElement }> | undefined;
-//
+
 // export type TopologyDataModelDepicted = (resource: K8sResourceCommon, model: Model) => boolean;
-//
+
 // export type TopologyDataModelReconciler = (model: Model, resources: TopologyDataResources) => void;
-//
+
 // export type CreateConnection = (
 //   source: Node,
 //   target: Node | Graph,
 // ) => Promise<React.ReactElement[] | null>;
-//
+
 // export type CreateConnectionGetter = (
 //   createHints: string[],
 //   source?: Node,
 //   target?: Node,
 // ) => CreateConnection;
-//
-// export type RelationshipProviderProvides = (source: Node, target: Node) => Promise<boolean>;
-//
-// export type RelationshipProviderCreate = (source: Node, target: Node) => Promise<void>;
-//
-// export enum TopologyDisplayFilterType {
-//   show = 'show',
-//   expand = 'expand',
-//   kind = 'kind',
-// }
-//
-// export type TopologyDisplayOption = {
-//   type: TopologyDisplayFilterType;
-//   id: string;
-//   label?: string;
-//   labelKey?: string;
-//   priority: number;
-//   value: boolean;
-// };
-//
-// export type OverviewItem<T = K8sResourceCommon> = {
-//   obj: T;
-//   hpas?: K8sResourceCommon[];
-//   isOperatorBackedService?: boolean;
-//   isMonitorable?: boolean;
-//   monitoringAlerts?: PrometheusAlert[];
-// };
-//
-// export type DisplayFilters = TopologyDisplayOption[];
-//
-// // Applies the filters on the model and returns the ids of filters that were relevant
+
+export type RelationshipProviderProvides = (source: Node, target: Node) => Promise<boolean>;
+
+export type RelationshipProviderCreate = (source: Node, target: Node) => Promise<void>;
+
+export enum TopologyDisplayFilterType {
+  show = 'show',
+  expand = 'expand',
+  kind = 'kind',
+}
+
+export type TopologyDisplayOption = {
+  type: TopologyDisplayFilterType;
+  id: string;
+  label?: string;
+  labelKey?: string;
+  priority: number;
+  value: boolean;
+};
+
+export type OverviewItem<T = K8sResourceCommon> = {
+  obj: T;
+  hpas?: K8sResourceCommon[];
+  isOperatorBackedService?: boolean;
+  isMonitorable?: boolean;
+  monitoringAlerts?: PrometheusAlert[];
+};
+
+export type DisplayFilters = TopologyDisplayOption[];
+
+// Applies the filters on the model and returns the ids of filters that were relevant
 // export type TopologyApplyDisplayOptions = (model: Model, filters: DisplayFilters) => string[];
-//
-// export enum TopologyDecoratorQuadrant {
-//   upperLeft = 'upperLeft',
-//   upperRight = 'upperRight',
-//   lowerLeft = 'lowerLeft',
-//   lowerRight = 'lowerRight',
-// }
-//
-// export type TopologyDecoratorGetter = (
-//   element: Node,
-//   radius: number,
-//   centerX: number,
-//   centerY: number,
-// ) => React.ReactElement;
-//
-// export type TopologyDecorator = {
-//   id: string;
-//   priority: number;
-//   quadrant: TopologyDecoratorQuadrant;
-//   decorator: TopologyDecoratorGetter;
-// };
-//
+
+export enum TopologyDecoratorQuadrant {
+  upperLeft = 'upperLeft',
+  upperRight = 'upperRight',
+  lowerLeft = 'lowerLeft',
+  lowerRight = 'lowerRight',
+}
+
+export type TopologyDecoratorGetter = (
+  element: Node,
+  radius: number,
+  centerX: number,
+  centerY: number,
+) => React.ReactElement;
+
+export type TopologyDecorator = {
+  id: string;
+  priority: number;
+  quadrant: TopologyDecoratorQuadrant;
+  decorator: TopologyDecoratorGetter;
+};
+
 // export interface TopologyDataObject<D = {}> {
 //   id: string;
 //   name: string;
@@ -122,49 +122,49 @@
 //   resource: K8sResourceCommon | null;
 //   groupResources?: OdcNodeModel[];
 // }
-//
+
 // export interface TopologyApplicationObject {
 //   id: string;
 //   name: string;
 //   resources: OdcNodeModel[];
 // }
-//
-// export interface WorkloadData {
-//   editURL?: string;
-//   vcsURI?: string;
-//   vcsRef?: string;
-//   builderImage?: string;
-//   kind?: string;
-//   isKnativeResource?: boolean;
-// }
-//
-// export type TrafficData = {
-//   nodes: KialiNode[];
-//   edges: KialiEdge[];
-// };
-//
-// export type KialiNode = {
-//   data: {
-//     id: string;
-//     nodeType: string;
-//     namespace: string;
-//     workload: string;
-//     app: string;
-//     version?: string;
-//     destServices?: { [key: string]: any }[];
-//     traffic?: { [key: string]: any }[];
-//   };
-// };
-//
-// export type KialiEdge = {
-//   data: {
-//     id: string;
-//     source: string;
-//     target: string;
-//     traffic: { [key: string]: any };
-//   };
-// };
-//
+
+export interface WorkloadData {
+  editURL?: string;
+  vcsURI?: string;
+  vcsRef?: string;
+  builderImage?: string;
+  kind?: string;
+  isKnativeResource?: boolean;
+}
+
+export type TrafficData = {
+  nodes: KialiNode[];
+  edges: KialiEdge[];
+};
+
+export type KialiNode = {
+  data: {
+    id: string;
+    nodeType: string;
+    namespace: string;
+    workload: string;
+    app: string;
+    version?: string;
+    destServices?: { [key: string]: any }[];
+    traffic?: { [key: string]: any }[];
+  };
+};
+
+export type KialiEdge = {
+  data: {
+    id: string;
+    source: string;
+    target: string;
+    traffic: { [key: string]: any };
+  };
+};
+
 // export type GraphData = {
 //   namespace: string;
 //   createResourceAccess: string[];
@@ -172,16 +172,16 @@
 //   createConnectorExtensions?: CreateConnectionGetter[];
 //   decorators?: { [key: string]: TopologyDecorator[] };
 // };
-//
-// export type BuildConfigOverviewItem = K8sResourceCommon & {
-//   builds: K8sResourceCommon[];
-// };
-//
-// export type BuildConfigData = {
-//   loaded: boolean;
-//   loadError: string;
-//   buildConfigs: BuildConfigOverviewItem[];
-// };
-//
-// export const SHOW_GROUPING_HINT_EVENT = 'show-regroup-hint';
+
+export type BuildConfigOverviewItem = K8sResourceCommon & {
+  builds: K8sResourceCommon[];
+};
+
+export type BuildConfigData = {
+  loaded: boolean;
+  loadError: string;
+  buildConfigs: BuildConfigOverviewItem[];
+};
+
+export const SHOW_GROUPING_HINT_EVENT = 'show-regroup-hint';
 // export type ShowGroupingHintEventListener = EventListener<[Node, string]>;

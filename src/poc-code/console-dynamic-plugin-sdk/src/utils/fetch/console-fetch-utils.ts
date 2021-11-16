@@ -53,6 +53,7 @@ export const validateStatus = async (
 
   if (response.status === 401 && shouldLogout(url)) {
     // authSvc.logout(window.location.pathname);
+    console.error('// authSvc.logout(window.location.pathname);');
   }
 
   const contentType = response.headers.get('content-type');

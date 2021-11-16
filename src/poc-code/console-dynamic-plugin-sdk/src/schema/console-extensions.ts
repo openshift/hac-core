@@ -17,6 +17,7 @@ import {
 } from '../extensions/dashboards';
 import { FeatureFlag, ModelFeatureFlag } from '../extensions/feature-flags';
 import { FileUpload } from '../extensions/file-upload';
+import { HorizontalNavTab } from '../extensions/horizontal-nav-tabs';
 import {
   HrefNavItem,
   ResourceNSNavItem,
@@ -38,15 +39,15 @@ import { ReduxReducer } from '../extensions/redux';
 import { ModelMetadata } from '../extensions/resource-metadata';
 import { StorageProvider } from '../extensions/storage-provider';
 import { TelemetryListener } from '../extensions/telemetry';
-// import {
-//   TopologyComponentFactory,
-//   TopologyCreateConnector,
-//   TopologyDataModelFactory,
-//   TopologyDecoratorProvider,
-//   TopologyDisplayFilters,
-//   TopologyRelationshipProvider,
-// } from '../extensions/topology';
-// import { SupportedTopologyDetailsExtensions } from '../extensions/topology-details';
+import {
+  // TopologyComponentFactory,
+  // TopologyCreateConnector,
+  // TopologyDataModelFactory,
+  TopologyDecoratorProvider,
+  // TopologyDisplayFilters,
+  TopologyRelationshipProvider,
+} from '../extensions/topology';
+import { SupportedTopologyDetailsExtensions } from '../extensions/topology-details';
 import { UserPreferenceGroup, UserPreferenceItem } from '../extensions/user-preferences';
 import { YAMLTemplate } from '../extensions/yaml-templates';
 
@@ -76,7 +77,7 @@ export type SupportedExtension =
   | TelemetryListener
   | SupportedCatalogExtensions
   | SupportedActionExtensions
-  // | SupportedTopologyDetailsExtensions
+  | SupportedTopologyDetailsExtensions
   | RoutePage
   | ResourceListPage
   | ResourceTabPage
@@ -94,13 +95,14 @@ export type SupportedExtension =
   // | TopologyCreateConnector
   // | TopologyDataModelFactory
   // | TopologyDisplayFilters
-  // | TopologyDecoratorProvider
-  // | TopologyRelationshipProvider
-  | CreateResource
+  | TopologyDecoratorProvider
+  | TopologyRelationshipProvider
+  // | CreateResource
   | CreateResource
   | UserPreferenceGroup
   | UserPreferenceItem
-  | Perspective;
+  | Perspective
+  | HorizontalNavTab;
 
 /**
  * Schema of Console plugin's `console-extensions.json` file.

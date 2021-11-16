@@ -1,12 +1,12 @@
 import * as React from 'react';
 import * as _ from 'lodash';
-// import { useForceRender } from '@console/shared/src/hooks/useForceRender';
 import { Extension, ExtensionTypeGuard, LoadedExtension } from '../typings';
 import { translateExtension } from '../utils/extension-i18n';
 // import useTranslationExt from '../utils/useTranslationExt';
 import { subscribeToExtensions } from './pluginSubscriptionService';
 
-export const useForceRender = () => React.useReducer((s: boolean) => !s, false)[1] as VoidFunction;
+// Copied from '@console/shared/src/hooks/useForceRender'
+const useForceRender = () => React.useReducer((s: boolean) => !s, false)[1] as VoidFunction;
 
 /**
  * React hook for consuming Console extensions.
