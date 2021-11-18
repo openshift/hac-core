@@ -20,12 +20,15 @@ const DynamicRoute: React.FC<DynamicRouteProps> = ({ location }) => {
   const dynamicRoutePages = useExtensions<DynamicRoutePage>(isDynamicRoutePage);
   React.useEffect(() => {
     if (location) {
-      const [, , app] = location.pathname?.split('/') || [];
-      if (app) {
+      const [, first, second] = location.pathname?.split('/') || [];
+      if (first || second) {
         const { properties: currRoute, pluginName } =
-          dynamicRoutePages.find(({ properties }) =>
-            Array.isArray(properties.path) ? properties.path.includes(`/${app}`) : properties.path === `/${app}`,
-          ) || {};
+          dynamicRoutePages.find(({ properties }) => {
+            if (Array.isArray(properties.path)) {
+              return properties.path.includes(`/${second}`) || properties.path.includes(`/${first}`);
+            }
+            return properties.path === `/${second}` || properties.path === `/${first}`;
+          }) || {};
         if (currRoute) {
           setComponent(() =>
             React.lazy(async () => {
