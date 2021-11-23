@@ -1,5 +1,6 @@
 import { activePlugins } from './Utils/constants';
 import { HrefNavItem, NavSection } from '@console/dynamic-plugin-sdk/src';
+import { EnabledPlugin } from '@console/mount/src/components/plugins/IncludePlugins';
 
 export interface RouteProps {
   isHidden?: boolean;
@@ -19,8 +20,8 @@ export type CalculateRoutes = (navIdentifier: [string, string], currentNamespace
 const getAllExtensions: GetAllExtensions = async () => {
   return (
     await Promise.all(
-      activePlugins.flatMap(async (pluginName: string) => {
-        const { extensions } = (await (await fetch(`/api/plugins/${pluginName}/plugin-manifest.json`))?.json()) || {};
+      activePlugins.flatMap(async ({ name: pluginName, pathPrefix = '/api/plugins' }: EnabledPlugin) => {
+        const { extensions } = (await (await fetch(`${pathPrefix}/${pluginName}/plugin-manifest.json`))?.json()) || {};
         return extensions;
       }),
     )

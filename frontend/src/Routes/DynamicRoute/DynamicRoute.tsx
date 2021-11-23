@@ -4,6 +4,7 @@ import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { useExtensions } from '@console/plugin-sdk/src';
 import { ErrorState } from '@redhat-cloud-services/frontend-components/ErrorState';
 import { isRoutePage as isDynamicRoutePage, RoutePage as DynamicRoutePage } from '@console/dynamic-plugin-sdk';
+import { matchPath } from "react-router";
 
 const Loader = () => (
   <Bullseye>
@@ -15,19 +16,30 @@ type DynamicRouteProps = {
   location?: Location;
 };
 
+type RoutePage = {
+  path: string;
+  exact?: boolean;
+}
+
+const checkPath = (pathname, { path, exact }: RoutePage) => {
+  const [,section] = pathname.split('/');
+  return matchPath(
+    location.pathname, { path, exact }
+   ) || matchPath(
+    location.pathname, {path: `/${section}${path}`, exact }
+  );
+}
 const DynamicRoute: React.FC<DynamicRouteProps> = ({ location }) => {
   const [Component, setComponent] = React.useState<React.ExoticComponent<any>>(React.Fragment);
   const dynamicRoutePages = useExtensions<DynamicRoutePage>(isDynamicRoutePage);
   React.useEffect(() => {
     if (location) {
-      const [, first, second] = location.pathname?.split('/') || [];
-      if (first || second) {
-        const { properties: currRoute, pluginName } =
+      const { properties: currRoute, pluginName } =
           dynamicRoutePages.find(({ properties }) => {
             if (Array.isArray(properties.path)) {
-              return properties.path.includes(`/${second}`) || properties.path.includes(`/${first}`);
+              return properties.path.some((path) => checkPath(location.pathname, { ...properties, path }));
             }
-            return properties.path === `/${second}` || properties.path === `/${first}`;
+            return checkPath(location.pathname, properties as RoutePage);
           }) || {};
         if (currRoute) {
           setComponent(() =>
@@ -48,7 +60,6 @@ const DynamicRoute: React.FC<DynamicRouteProps> = ({ location }) => {
             }),
           );
         }
-      }
     }
   }, [location, dynamicRoutePages]);
 

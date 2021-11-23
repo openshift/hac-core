@@ -24,6 +24,7 @@ const webpackProxy = {
   }),
   routes: {
     '/api/plugins/console-demo-plugin': { host: 'http://localhost:9000' },
+    '/apps/sources': { host: 'http://localhost:8003' },
     ...(process.env.API_PORT && {
       '/api/hac': { host: `http://localhost:${process.env.API_PORT}` },
     }),

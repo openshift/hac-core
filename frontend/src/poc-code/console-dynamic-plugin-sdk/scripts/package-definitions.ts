@@ -27,7 +27,7 @@ const commonManifestFields: Partial<readPkg.PackageJson> = {
 };
 
 const commonFiles: GeneratedPackage['filesToCopy'] = {
-  '../../../LICENSE': 'LICENSE',
+  '../../../../LICENSE': 'LICENSE',
   'README.md': 'README.md',
 };
 
