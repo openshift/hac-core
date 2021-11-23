@@ -18,14 +18,22 @@ export type GetAllExtensions = () => Promise<(HrefNavItem | NavSection)[]>;
 export type CalculateRoutes = (navIdentifier: [string, string], currentNamespace: string, extensions: (HrefNavItem | NavSection)[]) => RouteProps[];
 
 const getAllExtensions: GetAllExtensions = async () => {
-  return (
-    await Promise.all(
-      activePlugins.flatMap(async ({ name: pluginName, pathPrefix = '/api/plugins' }: EnabledPlugin) => {
-        const { extensions } = (await (await fetch(`${pathPrefix}/${pluginName}/plugin-manifest.json`))?.json()) || {};
-        return extensions;
-      }),
-    )
-  ).flat();
+  const extensions = (await Promise.allSettled(
+    activePlugins.flatMap(async ({ name: pluginName, pathPrefix = '/api/plugins' }: EnabledPlugin) => {
+      try {
+        const manifest = await (await fetch(`${pathPrefix}/${pluginName}/plugin-manifest.json`))?.json();
+        return manifest?.extensions;
+      } catch (e) {
+        console.log(e);
+      }
+    }),
+  ));
+
+  return extensions
+  .filter((result): result is PromiseFulfilledResult<(HrefNavItem | NavSection)[]> => result.status === 'fulfilled' && result.value)
+  .map(({ value }) => value)
+  .flat()
+  .filter(({ type }) => ['console.navigation/href', 'console.navigation/section'].includes(type));
 };
 
 const calculateRoutes: CalculateRoutes = ([appId, navSection], currentNamespace, extensions) => {
