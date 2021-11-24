@@ -10,9 +10,9 @@ You can choose from either webpack proxy (simple to use) or more config heavy le
 
 ### Run with webpack proxy
 
-1. ```npm install```
+1. ```yarn install```
 
-2. ```npm run start:proxy``` / ```npm run start:beta:proxy```
+2. ```yarn start:proxy``` / ```yarn start:beta:proxy```
 
 Update `config/dev.webpack.config.js` according to your application URL. [Read more](https://github.com/RedHatInsights/frontend-components/tree/master/packages/config#useproxy).
 
@@ -25,15 +25,15 @@ SPANDX_CONFIG="$(pwd)/hac-core-frontend/profiles/local-frontend.js" bash insight
 
 Open new terminal and run the app
 
-1. ```npm install```
+1. ```yarn install```
 
-2. ```npm run start```
+2. ```yarn start```
     - starts webpack bundler and serves the files with webpack dev server
 
 
 ### Testing
 
-`npm run verify` will run `npm run lint` (eslint) and `npm test` (Jest)
+`yarn verify` will run `yarn lint` (eslint) and `npm test` (Jest)
 
 ## Deploying
 

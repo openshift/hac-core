@@ -6,13 +6,13 @@
   "main": "src/index.ts",
   "scripts": {
     "clean": "rm -rf dist generated",
-    "build": "npm run clean && npm run validate && npm run compile && npm run generate",
-    "compile": "for ext in '' '-webpack' ; do npm run ts-node -p tsconfig${ext}.json ; done",
-    "generate": "npm run generate-schema && npm run generate-doc && npm run generate-pkg-assets",
-    "generate-schema": "npm run ts-node scripts/generate-schema.ts",
-    "generate-doc": "npm run ts-node scripts/generate-doc.ts",
-    "generate-pkg-assets": "npm run ts-node scripts/generate-pkg-assets.ts",
-    "validate": "npm run ts-node scripts/validate-extensions.ts",
+    "build": "yarn clean && yarn validate && yarn compile && yarn generate",
+    "compile": "for ext in '' '-webpack' ; do yarn tsc -p tsconfig${ext}.json || exit $? ; done",
+    "generate": "yarn generate-schema && yarn generate-doc && yarn generate-pkg-assets",
+    "generate-schema": "yarn ts-node scripts/generate-schema.ts",
+    "generate-doc": "yarn ts-node scripts/generate-doc.ts",
+    "generate-pkg-assets": "yarn ts-node scripts/generate-pkg-assets.ts",
+    "validate": "yarn ts-node scripts/validate-extensions.ts",
     "ts-node": "ts-node -O '{\"module\":\"commonjs\"}'"
   },
   "devDependencies": {

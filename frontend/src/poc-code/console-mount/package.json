@@ -5,9 +5,9 @@
   "main": "src/app.tsx",
   "private": true,
   "scripts": {
-    "coverage": "npm run test --coverage --collectCoverageFrom='[\"packages/console-mount/src/**\",\"!**/__tests__/**\",\"!packages/console-mount/src/test/**\"]'",
-    "lint": "npm run eslint packages/console-mount --prefix ../..",
-    "test": "npm run test packages/console-mount --prefix ../.."
+    "coverage": "yarn test --coverage --collectCoverageFrom='[\"packages/console-mount/src/**\",\"!**/__tests__/**\",\"!packages/console-mount/src/test/**\"]'",
+    "lint": "yarn --cwd ../.. eslint packages/console-mount",
+    "test": "yarn --cwd ../.. test packages/console-mount"
   },
   "dependencies": {
     "@console/dynamic-plugin-sdk": "0.0.0-fixed",

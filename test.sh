@@ -5,6 +5,6 @@ set -exuo pipefail
 ./build.sh
 
 pushd frontend
-npm run lint
-npm run test
+yarn lint
+yarn test
 popd
