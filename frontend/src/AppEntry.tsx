@@ -10,7 +10,7 @@ import { IncludePlugins } from '@console/mount/src/components/plugins';
 import { activePlugins } from './Utils/constants';
 
 window.SERVER_FLAGS = {
-  consolePlugins: activePlugins,
+  consolePlugins: activePlugins.map(({ name }) => name),
 };
 
 const AppEntry = () => (
