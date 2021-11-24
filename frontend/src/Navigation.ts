@@ -36,7 +36,10 @@ const getAllExtensions: GetAllExtensions = async () => {
             const url = `${pathPrefix}/${pluginName}/plugin-manifest.json`;
             const response: Response = await fetch(url);
             if (response.status !== 200) {
-                throw new Error(`${url} - ${response.status} - ${response.statusText}`);
+                const msg = `${url} - ${response.status} - ${response.statusText}`;
+                // eslint-disable-next-line no-console
+                console.error(msg);
+                throw new Error(msg);
             }
             const manifest: ConsolePluginManifestJSON = await response.json();
             return manifest.extensions;
