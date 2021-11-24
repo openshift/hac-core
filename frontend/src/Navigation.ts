@@ -23,34 +23,34 @@ export type GetAllExtensions = () => Promise<NavExtension[]>;
 export type CalculateRoutes = (navIdentifier: [string, string], currentNamespace: string, extensions: (HrefNavItem | NavSection)[]) => RouteProps[];
 
 const isFulfilledPromise = (result: PromiseSettledResult<Extension[]>): result is PromiseFulfilledResult<Extension[]> => {
-    return result.status === 'fulfilled' && Boolean(result.value);
+  return result.status === 'fulfilled' && Boolean(result.value);
 };
 
 const isNavItem = (extension: Extension): extension is NavExtension => {
-    return navExtensionTypes.includes(extension.type);
+  return navExtensionTypes.includes(extension.type);
 };
 
 const getAllExtensions: GetAllExtensions = async () => {
-    const results: PromiseSettledResult<Extension[]>[] = await Promise.allSettled(
-        activePlugins.flatMap(async ({ name: pluginName, pathPrefix = '/api/plugins' }: EnabledPlugin) => {
-            const url = `${pathPrefix}/${pluginName}/plugin-manifest.json`;
-            const response: Response = await fetch(url);
-            if (response.status !== 200) {
-                const msg = `${url} - ${response.status} - ${response.statusText}`;
-                // eslint-disable-next-line no-console
-                console.error(msg);
-                throw new Error(msg);
-            }
-            const manifest: ConsolePluginManifestJSON = await response.json();
-            return manifest.extensions;
-        }),
-    );
+  const results: PromiseSettledResult<Extension[]>[] = await Promise.allSettled(
+    activePlugins.flatMap(async ({ name: pluginName, pathPrefix = '/api/plugins' }: EnabledPlugin) => {
+      const url = `${pathPrefix}/${pluginName}/plugin-manifest.json`;
+      const response: Response = await fetch(url);
+      if (response.status !== 200) {
+        const msg = `${url} - ${response.status} - ${response.statusText}`;
+        // eslint-disable-next-line no-console
+        console.error(msg);
+        throw new Error(msg);
+      }
+      const manifest: ConsolePluginManifestJSON = await response.json();
+      return manifest.extensions;
+    }),
+  );
 
   return results
-  .filter(isFulfilledPromise)
-  .map(({ value }) => value)
-  .flat()
-  .filter(isNavItem);
+    .filter(isFulfilledPromise)
+    .map(({ value }) => value)
+    .flat()
+    .filter(isNavItem);
 };
 
 const calculateRoutes: CalculateRoutes = ([appId, navSection], currentNamespace, extensions) => {

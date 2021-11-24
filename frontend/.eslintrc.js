@@ -85,5 +85,8 @@ module.exports = {
   globals: {
     process: 'readonly',
     global: 'readonly',
+    // FIXME: Promise.allSettled() has types that eslint does not recognize
+    PromiseSettledResult: 'readonly',
+    PromiseFulfilledResult: 'readonly',
   },
 };

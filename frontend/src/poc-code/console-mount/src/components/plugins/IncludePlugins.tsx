@@ -9,7 +9,7 @@ import { loadDynamicPlugin } from '@console/dynamic-plugin-sdk/src/runtime/plugi
 export type EnabledPlugin = {
   name: string;
   pathPrefix?: string;
-}
+};
 
 type PluginProps = {
   enabledPlugins?: EnabledPlugin[];
