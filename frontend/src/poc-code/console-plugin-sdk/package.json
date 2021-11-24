@@ -5,7 +5,7 @@
   "private": true,
   "main": "src/index.ts",
   "scripts": {
-    "test": "npm run test packages/console-plugin-sdk --prefix ../.."
+    "test": "yarn --cwd ../.. test packages/console-plugin-sdk"
   },
   "devDependencies": {
     "@types/js-combinatorics": "0.5.x",

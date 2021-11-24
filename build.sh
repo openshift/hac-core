@@ -2,6 +2,6 @@
 set -exuo pipefail
 
 pushd frontend
-npm install
-npm run build
+yarn install
+yarn build
 popd
