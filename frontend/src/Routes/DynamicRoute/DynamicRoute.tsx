@@ -23,7 +23,7 @@ type RoutePage = {
 
 const checkPath = (pathname, { path, exact }: RoutePage) => {
   const [, section] = pathname.split('/');
-  return matchPath(location.pathname, { path, exact }) || matchPath(location.pathname, { path: `/${section}${path}`, exact });
+  return matchPath(pathname, { path, exact }) || matchPath(pathname, { path: `/${section}${path}`, exact });
 };
 const DynamicRoute: React.FC<DynamicRouteProps> = ({ location }) => {
   const [Component, setComponent] = React.useState<React.ExoticComponent<any>>(React.Fragment);
