@@ -7,11 +7,13 @@ import { getRegistry } from '@redhat-cloud-services/frontend-components-utilitie
 import NotificationsPortal from '@redhat-cloud-services/frontend-components-notifications/NotificationPortal';
 import { notificationsReducer } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
+import { useStore } from 'react-redux';
 
 const App: React.FC = () => {
   const history = useHistory();
 
   const chrome = useChrome();
+  const store = useStore();
 
   React.useEffect(() => {
     const registry = getRegistry();
@@ -30,7 +32,7 @@ const App: React.FC = () => {
 
   return (
     <React.Fragment>
-      <NotificationsPortal />
+      <NotificationsPortal store={store} />
       <Routes />
     </React.Fragment>
   );
