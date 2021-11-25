@@ -19,6 +19,7 @@
     "lint:ts:fix": "yarn lint:ts --fix",
     "lint:sass": "stylelint 'src/**/*.scss' --config .stylelintrc.json",
     "nightly": "yarn deploy",
+    "dev": "yarn start:proxy:beta:ci",
     "start": "webpack serve --config config/dev.webpack.config.js",
     "start:proxy": "PROXY=true BETA=true webpack serve --config config/dev.webpack.config.js",
     "start:proxy:beta": "yarn build-sdk && PROXY=true BETA=true webpack serve --config config/dev.webpack.config.js",
