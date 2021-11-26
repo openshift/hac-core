@@ -1,0 +1,160 @@
+name: Release workflow
+on:
+  workflow_run:
+    workflows: ['Build and test']
+    branches: [main, master, ci-beta, qa-beta, stage-beta, prod-stable, ci-stable, qa-stable, stage-stable, prod-stable]
+    types:
+      - completed
+jobs:
+  pull-scripts:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: mkdir ${{ github.workspace }}/scripts
+      - name: Pull release file
+        run: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/release.sh > ${{ github.workspace }}/scripts/release.sh
+      - run: chmod +x "${GITHUB_WORKSPACE}/scripts/release.sh"
+      - name: Pull nginx conf file
+        run: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/nginx_conf_gen.sh > ./scripts/nginx_conf_gen.sh
+      - run: chmod +x "${GITHUB_WORKSPACE}/scripts/nginx_conf_gen.sh"
+      - name: Pull quay push file
+        run: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/quay_push.sh > ./scripts/quay_push.sh
+      - run: chmod +x "${GITHUB_WORKSPACE}/scripts/quay_push.sh"
+      - uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/scripts/*
+          key: ${{ github.sha }}-scripts
+  pull-jenkins:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: mkdir ${{ github.workspace }}/.travis
+      - name: Pull the file
+        run: curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/Jenkinsfile > ${{ github.workspace }}/.travis/58231b16fdee45a03a4ee3cf94a9f2c3
+      - uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/.travis/58231b16fdee45a03a4ee3cf94a9f2c3
+          key: ${{ github.sha }}-travis
+  set-ssh:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add SSH key
+        run: |
+            mkdir -p /home/runner/.ssh
+            ssh-keyscan github.com >> /home/runner/.ssh/known_hosts
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" > /home/runner/.ssh/github_actions
+            chmod 600 /home/runner/.ssh/github_actions
+            echo "Host github.com
+              HostName github.com
+              User git
+              AddKeysToAgent yes
+              IdentityFile /home/runner/.ssh/github_actions" >> /home/runner/.ssh/config
+      - uses: actions/cache@v2
+        with:
+          path: /home/runner/.ssh/*
+          key: ${{ github.sha }}-ssh
+  Release-to-build:
+    needs: [pull-scripts, pull-jenkins, set-ssh]
+    runs-on: ubuntu-latest
+    env:
+      COMMIT_AUTHOR_USERNAME: GitHub actions
+      COMMIT_AUTHOR_EMAIL: actions@github.com
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set env variables
+        run: |
+          echo "TRAVIS_BRANCH=$GITHUB_REF_NAME" >> $GITHUB_ENV
+          echo "TRAVIS_BUILD_NUMBER=$GITHUB_RUN_ID" >> $GITHUB_ENV
+          echo "APP_BUILD_DIR=${{ github.workspace }}/frontend/dist"
+          echo "TRAVIS_COMMIT_MESSAGE=`git log -1 --pretty=format:"%s"`" >> $GITHUB_ENV
+          echo "REPO=`node -e 'console.log(require("./package.json").insights.buildrepo)'`" >> $GITHUB_ENV
+      - run: git config -l | grep 'http\..*\.extraheader' | cut -d= -f1 | xargs -L1 git config --unset-all
+      - uses: actions/cache@v2
+        with:
+          path: /home/runner/.ssh/*
+          key: ${{ github.sha }}-ssh
+      - uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/scripts/*
+          key: ${{ github.sha }}-scripts
+      - uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/.travis/58231b16fdee45a03a4ee3cf94a9f2c3
+          key: ${{ github.sha }}-travis
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ${{ github.workspace }}/dist/*
+          key: ${{ github.sha }}
+      - name: Run the deploy
+        run: ${{ github.workspace }}/custom_release.sh
+      - uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/dist/*
+          key: ${{ github.sha }}-released
+  Run-generate-image:
+    needs: pull-scripts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          echo "TRAVIS_BRANCH=$GITHUB_REF_NAME" >> $GITHUB_ENV
+          echo "APP_ROOT=${{ github.workspace }}/dist" >> $GITHUB_ENV
+      - uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/scripts/*
+          key: ${{ github.sha }}-scripts
+      - uses: actions/cache@v2
+        id: restore-build
+        with:
+          path: ${{ github.workspace }}/dist/*
+          key: ${{ github.sha }}
+      - name: Generate configs
+        run: ${{ github.workspace }}/scripts/nginx_conf_gen.sh
+      - name: Check the build repo
+        run: ls -lah ${{ github.workspace }}/dist
+      - uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/dist/*
+          key: ${{ github.sha }}-docker-conf
+  Run-build-and-publish:
+    needs: [Run-generate-image, Release-to-build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/dist/*
+          key: ${{ github.sha }}-docker-conf
+      - uses: actions/cache@v2
+        with:
+          path: ${{ github.workspace }}/dist/*
+          key: ${{ github.sha }}-released
+      - name: List dist folder
+        run: ls -lah ${{ github.workspace }}/dist
+      - name: Set env variables
+        run: |
+          echo "SRC_HASH=`git rev-parse --verify HEAD`" >> $GITHUB_ENV
+          echo "GIT_BRANCH=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+      - name: Deploy to quay
+        run: |
+          APP_NAME=`node -e 'console.log(require("./package.json").imagename || require("./package.json").insights.appname)'`
+          cd ${{ github.workspace }}/dist
+          docker build . -t ${APP_NAME}
+
+          docker tag ${APP_NAME} quay.io/redhat-cloud-services/${APP_NAME}
+
+          docker tag ${APP_NAME} quay.io/redhat-cloud-services/${APP_NAME}:${SRC_HASH}
+
+          docker tag ${APP_NAME} quay.io/redhat-cloud-services/${APP_NAME}:${GIT_BRANCH}
+
+          echo ${{ secrets.DOCKER_TOKEN }} | docker login quay.io --username \$oauthtoken --password-stdin
+
+          docker push quay.io/redhat-cloud-services/${APP_NAME}
+          docker push quay.io/redhat-cloud-services/${APP_NAME}:${SRC_HASH}
+          docker push quay.io/redhat-cloud-services/${APP_NAME}:${GIT_BRANCH}
+      
+

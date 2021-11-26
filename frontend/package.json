@@ -89,6 +89,7 @@
     "webpack-bundle-analyzer": "4.4.2"
   },
   "insights": {
-    "appname": "hac-core"
+    "appname": "hac-core",
+    "buildrepo": "git@github.com:RedHatInsights/hac-core-frontend-build.git"
   }
 }
