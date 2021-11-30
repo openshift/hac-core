@@ -20,6 +20,7 @@ jobs:
       - name: Install dependencies
         run: yarn install
       - run: popd
+
   test-files:
     needs: [install-dependencies]
     runs-on: ubuntu-latest
