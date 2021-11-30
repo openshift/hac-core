@@ -18,7 +18,7 @@ jobs:
           cache: yarn
       - run: pushd frontend
       - name: Install dependencies
-        run: yarn
+        run: yarn install
       - run: popd
   test-files:
     needs: [install-dependencies]
