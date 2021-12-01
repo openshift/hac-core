@@ -39,7 +39,8 @@ const isNavItem = (extension: Extension): extension is NavExtension => {
 const getAllExtensions: GetAllExtensions = async () => {
   const results: PromiseSettledResult<Extension[]>[] = await Promise.allSettled(
     activePlugins.flatMap(async ({ name: pluginName, pathPrefix = '/api/plugins' }: EnabledPlugin) => {
-      const url = `${pathPrefix}/${pluginName}/plugin-manifest.json`;
+      // TODO: once we are hook use chrome to calculate root
+      const url = `./${pathPrefix}/${pluginName}/plugin-manifest.json`;
       const response: Response = await fetch(url);
       if (response.status !== 200) {
         const msg = `${url} - ${response.status} - ${response.statusText}`;

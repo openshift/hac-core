@@ -14,10 +14,10 @@ export type EnabledPlugin = {
 type PluginProps = {
   enabledPlugins?: EnabledPlugin[];
   onPluginRegister?: Function;
-  pathPrefix?: String;
+  base?: String;
 };
 
-const IncludePlugins = ({ enabledPlugins, onPluginRegister = noop }: PluginProps) => {
+const IncludePlugins = ({ enabledPlugins, onPluginRegister = noop, base }: PluginProps) => {
   const [pluginStore, setPluginStore] = React.useState<PluginStore>();
   const store = useReduxStore();
 
@@ -25,8 +25,8 @@ const IncludePlugins = ({ enabledPlugins, onPluginRegister = noop }: PluginProps
     if (pluginStore) {
       enabledPlugins &&
         enabledPlugins.forEach(async ({ name: item, pathPrefix = '/api/plugins' }) => {
-          const manifest = await (await fetch(`${pathPrefix}/${item}/plugin-manifest.json`)).json();
-          loadDynamicPlugin(`${pathPrefix}/${item}/`, manifest).then((pluginName) => {
+          const manifest = await (await fetch(`${base}${pathPrefix}/${item}/plugin-manifest.json`)).json();
+          loadDynamicPlugin(`${base}${pathPrefix}/${item}/`, manifest).then((pluginName) => {
             pluginStore.setDynamicPluginEnabled(pluginName, true);
           });
         });
