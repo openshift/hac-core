@@ -2,6 +2,8 @@
 set -e
 set -x
 
+pushd frontend
+
 if [[ "${TRAVIS_BRANCH}" = "master" || "${TRAVIS_BRANCH}" = "main" ]]
 then
     for env in ci qa stage
@@ -27,3 +29,5 @@ if [[ "${TRAVIS_BRANCH}" = "prod-beta" || "${TRAVIS_BRANCH}" = "prod-stable" ]];
     rm -rf ./build/.git
     ./scripts/release.sh "${TRAVIS_BRANCH}"
 fi
+
+popd
