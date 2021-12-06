@@ -23,7 +23,9 @@ const webpackProxy = {
     localChrome: process.env.INSIGHTS_CHROME,
   }),
   routes: {
-    '/api/plugins/console-demo-plugin': { host: 'http://localhost:9000' },
+    // In order to serve your plugin locally change this line
+    '/api/plugins/console-demo-plugin': { host: 'http://localhost:9001' },
+    // first part is the plugin URL, host is your localhost URL with port
     ...(process.env.API_PORT && {
       '/api/hac': { host: `http://localhost:${process.env.API_PORT}` },
     }),

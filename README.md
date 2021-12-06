@@ -8,6 +8,28 @@ This repo will closely work with the [SDK for Dynamic Plugins](https://github.co
 
 > Note: Today it includes a hacked up version of the SDK to allow us to configure and set up the interface between ConsoleDot and Dynamic Plugins
 
+### Local development
+
+If you want to run your plugin locally with hac-core you will have to update /config/dev.webpack.config.js routes to include your plugin. Then you will have to install and run this application
+
+```
+cd frontend
+yarn install
+yarn dev
+```
+
+### Running with dynamic plugins - openshift console
+
+If you want to run with dynamic plugin from openshift console, simply host the dynamic plugin from the console with backend bridge.
+
+```
+./bin/bridge -plugins console-demo-plugin=http://localhost:9001/
+```
+
+### Running with dynamic plugins - new dynamic plugin
+
+If you want to run the hac-core with dynamic plugin served outside openshift no need for any extra steps. Just run your dynamic plugin and hac-core.
+
 ## Development
 
 To install & build (for production) the code you can run `./build.sh`.
