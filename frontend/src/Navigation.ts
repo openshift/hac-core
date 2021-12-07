@@ -97,11 +97,20 @@ const calculateNavigation = async ({ dynamicNav, currentNamespace }: DynamicNav)
 
 export const useNavigation = ({ dynamicNav, currentNamespace }: DynamicNav): Navigation | RouteProps[] => {
   const [navigation, setNavigation] = React.useState<Navigation | RouteProps[]>();
+  const unmounted = React.useRef<boolean>(false);
   React.useEffect(() => {
     if (dynamicNav) {
       // this is just one off for now, but we can start building on this
-      calculateNavigation({ dynamicNav, currentNamespace }).then((data: Navigation | RouteProps[]) => setNavigation(data));
+      calculateNavigation({ dynamicNav, currentNamespace }).then((data: Navigation | RouteProps[]) => {
+        if (!unmounted.current) {
+          setNavigation(data);
+        }
+      });
     }
+
+    return () => {
+      unmounted.current = true;
+    };
   }, [dynamicNav]);
 
   return navigation;
