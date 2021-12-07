@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { activePlugins } from './Utils/constants';
 import { HrefNavItem, NavSection } from '@console/dynamic-plugin-sdk/src';
 import { EnabledPlugin } from '@console/mount/src/components/plugins/IncludePlugins';
@@ -21,6 +22,11 @@ type NavExtension = HrefNavItem | NavSection;
 
 export type GetAllExtensions = () => Promise<NavExtension[]>;
 export type CalculateRoutes = (navIdentifier: [string, string], currentNamespace: string, extensions: (HrefNavItem | NavSection)[]) => RouteProps[];
+export type Navigation = {
+  expandable: boolean;
+  title: string;
+  routes: RouteProps[];
+};
 
 const isFulfilledPromise = (result: PromiseSettledResult<Extension[]>): result is PromiseFulfilledResult<Extension[]> => {
   return result.status === 'fulfilled' && Boolean(result.value);
@@ -63,13 +69,16 @@ const calculateRoutes: CalculateRoutes = ([appId, navSection], currentNamespace,
     }));
 };
 
-export default async ({ dynamicNav, currentNamespace }: DynamicNav) => {
+const calculateNavigation = async ({ dynamicNav, currentNamespace }: DynamicNav): Promise<Navigation | RouteProps[]> => {
   const [appId, navSection] = dynamicNav.split('/');
   let allExtensions: NavExtension[] = [];
   let routes: RouteProps | RouteProps[];
   try {
     allExtensions = await getAllExtensions();
     routes = calculateRoutes([appId, navSection], currentNamespace, allExtensions);
+    if (routes.length === 0) {
+      routes = [{ isHidden: true }];
+    }
   } catch (e) {
     routes = [{ isHidden: true }];
     // eslint-disable-next-line no-console
@@ -85,3 +94,26 @@ export default async ({ dynamicNav, currentNamespace }: DynamicNav) => {
       }
     : routes;
 };
+
+export const useNavigation = ({ dynamicNav, currentNamespace }: DynamicNav): Navigation | RouteProps[] => {
+  const [navigation, setNavigation] = React.useState<Navigation | RouteProps[]>();
+  const unmounted = React.useRef<boolean>(false);
+  React.useEffect(() => {
+    if (dynamicNav) {
+      // this is just one off for now, but we can start building on this
+      calculateNavigation({ dynamicNav, currentNamespace }).then((data: Navigation | RouteProps[]) => {
+        if (!unmounted.current) {
+          setNavigation(data);
+        }
+      });
+    }
+
+    return () => {
+      unmounted.current = true;
+    };
+  }, [dynamicNav, currentNamespace]);
+
+  return navigation;
+};
+
+export default calculateNavigation;
