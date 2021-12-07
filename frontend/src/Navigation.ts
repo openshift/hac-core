@@ -111,7 +111,7 @@ export const useNavigation = ({ dynamicNav, currentNamespace }: DynamicNav): Nav
     return () => {
       unmounted.current = true;
     };
-  }, [dynamicNav]);
+  }, [dynamicNav, currentNamespace]);
 
   return navigation;
 };
