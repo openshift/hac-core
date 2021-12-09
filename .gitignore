@@ -29,5 +29,7 @@ yarn-error.log*
 
 .DS_Store
 coverage
+
+# Used when releasing to build repository and quay image
 frontend/scripts
 frontend/.travis
