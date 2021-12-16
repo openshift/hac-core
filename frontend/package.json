@@ -21,7 +21,7 @@
     "nightly": "yarn deploy",
     "dev": "yarn start:proxy:beta:ci",
     "start": "webpack serve --config config/dev.webpack.config.js",
-    "start:proxy": "PROXY=true BETA=true webpack serve --config config/dev.webpack.config.js",
+    "start:proxy": "yarn build-sdk && PROXY=true BETA=true webpack serve --config config/dev.webpack.config.js",
     "start:proxy:beta": "yarn build-sdk && PROXY=true BETA=true webpack serve --config config/dev.webpack.config.js",
     "start:proxy:beta:ci": "ENVIRONMENT=ci yarn start:proxy:beta",
     "start:beta": "BETA=true npm start",
