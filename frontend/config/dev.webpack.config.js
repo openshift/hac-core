@@ -13,6 +13,16 @@ const betaOrStable = process.env.BETA ? 'beta' : 'stable';
 // for accessing prod-beta change this to 'prod-beta'
 const env = `${environment}-${betaOrStable}`;
 
+const calculateRemoteConfig = (remoteConfig) => {
+  if (remoteConfig === 'stage') {
+    return 'https://console.stage.redhat.com';
+  } else if (remoteConfig === 'prod') {
+    return 'https://console.redhat.com';
+  }
+
+  return `https://${remoteConfig}.console.redhat.com`;
+};
+
 const webpackProxy = {
   deployment: process.env.BETA ? 'beta/apps' : 'apps',
   useProxy: true,
@@ -29,6 +39,11 @@ const webpackProxy = {
     // first part is the plugin URL, host is your localhost URL with port
     ...(process.env.API_PORT && {
       '/api/hac': { host: `http://localhost:${process.env.API_PORT}` },
+    }),
+    ...(process.env.REMOTE_CONFIG && {
+      [`${process.env.BETA ? '/beta' : ''}/config`]: {
+        host: calculateRemoteConfig(process.env.REMOTE_CONFIG),
+      },
     }),
     ...(process.env.CONFIG_PORT && {
       [`${process.env.BETA ? '/beta' : ''}/config`]: {
