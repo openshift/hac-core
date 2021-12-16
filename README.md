@@ -28,7 +28,7 @@ If you want to run with dynamic plugin from openshift console, simply host the d
 
 ### Running with dynamic plugins - new dynamic plugin
 
-If you want to run the hac-core with dynamic plugin served outside openshift no need for any extra steps. Just run your dynamic plugin and hac-core.
+If you want to run the hac-core with dynamic plugin served outside openshift no need for any extra steps. Just run your dynamic plugin using `npm run start:federated` and hac-core with `yarn dev`. This will start dynamic plugin in federation mode and hac-core will be the host application. The path over which your plugin is available will be printed when starting it, you should then go to `/config/dev.webpack.config.js` and adjust it based on the comments there. After adjusting it, you should restart the `hac-core` app.
 
 ## Development
 

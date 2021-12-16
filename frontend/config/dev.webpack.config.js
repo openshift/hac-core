@@ -23,10 +23,6 @@ const webpackProxy = {
     localChrome: process.env.INSIGHTS_CHROME,
   }),
   routes: {
-    // In order to serve your plugin locally change this line
-    '/api/plugins/console-demo-plugin': { host: 'http://localhost:9000' },
-    // '/beta/api/plugins/console-demo-plugin': { host: 'http://localhost:8003' },
-    // first part is the plugin URL, host is your localhost URL with port
     ...(process.env.API_PORT && {
       '/api/hac': { host: `http://localhost:${process.env.API_PORT}` },
     }),
@@ -36,6 +32,20 @@ const webpackProxy = {
       },
     }),
   },
+  customProxy: [
+    {
+      // if you want to host different plugin than `console-demo-plugin` locally adjust this line
+      context: ['/beta/api/plugins/console-demo-plugin', '/api/plugins/console-demo-plugin'],
+      // In order to serve your plugin locally on your server change this line ↓
+      target: 'http://localhost:9000',
+      secure: false,
+      changeOrigin: true,
+      pathRewrite: {
+        // if you don't want to rewrite `/beta/api/plugins` to `/api/plugins` remove this line
+        '^/beta/api/plugins/console-demo-plugin': '/api/plugins/console-demo-plugin',
+      },
+    },
+  ],
 };
 
 const { config: webpackConfig, plugins } = config({
