@@ -8,18 +8,22 @@ import logger from 'redux-logger';
 import { IncludePlugins } from '@console/mount/src/components/plugins';
 // import MainAppContent from '@console/mount/src/components/foundation/MainAppContent';
 import { activePlugins } from './Utils/constants';
+import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 
 window.SERVER_FLAGS = {
   consolePlugins: activePlugins.map(({ name }) => name),
 };
 
-const AppEntry = () => (
-  <Provider store={init(process.env.NODE_ENV !== 'production' && logger).getStore()}>
-    <Router basename={getBaseName(window.location.pathname, 1)}>
-      <IncludePlugins enabledPlugins={activePlugins} />
-      <App />
-    </Router>
-  </Provider>
-);
+const AppEntry = () => {
+  const { isBeta } = useChrome();
+  return (
+    <Provider store={init(process.env.NODE_ENV !== 'production' && logger).getStore()}>
+      <Router basename={getBaseName(window.location.pathname, 1)}>
+        <IncludePlugins enabledPlugins={activePlugins} base={isBeta?.() ? '/beta' : ''} />
+        <App />
+      </Router>
+    </Provider>
+  );
+};
 
 export default AppEntry;
