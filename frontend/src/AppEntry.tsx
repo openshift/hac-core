@@ -6,7 +6,6 @@ import App from './App';
 import { getBaseName } from '@redhat-cloud-services/frontend-components-utilities/helpers';
 import logger from 'redux-logger';
 import { IncludePlugins } from '@console/mount/src/components/plugins';
-// import MainAppContent from '@console/mount/src/components/foundation/MainAppContent';
 import { activePlugins } from './Utils/constants';
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 
