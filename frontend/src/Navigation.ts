@@ -97,6 +97,13 @@ const calculateNavigation = async ({ dynamicNav, currentNamespace, base }: Dynam
     : routes;
 };
 
+/**
+ * Hook to be used by chrome to calculate navigation chunks.
+ * @param { dynamicNav, currentNamespace }
+ *  * dynamicNav - entry idicating dynamic navigation
+ *  * currentNamespace - current app namespace
+ * @returns either navigation object for nested items or array of navigation object for multiple entries.
+ */
 export const useNavigation = ({ dynamicNav, currentNamespace }: DynamicNav): Navigation | RouteProps[] => {
   const [navigation, setNavigation] = React.useState<Navigation | RouteProps[]>();
   const unmounted = React.useRef<boolean>(false);
