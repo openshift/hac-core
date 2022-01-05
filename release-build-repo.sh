@@ -16,6 +16,9 @@ export REPO=`node -e 'console.log(require("./package.json").insights.buildrepo)'
 # Scipts folder holds scripts from frontend-common-builder
 mkdir -p ./scripts
 
+# Let's see who is running this script
+whoami
+
 # .travis folder is used by release script to promote code to jenkins
 mkdir -p ./.travis
 curl -sSL https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master/src/release.sh > ./scripts/release.sh
