@@ -28,23 +28,17 @@ chmod +x -R ./scripts/
 # When pushed to master/main let's release to [ci, qa, stage]-beta
 if [[ "${TRAVIS_BRANCH}" = "master" || "${TRAVIS_BRANCH}" = "main" ]]
 then
-    for env in ci qa stage
-    do
-        echo "PUSHING ${env}-beta"
-        rm -rf ./dist/.git
-        ./scripts/release.sh "${env}-beta"
-    done
+    echo "PUSHING stage-beta"
+    rm -rf ./dist/.git
+    ./scripts/release.sh "stage-beta"
 fi
 
 # When pushed to stable let's release to [ci, qa, stage]-stable
 if [ "${TRAVIS_BRANCH}" = "stable" ]
 then
-    for env in ci qa stage
-    do
-        echo "PUSHING ${env}-stable"
-        rm -rf ./dist/.git
-        ./scripts/release.sh "${env}-stable"
-    done
+    echo "PUSHING stage-stable"
+    rm -rf ./dist/.git
+    ./scripts/release.sh "stage-stable"
 fi
 
 # When pushed to prod-beta or prod-stable let's release to prod-beta or prod-stable
