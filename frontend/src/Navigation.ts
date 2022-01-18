@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { activePlugins } from './Utils/constants';
+import { getActivePlugins } from './Utils/constants';
 import { HrefNavItem, NavSection } from '@console/dynamic-plugin-sdk/src';
 import { EnabledPlugin } from '@console/mount/src/components/plugins/IncludePlugins';
 import { Extension } from '@console/dynamic-plugin-sdk/src/types';
 import { ConsolePluginManifestJSON } from '@console/dynamic-plugin-sdk/src/schema/plugin-manifest';
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
+import { insights } from '../package.json';
 
 export interface RouteProps {
   isHidden?: boolean;
@@ -17,12 +18,13 @@ export interface DynamicNav {
   dynamicNav: string;
   currentNamespace: string;
   base?: string;
+  isBeta?: () => boolean;
 }
 
 const navExtensionTypes = ['console.navigation/href', 'console.navigation/section'];
 type NavExtension = HrefNavItem | NavSection;
 
-export type GetAllExtensions = (base?: string) => Promise<NavExtension[]>;
+export type GetAllExtensions = (base?: string, isBeta?: () => boolean) => Promise<NavExtension[]>;
 export type CalculateRoutes = (navIdentifier: [string, string], currentNamespace: string, extensions: (HrefNavItem | NavSection)[]) => RouteProps[];
 export type Navigation = {
   expandable: boolean;
@@ -38,9 +40,10 @@ const isNavItem = (extension: Extension): extension is NavExtension => {
   return navExtensionTypes.includes(extension.type);
 };
 
-const getAllExtensions: GetAllExtensions = async (base = '') => {
+const getAllExtensions: GetAllExtensions = async (base = '', isBeta = () => false) => {
+  const plugins = await getActivePlugins(isBeta(), insights.appname);
   const results: PromiseSettledResult<Extension[]>[] = await Promise.allSettled(
-    activePlugins.flatMap(async ({ name: pluginName, pathPrefix = '/api/plugins' }: EnabledPlugin) => {
+    plugins.flatMap(async ({ name: pluginName, pathPrefix = '/api/plugins' }: EnabledPlugin) => {
       const url = `${base}${pathPrefix}/${pluginName}/plugin-manifest.json`;
       const response: Response = await fetch(url);
       if (response.status !== 200) {
@@ -71,12 +74,12 @@ const calculateRoutes: CalculateRoutes = ([appId, navSection], currentNamespace,
     }));
 };
 
-const calculateNavigation = async ({ dynamicNav, currentNamespace, base }: DynamicNav): Promise<Navigation | RouteProps[]> => {
+const calculateNavigation = async ({ dynamicNav, currentNamespace, base, isBeta }: DynamicNav): Promise<Navigation | RouteProps[]> => {
   const [appId, navSection] = dynamicNav.split('/');
   let allExtensions: NavExtension[] = [];
   let routes: RouteProps | RouteProps[];
   try {
-    allExtensions = await getAllExtensions(base);
+    allExtensions = await getAllExtensions(base, isBeta);
     routes = calculateRoutes([appId, navSection], currentNamespace, allExtensions);
     if (routes.length === 0) {
       routes = [{ isHidden: true }];
@@ -111,7 +114,7 @@ export const useNavigation = ({ dynamicNav, currentNamespace }: DynamicNav): Nav
   React.useEffect(() => {
     if (dynamicNav) {
       // this is just one off for now, but we can start building on this
-      calculateNavigation({ dynamicNav, currentNamespace, base: isBeta() ? `/beta` : '' }).then((data: Navigation | RouteProps[]) => {
+      calculateNavigation({ dynamicNav, currentNamespace, base: isBeta() ? `/beta` : '', isBeta }).then((data: Navigation | RouteProps[]) => {
         if (!unmounted.current) {
           setNavigation(data);
         }

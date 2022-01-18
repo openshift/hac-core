@@ -6,20 +6,35 @@ import App from './App';
 import { getBaseName } from '@redhat-cloud-services/frontend-components-utilities/helpers';
 import logger from 'redux-logger';
 import { IncludePlugins } from '@console/mount/src/components/plugins';
-import { activePlugins } from './Utils/constants';
+import { getActivePlugins, PluginType } from './Utils/constants';
+import Loader from './Utils/Loader';
+import { insights } from '../package.json';
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
-
-window.SERVER_FLAGS = {
-  consolePlugins: activePlugins.map(({ name }) => name),
-};
 
 const AppEntry = () => {
   const { isBeta } = useChrome();
+  const [plugins, setPlugins] = React.useState<PluginType[]>([]);
+  React.useEffect(() => {
+    if (isBeta) {
+      getActivePlugins(isBeta(), insights.appname).then((data) => {
+        setPlugins(data);
+        window.SERVER_FLAGS = {
+          consolePlugins: data.map(({ name }) => name),
+        };
+      });
+    }
+  }, [isBeta]);
   return (
     <Provider store={init(process.env.NODE_ENV !== 'production' && logger).getStore()}>
       <Router basename={getBaseName(window.location.pathname, 1)}>
-        <IncludePlugins enabledPlugins={activePlugins} base={isBeta?.() ? '/beta' : ''} />
-        <App />
+        {plugins.length > 0 ? (
+          <React.Fragment>
+            <IncludePlugins enabledPlugins={plugins} base={isBeta?.() ? '/beta' : ''} />
+            <App />
+          </React.Fragment>
+        ) : (
+          <Loader />
+        )}
       </Router>
     </Provider>
   );

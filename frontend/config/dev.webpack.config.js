@@ -72,6 +72,8 @@ const { config: webpackConfig, plugins } = config({
 
 plugins.push(...commonPlugins);
 
+webpackConfig.devServer.client.overlay = false;
+
 module.exports = mergeTsConfigAliases({
   ...webpackConfig,
   plugins,

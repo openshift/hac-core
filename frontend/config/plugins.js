@@ -1,6 +1,7 @@
 const webpack = require('webpack');
 const { resolve } = require('path');
 const fedModulePlugin = require('@redhat-cloud-services/frontend-components-config/federated-modules');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const plugins = [
   fedModulePlugin({
@@ -12,6 +13,9 @@ const plugins = [
       // System detail
       './Navigation': resolve(__dirname, '../src/Navigation'),
     },
+  }),
+  new CopyWebpackPlugin({
+    patterns: [{ from: 'static' }],
   }),
 ];
 
