@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { getActivePlugins } from './Utils/constants';
+import { getActivePlugins } from './Utils/plugins';
 import { HrefNavItem, NavSection } from '@console/dynamic-plugin-sdk/src';
 import { EnabledPlugin } from '@console/mount/src/components/plugins/IncludePlugins';
 import { Extension } from '@console/dynamic-plugin-sdk/src/types';
 import { ConsolePluginManifestJSON } from '@console/dynamic-plugin-sdk/src/schema/plugin-manifest';
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
-import { insights } from '../package.json';
+import packageInfo from '../package.json';
 
 export interface RouteProps {
   isHidden?: boolean;
@@ -41,7 +41,7 @@ const isNavItem = (extension: Extension): extension is NavExtension => {
 };
 
 const getAllExtensions: GetAllExtensions = async (base = '', isBeta = () => false) => {
-  const plugins = await getActivePlugins(isBeta(), insights.appname);
+  const plugins = await getActivePlugins(isBeta(), packageInfo.insights.appname);
   const results: PromiseSettledResult<Extension[]>[] = await Promise.allSettled(
     plugins.flatMap(async ({ name: pluginName, pathPrefix = '/api/plugins' }: EnabledPlugin) => {
       const url = `${base}${pathPrefix}/${pluginName}/plugin-manifest.json`;

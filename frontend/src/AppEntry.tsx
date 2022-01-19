@@ -6,9 +6,9 @@ import App from './App';
 import { getBaseName } from '@redhat-cloud-services/frontend-components-utilities/helpers';
 import logger from 'redux-logger';
 import { IncludePlugins } from '@console/mount/src/components/plugins';
-import { getActivePlugins, PluginType } from './Utils/constants';
+import { getActivePlugins, PluginType } from './Utils/plugins';
 import Loader from './Utils/Loader';
-import { insights } from '../package.json';
+import packageInfo from '../package.json';
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 
 const AppEntry = () => {
@@ -16,7 +16,7 @@ const AppEntry = () => {
   const [plugins, setPlugins] = React.useState<PluginType[]>([]);
   React.useEffect(() => {
     if (isBeta) {
-      getActivePlugins(isBeta(), insights.appname).then((data) => {
+      getActivePlugins(isBeta(), packageInfo.insights.appname).then((data) => {
         setPlugins(data);
         window.SERVER_FLAGS = {
           consolePlugins: data.map(({ name }) => name),
