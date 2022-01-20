@@ -11,6 +11,7 @@
     "experimentalDecorators": true,
     "sourceMap": true,
     "noUnusedLocals": true,
+    "resolveJsonModule": true,
     "paths": {
       "@console/mount/*": ["src/poc-code/console-mount/*"],
       "@console/plugin-sdk": ["src/poc-code/console-plugin-sdk"],

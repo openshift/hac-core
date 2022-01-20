@@ -42,6 +42,7 @@
     "chalk": "^2.4.2",
     "classnames": "^2.3.1",
     "comment-json": "^4.1.1",
+    "copy-webpack-plugin": "^10.2.0",
     "find-up": "^4.1.0",
     "lodash-es": "^4.17.21",
     "react": "17.0.2",
