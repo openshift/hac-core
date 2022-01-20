@@ -10,7 +10,7 @@ export const getActivePlugins: GetActivePlugins = async (isBeta, appName) => {
     return (await fetch(`${isBeta ? '/beta' : ''}/apps/${appName}/plugins.json`)).json();
   } catch (e) {
     // eslint-disable-next-line no-console
-    console.error(e);
+    console.error('Failed to fetch plugin data', e);
     return [];
   }
 };
