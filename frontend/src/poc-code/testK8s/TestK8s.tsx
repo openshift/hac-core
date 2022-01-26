@@ -32,6 +32,7 @@ const ConfigMapModel: K8sModel = {
   namespaced: true,
 };
 
+// eslint-disable-next-line no-shadow
 enum ActionType {
   LIST = 'list',
   CREATE = 'create',
