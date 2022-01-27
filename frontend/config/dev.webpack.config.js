@@ -2,6 +2,7 @@ const { resolve } = require('path');
 const config = require('@redhat-cloud-services/frontend-components-config');
 const commonPlugins = require('./plugins');
 const mergeTsConfigAliases = require('./mergeTsConfigAliases');
+const { K8sTargetURL } = require('../constants');
 
 const insightsProxy = {
   https: false,
@@ -48,6 +49,15 @@ const webpackProxy = {
     }),
   },
   customProxy: [
+    {
+      context: (path) => path.includes('/api/k8s'),
+      target: K8sTargetURL,
+      secure: false,
+      changeOrigin: true,
+      autoRewrite: true,
+      ws: true,
+      pathRewrite: { '^/api/k8s': '' },
+    },
     {
       // if you want to host different plugin than `console-demo-plugin` locally adjust this line
       context: ['/beta/api/plugins/console-demo-plugin', '/api/plugins/console-demo-plugin'],
