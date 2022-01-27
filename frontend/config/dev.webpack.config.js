@@ -2,6 +2,7 @@ const { resolve } = require('path');
 const config = require('@redhat-cloud-services/frontend-components-config');
 const commonPlugins = require('./plugins');
 const mergeTsConfigAliases = require('./mergeTsConfigAliases');
+const { K8sTargetURL } = require('../constants');
 
 const insightsProxy = {
   https: false,
@@ -50,7 +51,7 @@ const webpackProxy = {
   customProxy: [
     {
       context: (path) => path.includes('/api/k8s'),
-      target: 'https://api-toolchain-host-operator.apps.appstudio-stage.x99m.p1.openshiftapps.com:443',
+      target: K8sTargetURL,
       secure: false,
       changeOrigin: true,
       autoRewrite: true,

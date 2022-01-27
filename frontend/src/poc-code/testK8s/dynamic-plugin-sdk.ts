@@ -2,11 +2,15 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import { HttpError } from './shared/utils/error/http-error';
+import { K8sTargetURL } from '../../../constants';
 
 const HOOK_POLL_DELAY = 2000; // change this if you want the useHook to go faster / slower on polls
 
 /* throw away fetch methods */
-const k8sBasePath = `/api/k8s`; // webpack proxy path
+/**
+ * The path to talk to K8s instance; either directly or through the dev webpack server.
+ */
+const k8sBasePath = process.env.NODE_ENV === 'production' ? K8sTargetURL : `/api/k8s`;
 
 export const validateStatus = async (
   response: Response
