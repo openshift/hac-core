@@ -70,7 +70,9 @@ const commonFetch = async (url, method, options, timeout): Promise<any> => {
   const allOptions = _.defaultsDeep({ method }, options, { headers: { Accept: 'application/json' } });
   allOptions.headers.Authorization = `Bearer ${token}`;
   try {
-    const response = await fetch(url, allOptions).then(validateStatus);
+    // Allow creds to be sent to cross origin in preflight objects
+    const fetchInput = process.env.NODE_ENV === 'production' ? new Request(url, { credentials: 'include' }) : url;
+    const response = await fetch(fetchInput, allOptions).then(validateStatus);
     const json = await response.json();
     return Promise.resolve(json);
   } catch(e) {
