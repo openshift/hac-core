@@ -15,7 +15,7 @@ const AppEntry = () => {
   const { isBeta } = useChrome();
   const [plugins, setPlugins] = React.useState<PluginType[]>([]);
   React.useEffect(() => {
-    if (isBeta) {
+    if (isBeta !== undefined) {
       getActivePlugins(isBeta(), packageInfo.insights.appname).then((data) => {
         setPlugins(data);
         window.SERVER_FLAGS = {
