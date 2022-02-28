@@ -28,7 +28,7 @@ chmod +x -R ./scripts/
 # When pushed to master/main let's release to [ci, qa, stage]-beta
 if [[ "${TRAVIS_BRANCH}" = "master" || "${TRAVIS_BRANCH}" = "main" ]]
 then
-    for env in qa stage
+    for env in qa stage prod
     do
         echo "PUSHING ${env}-beta"
         rm -rf ./dist/.git
