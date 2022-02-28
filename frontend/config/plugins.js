@@ -13,6 +13,7 @@ const plugins = [
       // System detail
       './Navigation': resolve(__dirname, '../src/Navigation'),
     },
+    shared: [{ 'react-router-dom': { singleton: true, requiredVersion: '5.2.0' } }],
   }),
   new CopyWebpackPlugin({
     patterns: [{ from: 'static' }],
