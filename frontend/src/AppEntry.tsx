@@ -10,9 +10,11 @@ import { getActivePlugins, PluginType } from './Utils/plugins';
 import Loader from './Utils/Loader';
 import packageInfo from '../package.json';
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
+import { setUtilsConfig, getUtilsConfig } from '@openshift/dynamic-plugin-sdk-utils';
+import { commonFetch } from './Utils/commonFetch';
 
 const AppEntry = () => {
-  const { isBeta } = useChrome();
+  const { isBeta, auth } = useChrome();
   const [plugins, setPlugins] = React.useState<PluginType[]>([]);
   React.useEffect(() => {
     if (isBeta !== undefined) {
@@ -24,6 +26,19 @@ const AppEntry = () => {
       });
     }
   }, [isBeta]);
+
+  React.useEffect(() => {
+    if (auth !== undefined) {
+      try {
+        getUtilsConfig();
+        return;
+      } catch (e) {
+        // not set
+        setUtilsConfig({ appFetch: commonFetch(auth.getToken()) });
+      }
+    }
+  }, [auth]);
+
   return (
     <Provider store={init(process.env.NODE_ENV !== 'production' && logger).getStore()}>
       <Router basename={getBaseName(window.location.pathname, 1)}>
