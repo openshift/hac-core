@@ -6,6 +6,8 @@ import { SharedModuleResolution, RemoteEntryModule } from './types';
 const modules: SharedModuleResolution = {
   '@openshift-console/dynamic-plugin-sdk': async () => () =>
     require('@console/dynamic-plugin-sdk/src/lib-core'),
+  '@openshift/dynamic-plugin-sdk-utils': async () => () =>
+    require('@openshift/dynamic-plugin-sdk-utils'),
   // '@openshift-console/dynamic-plugin-sdk-internal': async () => () =>
   //   require('@console/dynamic-plugin-sdk/src/lib-internal'),
   // '@openshift-console/dynamic-plugin-sdk-internal-kubevirt': async () => () =>
