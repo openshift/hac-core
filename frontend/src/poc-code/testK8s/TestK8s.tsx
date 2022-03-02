@@ -6,12 +6,13 @@ import {
   k8sDeleteResource,
   k8sGetResource,
   k8sListResource,
-  K8sModel,
+  // K8sModel,
   k8sPatchResource,
-  K8sResourceCommon,
+  // K8sResourceCommon,
   k8sUpdateResource,
-  // useK8sWatchResource,
-} from './dynamic-plugin-sdk';
+} from '@openshift/dynamic-plugin-sdk-utils';
+
+import type { K8sModel, K8sResourceCommon } from './dynamic-plugin-sdk';
 
 const ProjectModel: K8sModel = {
   apiVersion: 'v1',
@@ -22,19 +23,20 @@ const ProjectModel: K8sModel = {
   labelPlural: 'Projects',
   plural: 'projects',
 };
-const ConfigMapModel: K8sModel = {
-  apiVersion: 'v1',
-  kind: 'ConfigMap',
-  abbr: 'CM',
-  plural: 'configmaps',
-  labelPlural: 'ConfigMaps',
-  label: 'ConfigMap',
-  namespaced: true,
+
+const ApplicationModel: K8sModel = {
+  apiVersion: 'v1alpha1',
+  kind: 'Application',
+  apiGroup: 'appstudio.redhat.com',
+  abbr: 'A',
+  label: 'Application',
+  labelPlural: 'Applications',
+  plural: 'applications',
 };
 
 // eslint-disable-next-line no-shadow
 enum ActionType {
-  LIST = 'list',
+  LIST = 'list projects',
   CREATE = 'create',
   GET = 'get',
   PATCH = 'patch',
@@ -48,57 +50,35 @@ const TestK8s: React.FC = () => {
   const [name, setName] = React.useState<string>('test');
   const [status, setStatus] = React.useState<string>('');
   const [action, setAction] = React.useState<ActionType | null>(null);
-
-  // const result = useK8sWatchResource({
-  //   groupVersionKind: { version: 'v1', kind: 'ConfigMap' },
-  //   name: 'test',
-  //   namespace,
-  // });
-  // const result = useK8sWatchResource(
-  //   namespace === 'default' // default namespace has 100s of configmaps, don't fetch it
-  //     ? {}
-  //     : {
-  //         // groupVersionKind: { group: 'project.openshift.io', version: 'v1', kind: 'Project' },
-  //         groupVersionKind: { version: 'v1', kind: 'ConfigMap' },
-  //         isList: true,
-  //         namespace,
-  //       },
-  // );
-  // const hookResource = result[0];
-  // console.debug('render result', result);
+  const [resourceVersion, setResourceVersion] = React.useState<string>(null);
 
   React.useEffect(() => {
-    const testConfigMapMetadata = {
+    const testApplicationMetadata = {
+      name,
+      ns: namespace,
+    };
+    const testApplicationData: K8sResourceCommon & { [key: string]: any } = {
+      apiVersion: `${ApplicationModel.apiGroup}/${ApplicationModel.apiVersion}`,
+      kind: ApplicationModel.kind,
       metadata: {
         name,
         namespace,
-      },
-    };
-    const testConfigMapData: K8sResourceCommon & { [key: string]: any } = {
-      apiVersion: ConfigMapModel.apiVersion,
-      kind: ConfigMapModel.kind,
-      ...testConfigMapMetadata,
-      data: {
-        test: 'true',
       },
     };
 
     let promise = null;
     switch (action) {
       case ActionType.LIST:
-        // TODO: this can work sorta for getting your namespace value
-        // response[0].metadata.name === your namespace
         promise = k8sListResource({
           model: ProjectModel,
-        }).then((data) => {
-          // Lock in the namespace
+        }).then(({ items }: any) => {
           let ns = null;
-          if (Array.isArray(data)) {
-            const namespaces = data.map((dataResource) => dataResource.metadata.name);
+          if (Array.isArray(items)) {
+            const namespaces = items.map((dataResource) => dataResource.metadata.name);
             console.debug('++++available namespaces:', namespaces);
             ns = namespaces[0];
-          } else if (data?.metadata?.namespace) {
-            ns = data.metadata.namespace;
+          } else if (items?.metadata?.namespace) {
+            ns = items.metadata.namespace;
           }
 
           if (ns) {
@@ -108,30 +88,33 @@ const TestK8s: React.FC = () => {
             // eslint-disable-next-line no-alert
             alert('Could not find namespace; you are likely not able to do much as we are targeting "default"');
           }
-          return data;
+          return items;
         });
         break;
       case ActionType.CREATE:
         promise = k8sCreateResource({
-          model: ConfigMapModel,
-          data: testConfigMapData,
+          model: ApplicationModel,
+          queryOptions: testApplicationMetadata,
+          resource: testApplicationData,
         });
         break;
       case ActionType.GET:
         promise = k8sGetResource({
-          model: ConfigMapModel,
-          name: testConfigMapMetadata.metadata.name,
-          ns: testConfigMapMetadata.metadata.namespace,
+          model: ApplicationModel,
+          queryOptions: testApplicationMetadata,
+        }).then((data) => {
+          setResourceVersion(data?.metadata?.resourceVersion);
+          return data;
         });
         break;
       case ActionType.PATCH:
         promise = k8sPatchResource({
-          model: ConfigMapModel,
-          resource: testConfigMapMetadata,
-          data: [
+          model: ApplicationModel,
+          queryOptions: testApplicationMetadata,
+          patches: [
             {
               op: 'replace',
-              path: '/data/test',
+              path: '/test',
               value: 'false',
             },
           ],
@@ -139,16 +122,24 @@ const TestK8s: React.FC = () => {
         break;
       case ActionType.PUT:
         promise = k8sUpdateResource({
-          model: ConfigMapModel,
-          name: testConfigMapMetadata.metadata.name,
-          ns: testConfigMapMetadata.metadata.namespace,
-          data: { ...testConfigMapData, data: { ...testConfigMapData.data, new: 'prop' } },
+          model: ApplicationModel,
+          queryOptions: testApplicationMetadata,
+          resource: {
+            ...testApplicationData,
+            metadata: {
+              ...testApplicationData.metadata,
+              resourceVersion,
+            },
+          },
+        }).then((data) => {
+          setResourceVersion(data?.metadata?.resourceVersion);
+          return data;
         });
         break;
       case ActionType.DELETE:
         promise = k8sDeleteResource({
-          model: ConfigMapModel,
-          resource: testConfigMapMetadata,
+          model: ApplicationModel,
+          queryOptions: testApplicationMetadata,
         });
         break;
       case null:
@@ -166,7 +157,7 @@ const TestK8s: React.FC = () => {
       })
       .catch((err) => {
         console.error(`++++failed ${action}`, err);
-        setStatus('failed call');
+        setStatus(`failed call: ${err.message}`);
         setR(null);
       })
       .finally(() => {
@@ -174,34 +165,48 @@ const TestK8s: React.FC = () => {
       });
   }, [action, name, namespace]);
 
+  const sanitize = (resourceOrResourceList) => {
+    if (Array.isArray(resourceOrResourceList)) {
+      return resourceOrResourceList.map(sanitize);
+    }
+
+    const {
+      apiVersion,
+      kind,
+      apiGroup,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      metadata: { managedFields, ...metadata }, // drop managedFields
+      ...resource
+    } = resourceOrResourceList;
+
+    return {
+      apiVersion,
+      kind,
+      apiGroup,
+      metadata,
+      ...resource,
+    };
+  };
+
   return (
     <PageSection>
-      <TextInput placeholder="ConfigMap name" onChange={(v) => setName(v)} value={name} />
+      <TextInput placeholder="Application name" onChange={(v) => setName(v)} value={name} />
       <div>
-        <p>Test calls -- predefined data; use the above input to make/update/get multiple ConfigMaps</p>
+        <p>Test calls -- predefined data; use the above input to make/update/get multiple Applications</p>
         {Object.values(ActionType).map((v) => (
           <React.Fragment key={v}>
-            <Button isDisabled={v !== ActionType.LIST && namespace === 'default'} onClick={() => setAction(v)}>
+            <Button
+              isDisabled={(v !== ActionType.LIST && namespace === 'default') || (v === ActionType.PUT && resourceVersion === null)}
+              onClick={() => setAction(v)}
+            >
               {v}
             </Button>{' '}
           </React.Fragment>
         ))}
         In `{namespace}` namespace
       </div>
-      {/*{hookResource ? (*/}
-      {/*  <>*/}
-      {/*    {Array.isArray(hookResource) && <p>{hookResource.length} item(s) in the array</p>}*/}
-      {/*    <pre>{JSON.stringify(hookResource, null, 2)}</pre>*/}
-      {/*  </>*/}
-      {/*) : (*/}
-      {/*  'No watched resource'*/}
-      {/*)}*/}
-      {r && (
-        <>
-          <div>{status}</div>
-          <pre>{JSON.stringify(r, null, 2)}</pre>
-        </>
-      )}
+      <div>{status}</div>
+      {r && <pre>{JSON.stringify(sanitize(r), null, 2)}</pre>}
     </PageSection>
   );
 };

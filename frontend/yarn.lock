@@ -551,6 +551,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@openshift/dynamic-plugin-sdk-utils@^1.0.0-alpha1":
+  version "1.0.0-alpha1"
+  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk-utils/-/dynamic-plugin-sdk-utils-1.0.0-alpha1.tgz#fa5d43d1072e2bfb7cf88400d2626e9d4fdad07e"
+  integrity sha512-mV53XRKyVB9mbokSbtnDl3vUwrWCxjqRJ3fYV891GkDtrQGV+foyTMdu4nD4VHjJcuayknZX46YtjGyyAKlpKA==
+
 "@patternfly/patternfly@4.122.2":
   version "4.122.2"
   resolved "https://registry.yarnpkg.com/@patternfly/patternfly/-/patternfly-4.122.2.tgz#3e774d78996c7027b8c528edb2e90990676458a5"

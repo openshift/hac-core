@@ -183,9 +183,9 @@ type ObjectMetadata = {
  *  External Types  *
  * ---------------- */
 export type K8sResourceCommon = {
-  apiVersion?: string;
-  kind?: string;
-  metadata?: ObjectMetadata;
+  apiVersion: string;
+  kind: string;
+  metadata: ObjectMetadata;
 };
 export type K8sModel = {
   abbr: string;
