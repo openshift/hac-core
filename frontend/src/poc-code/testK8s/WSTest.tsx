@@ -11,9 +11,6 @@ const WSTest = () => {
   const [error, setError] = React.useState(null);
   const [isOpen, setOpen] = React.useState(false);
 
-  // To get WS to work even a bit, we need to modify @redhat-cloud-services/frontend-components-config-utilities
-  // in 'frontend/node_modules/@redhat-cloud-services/frontend-components-config-utilities/repos/insights-chrome-build/snippets/head.html'
-  // 'wss:' needs to exist next to 'https:'
   React.useEffect(() => {
     let ws: WSFactory;
     if (createSocket) {
