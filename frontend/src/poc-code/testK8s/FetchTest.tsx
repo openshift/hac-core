@@ -1,16 +1,19 @@
+/* eslint-disable no-console */
 import * as React from 'react';
 import { Button, TextInput, Title } from '@patternfly/react-core';
-import PrintObject from './PrintObject';
 import {
   k8sCreateResource,
   k8sDeleteResource,
   k8sGetResource,
   k8sListResource,
-  K8sModel,
+  // K8sModel,
   k8sPatchResource,
-  K8sResourceCommon,
+  // K8sResourceCommon,
   k8sUpdateResource,
-} from './dynamic-plugin-sdk';
+} from '@openshift/dynamic-plugin-sdk-utils';
+
+import type { K8sModel, K8sResourceCommon } from './dynamic-plugin-sdk';
+import PrintObject from './PrintObject';
 
 const ProjectModel: K8sModel = {
   apiVersion: 'v1',
@@ -21,15 +24,6 @@ const ProjectModel: K8sModel = {
   labelPlural: 'Projects',
   plural: 'projects',
 };
-// const ConfigMapModel: K8sModel = {
-//   apiVersion: 'v1',
-//   kind: 'ConfigMap',
-//   abbr: 'CM',
-//   plural: 'configmaps',
-//   labelPlural: 'ConfigMaps',
-//   label: 'ConfigMap',
-//   namespaced: true,
-// };
 
 const ApplicationModel: K8sModel = {
   apiVersion: 'v1alpha1',
@@ -57,57 +51,35 @@ const FetchTest: React.FC = () => {
   const [name, setName] = React.useState<string>('test');
   const [status, setStatus] = React.useState<string>('');
   const [action, setAction] = React.useState<ActionType | null>(null);
-
-  // const result = useK8sWatchResource({
-  //   groupVersionKind: { version: 'v1', kind: 'ConfigMap' },
-  //   name: 'test',
-  //   namespace,
-  // });
-  // const result = useK8sWatchResource(
-  //   namespace === 'default' // default namespace has 100s of configmaps, don't fetch it
-  //     ? {}
-  //     : {
-  //         // groupVersionKind: { group: 'project.openshift.io', version: 'v1', kind: 'Project' },
-  //         groupVersionKind: { version: 'v1', kind: 'ConfigMap' },
-  //         isList: true,
-  //         namespace,
-  //       },
-  // );
-  // const hookResource = result[0];
-  // console.debug('render result', result);
+  const [resourceVersion, setResourceVersion] = React.useState<string>(null);
 
   React.useEffect(() => {
     const testApplicationMetadata = {
-      metadata: {
-        name,
-        namespace,
-      },
+      name,
+      ns: namespace,
     };
     const testApplicationData: K8sResourceCommon & { [key: string]: any } = {
       apiVersion: `${ApplicationModel.apiGroup}/${ApplicationModel.apiVersion}`,
       kind: ApplicationModel.kind,
-      ...testApplicationMetadata,
-      spec: {
-        displayName: name,
+      metadata: {
+        name,
+        namespace,
       },
     };
 
     let promise = null;
     switch (action) {
       case ActionType.LIST:
-        // TODO: this can work sorta for getting your namespace value
-        // response[0].metadata.name === your namespace
         promise = k8sListResource({
           model: ProjectModel,
-        }).then((data) => {
-          // Lock in the namespace
+        }).then(({ items }: any) => {
           let ns = null;
-          if (Array.isArray(data)) {
-            const namespaces = data.map((dataResource) => dataResource.metadata.name);
+          if (Array.isArray(items)) {
+            const namespaces = items.map((dataResource) => dataResource.metadata.name);
             console.debug('++++available namespaces:', namespaces);
             ns = namespaces[0];
-          } else if (data?.metadata?.namespace) {
-            ns = data.metadata.namespace;
+          } else if (items?.metadata?.namespace) {
+            ns = items.metadata.namespace;
           }
 
           if (ns) {
@@ -117,30 +89,33 @@ const FetchTest: React.FC = () => {
             // eslint-disable-next-line no-alert
             alert('Could not find namespace; you are likely not able to do much as we are targeting "default"');
           }
-          return data;
+          return items;
         });
         break;
       case ActionType.CREATE:
         promise = k8sCreateResource({
           model: ApplicationModel,
-          data: testApplicationData,
+          queryOptions: testApplicationMetadata,
+          resource: testApplicationData,
         });
         break;
       case ActionType.GET:
         promise = k8sGetResource({
           model: ApplicationModel,
-          name: testApplicationMetadata.metadata.name,
-          ns: testApplicationMetadata.metadata.namespace,
+          queryOptions: testApplicationMetadata,
+        }).then((data) => {
+          setResourceVersion(data?.metadata?.resourceVersion);
+          return data;
         });
         break;
       case ActionType.PATCH:
         promise = k8sPatchResource({
           model: ApplicationModel,
-          resource: testApplicationMetadata,
-          data: [
+          queryOptions: testApplicationMetadata,
+          patches: [
             {
               op: 'replace',
-              path: '/data/test',
+              path: '/test',
               value: 'false',
             },
           ],
@@ -149,15 +124,23 @@ const FetchTest: React.FC = () => {
       case ActionType.PUT:
         promise = k8sUpdateResource({
           model: ApplicationModel,
-          name: testApplicationMetadata.metadata.name,
-          ns: testApplicationMetadata.metadata.namespace,
-          data: { ...testApplicationData, data: { ...testApplicationData.data, new: 'prop' } },
+          queryOptions: testApplicationMetadata,
+          resource: {
+            ...testApplicationData,
+            metadata: {
+              ...testApplicationData.metadata,
+              resourceVersion,
+            },
+          },
+        }).then((data) => {
+          setResourceVersion(data?.metadata?.resourceVersion);
+          return data;
         });
         break;
       case ActionType.DELETE:
         promise = k8sDeleteResource({
           model: ApplicationModel,
-          resource: testApplicationMetadata,
+          queryOptions: testApplicationMetadata,
         });
         break;
       case null:
@@ -181,7 +164,7 @@ const FetchTest: React.FC = () => {
       .finally(() => {
         setAction(null); // prevent the hook for re-firing on name change
       });
-  }, [action, name, namespace]);
+  }, [action, name, namespace, resourceVersion]);
 
   return (
     <>
@@ -193,21 +176,16 @@ const FetchTest: React.FC = () => {
         <p>Test calls -- predefined data; use the above input to make/update/get multiple Applications</p>
         {Object.values(ActionType).map((v) => (
           <React.Fragment key={v}>
-            <Button isDisabled={v !== ActionType.LIST && namespace === 'default'} onClick={() => setAction(v)}>
+            <Button
+              isDisabled={(v !== ActionType.LIST && namespace === 'default') || (v === ActionType.PUT && resourceVersion === null)}
+              onClick={() => setAction(v)}
+            >
               {v}
             </Button>{' '}
           </React.Fragment>
         ))}
         In `{namespace}` namespace
       </div>
-      {/*{hookResource ? (*/}
-      {/*  <>*/}
-      {/*    {Array.isArray(hookResource) && <p>{hookResource.length} item(s) in the array</p>}*/}
-      {/*    <pre>{JSON.stringify(hookResource, null, 2)}</pre>*/}
-      {/*  </>*/}
-      {/*) : (*/}
-      {/*  'No watched resource'*/}
-      {/*)}*/}
       <div>{status}</div>
       {r && <PrintObject object={r} />}
     </>
