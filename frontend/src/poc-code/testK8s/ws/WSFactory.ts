@@ -1,28 +1,31 @@
-const createURL = (host: string, path: string): string => {
-  let url;
-
-  if (host === 'auto') {
-    if (window.location.protocol === 'https:') {
-      url = 'wss://';
-    } else {
-      url = 'ws://';
-    }
-    url += window.location.host;
-  } else {
-    url = host;
-  }
-
-  if (path) {
-    url += path;
-  }
-
-  return url;
-};
+import type {
+  EventHandlers,
+  EventHandlerTypes,
+  CloseHandler,
+  MessageHandler,
+  BulkMessageHandler,
+  MessageDataType,
+  DestroyHandler,
+  OpenHandler,
+  ErrorHandler,
+} from './types';
+import { applyConfigSubProtocols, applyConfigHost, createURL } from './ws-utils';
 
 export type WSOptions = {
-  host: string;
+  /**
+   * The path to the resource you wish to watch.
+   */
   path: string;
-  subprotocols: string[];
+  /**
+   * Overridable ws host url for Plugins. Normally set by the application.
+   */
+  host?: string;
+  /**
+   * Overridable ws sub protocols for Plugins. Normally set by the application.
+   * Is ignored if `host` is not set.
+   */
+  subProtocols?: string[];
+  // TODO: document
   reconnect?: boolean;
   jsonParse?: boolean;
   bufferMax?: number;
@@ -30,77 +33,47 @@ export type WSOptions = {
   timeout?: number;
 };
 
-type GenericHandler<T = any> = (data: T) => void;
-export type OpenHandler = GenericHandler<undefined>; // nothing is sent
-export type CloseHandler = GenericHandler<CloseEvent>;
-export type ErrorHandler = GenericHandler<Event>;
-/**
- * The WebSocket can send JSON that is parsed, or we just send it through as-is
- */
-export type MessageDataType = object | any;
-export type MessageHandler = GenericHandler<MessageDataType>;
-export type DestroyHandler = GenericHandler<undefined>;
-export type BulkMessageHandler = GenericHandler<MessageDataType>;
-
-type WSHandlers = {
-  open: OpenHandler[];
-  close: CloseHandler[];
-  error: ErrorHandler[];
-  message: MessageHandler[];
-  destroy: DestroyHandler[];
-  bulkmessage: BulkMessageHandler[];
-};
-
-type WSHandlerType = keyof WSHandlers;
-
 /**
  * @class WebSocket factory and utility wrapper.
  */
 export class WSFactory {
-  private readonly id: string;
-
-  private readonly url: string;
-
-  private paused: boolean;
-
-  private handlers: WSHandlers;
-
-  private state: string;
-
-  private messageBuffer: MessageDataType[];
-
-  private connectionAttempt: ReturnType<typeof setTimeout>;
+  private readonly handlers: EventHandlers;
 
   private readonly flushCanceler: ReturnType<typeof setInterval>;
 
-  private options: WSOptions;
+  private readonly bufferMax: number;
 
-  private bufferMax: number;
+  private paused = false;
 
-  private ws: WebSocket;
+  private state = '';
+
+  private messageBuffer: MessageDataType[] = [];
+
+  private connectionAttempt: ReturnType<typeof setTimeout>;
+
+  private ws: WebSocket | null = null;
 
   /**
    * @param id - unique id for the WebSocket.
    * @param options - websocket options to initate the WebSocket with.
    */
-  constructor(id: string, options: WSOptions) {
-    this.id = id;
-    this.options = options;
+  constructor(private readonly id: string, private readonly options: WSOptions) {
     this.bufferMax = options.bufferMax || 0;
-    this.url = createURL(options.host, options.path);
-    this.paused = false;
     this.handlers = {
       open: [],
       close: [],
       error: [],
       message: [],
       destroy: [],
-      bulkmessage: [],
+      bulkMessage: [],
     };
     this.connect();
 
     if (this.bufferMax) {
-      this.flushCanceler = setInterval(this.flushMessageBuffer.bind(this), this.options.bufferFlushInterval || 500);
+      this.flushCanceler = setInterval(
+        this.flushMessageBuffer.bind(this),
+        this.options.bufferFlushInterval || 500,
+      );
     }
   }
 
@@ -135,12 +108,15 @@ export class WSFactory {
   }
 
   private connect() {
-    // eslint-disable-next-line @typescript-eslint/no-this-alias
-    const that = this;
     this.state = 'init';
     this.messageBuffer = [];
+
+    const url = createURL(applyConfigHost(this.options.host), this.options.path);
+    const subProtocols = applyConfigSubProtocols(
+      this.options.host ? this.options.subProtocols : undefined,
+    );
     try {
-      this.ws = new WebSocket(this.url, this.options.subprotocols);
+      this.ws = new WebSocket(url, subProtocols);
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error('Error creating websocket:', e);
@@ -148,57 +124,52 @@ export class WSFactory {
       return;
     }
 
-    this.ws.onopen = function () {
+    this.ws.onopen = () => {
       // eslint-disable-next-line no-console
-      console.log(`websocket open: ${that.id}`);
-      that.state = 'open';
-      that.triggerEvent('open', undefined);
-      if (that.connectionAttempt) {
-        clearTimeout(that.connectionAttempt);
-        that.connectionAttempt = null;
+      console.log(`websocket open: ${this.id}`);
+      this.state = 'open';
+      this.triggerEvent('open', undefined);
+      if (this.connectionAttempt) {
+        clearTimeout(this.connectionAttempt);
+        this.connectionAttempt = null;
       }
     };
-    this.ws.onclose = function (evt: CloseEvent) {
+    this.ws.onclose = (evt) => {
       // eslint-disable-next-line no-console
-      console.log(`websocket closed: ${that.id}`, evt);
-      that.state = 'closed';
-      that.triggerEvent('close', evt);
-      that.reconnect();
+      console.log(`websocket closed: ${this.id}`, evt);
+      this.state = 'closed';
+      this.triggerEvent('close', evt);
+      this.reconnect();
     };
-    this.ws.onerror = function (evt: Event) {
+    this.ws.onerror = (evt) => {
       // eslint-disable-next-line no-console
-      console.log(`websocket error: ${that.id}`);
-      that.state = 'error';
-      that.triggerEvent('error', evt);
+      console.log(`websocket error: ${this.id}`);
+      this.state = 'error';
+      this.triggerEvent('error', evt);
     };
-    this.ws.onmessage = function (evt: Parameters<typeof WebSocket.prototype.onmessage>[0]) {
-      const msg = that.options?.jsonParse ? JSON.parse(evt.data) : evt.data;
+    this.ws.onmessage = (evt) => {
+      const msg = this.options?.jsonParse ? JSON.parse(evt.data) : evt.data;
       // In some browsers, onmessage can fire after onclose/error. Don't update state to be incorrect.
-      if (that.state !== 'destroyed' && that.state !== 'closed') {
-        that.state = 'open';
+      if (this.state !== 'destroyed' && this.state !== 'closed') {
+        this.state = 'open';
       }
-      that.triggerEvent('message', msg);
+      this.triggerEvent('message', msg);
     };
-  }
-
-  private registerHandler(type: WSHandlerType, fn: GenericHandler) {
-    if (this.state === 'destroyed') {
-      return;
-    }
-    this.handlers[type].push(fn);
   }
 
   /**
-   * Invoke all registered handler callbacks for a given event type.
+   * Invoke all registered handler callbacks for a given data.
    */
-  private invokeHandlers(type: WSHandlerType, data: MessageDataType) {
+  private invokeHandlers(type: EventHandlerTypes, data?: unknown) {
     const handlers = this.handlers[type];
     if (!handlers) {
       return;
     }
-    handlers.forEach(function (h) {
+    handlers.forEach((h) => {
       try {
-        h(data);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        h(data); // typescript is having an issue with passing the data, muting for now
       } catch (e) {
         // eslint-disable-next-line no-console
         console.error('WS handling failed:', e);
@@ -209,14 +180,18 @@ export class WSFactory {
   /**
    * Triggers event to be buffered or invoked depending on config.
    */
-  private triggerEvent(type: WSHandlerType, event?: MessageDataType) {
+  private triggerEvent(type: EventHandlerTypes, data?: unknown) {
     if (this.state === 'destroyed') {
       return;
     }
 
+    const isMessageEvent = (t: string, e: unknown): e is MessageDataType => {
+      return t === 'message' && !!e;
+    };
+
     // Only buffer "message" events, so "error" and "close" etc can pass thru.
-    if (this.bufferMax && type === 'message') {
-      this.messageBuffer.push(event);
+    if (this.bufferMax && isMessageEvent(type, data)) {
+      this.messageBuffer.push(data);
 
       if (this.messageBuffer.length > this.bufferMax) {
         this.messageBuffer.shift();
@@ -225,36 +200,54 @@ export class WSFactory {
       return;
     }
 
-    this.invokeHandlers(type, event);
+    this.invokeHandlers(type, data);
   }
 
-  onmessage(fn: MessageHandler) {
-    this.registerHandler('message', fn);
+  onMessage(fn: MessageHandler): WSFactory {
+    if (this.state === 'destroyed') {
+      return this;
+    }
+    this.handlers.message.push(fn);
     return this;
   }
 
-  onbulkmessage(fn: BulkMessageHandler) {
-    this.registerHandler('bulkmessage', fn);
+  onBulkMessage(fn: BulkMessageHandler): WSFactory {
+    if (this.state === 'destroyed') {
+      return this;
+    }
+    this.handlers.bulkMessage.push(fn);
     return this;
   }
 
-  onerror(fn: ErrorHandler) {
-    this.registerHandler('error', fn);
+  onError(fn: ErrorHandler): WSFactory {
+    if (this.state === 'destroyed') {
+      return this;
+    }
+    this.handlers.error.push(fn);
     return this;
   }
 
-  onopen(fn: OpenHandler) {
-    this.registerHandler('open', fn);
+  onOpen(fn: OpenHandler): WSFactory {
+    if (this.state === 'destroyed') {
+      return this;
+    }
+    this.handlers.open.push(fn);
     return this;
   }
 
-  onclose(fn: CloseHandler) {
-    this.registerHandler('close', fn);
+  onClose(fn: CloseHandler): WSFactory {
+    if (this.state === 'destroyed') {
+      return this;
+    }
+    this.handlers.close.push(fn);
     return this;
   }
 
-  ondestroy(fn: DestroyHandler) {
-    this.registerHandler('destroy', fn);
+  onDestroy(fn: DestroyHandler): WSFactory {
+    if (this.state === 'destroyed') {
+      return this;
+    }
+    this.handlers.destroy.push(fn);
     return this;
   }
 
@@ -267,8 +260,8 @@ export class WSFactory {
       return;
     }
 
-    if (this.handlers.bulkmessage.length) {
-      this.invokeHandlers('bulkmessage', this.messageBuffer);
+    if (this.handlers.bulkMessage.length) {
+      this.invokeHandlers('bulkMessage', this.messageBuffer);
     } else {
       this.messageBuffer.forEach((e) => this.invokeHandlers('message', e));
     }
@@ -324,7 +317,7 @@ export class WSFactory {
       this.ws.onclose = null;
       this.ws.onerror = null;
       this.ws.onmessage = null;
-      delete this.ws;
+      this.ws = null;
     }
 
     try {
@@ -336,11 +329,10 @@ export class WSFactory {
 
     this.state = 'destroyed';
 
-    delete this.options;
     this.messageBuffer = [];
   }
 
   send(data: Parameters<typeof WebSocket.prototype.send>[0]) {
-    this.ws && this.ws.send(data);
+    this.ws?.send(data);
   }
 }
