@@ -20,7 +20,7 @@ const getUtilsConfig = () => {
 
   return {
     wsConfigs: {
-      host: 'wss://api-toolchain-host-operator.apps.appstudio-stage.x99m.p1.openshiftapps.com:443',
+      host: K8S_WS_TARGET_URL,
       subProtocols: [`base64url.bearer.authorization.k8s.io.${base64Token}`, 'base64.binary.k8s.io'],
     },
   };
