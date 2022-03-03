@@ -1,8 +1,8 @@
 const getToken = (): string | null => {
   const cookieToken = document.cookie.split('; ').find((val) => val.startsWith('cs_jwt='));
   if (!cookieToken) {
-    // Promise.reject('Could not make k8s call. Unable to find token.');
-    console.error('no token??', typeof cookieToken, cookieToken);
+    // eslint-disable-next-line no-console
+    console.error('token loading issues', typeof cookieToken, cookieToken);
     return null;
   }
   const [, token] = cookieToken.split('=');
@@ -10,7 +10,6 @@ const getToken = (): string | null => {
   return token;
 };
 const base64 = (data: string): string => {
-  // console.debug('equals??', btoa(data).replace(/\+/g, '-').replace(/\//g, '_').split('=', 1)[0]);
   return btoa(data).replace(/\+/g, '-').replace(/\//g, '_').split('=', 1)[0];
 };
 

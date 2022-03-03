@@ -70,10 +70,7 @@ export class WSFactory {
     this.connect();
 
     if (this.bufferMax) {
-      this.flushCanceler = setInterval(
-        this.flushMessageBuffer.bind(this),
-        this.options.bufferFlushInterval || 500,
-      );
+      this.flushCanceler = setInterval(this.flushMessageBuffer.bind(this), this.options.bufferFlushInterval || 500);
     }
   }
 
@@ -112,9 +109,7 @@ export class WSFactory {
     this.messageBuffer = [];
 
     const url = createURL(applyConfigHost(this.options.host), this.options.path);
-    const subProtocols = applyConfigSubProtocols(
-      this.options.host ? this.options.subProtocols : undefined,
-    );
+    const subProtocols = applyConfigSubProtocols(this.options.host ? this.options.subProtocols : undefined);
     try {
       this.ws = new WebSocket(url, subProtocols);
     } catch (e) {
