@@ -88,6 +88,7 @@ module.exports = {
     // FIXME: Promise.allSettled() has types that eslint does not recognize
     PromiseSettledResult: 'readonly',
     PromiseFulfilledResult: 'readonly',
-    K8S_TARGET_URL: 'readonly'
+    K8S_TARGET_URL: 'readonly',
+    K8S_WS_TARGET_URL: 'readonly',
   },
 };

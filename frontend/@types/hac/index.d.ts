@@ -7,5 +7,6 @@ declare interface Window {
 }
 
 declare const K8S_TARGET_URL: string;
+declare const K8S_WS_TARGET_URL: string;
 
 declare const __webpack_init_sharing__: Function;
