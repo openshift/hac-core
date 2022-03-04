@@ -103,11 +103,13 @@ export const getPluginEntryCallback = (
 };
 
 export const registerPluginEntryCallback = (pluginStore: PluginStore) => {
-  window.loadPluginEntry = getPluginEntryCallback(
+  const loadPluginEntry = getPluginEntryCallback(
     pluginStore,
     initSharedPluginModules,
     resolveEncodedCodeRefs,
   );
+  window.__load_plugin_entry__ = loadPluginEntry;
+  window.loadPluginEntry = loadPluginEntry
 };
 
 export const loadPluginFromURL = async (baseURL: string) => {

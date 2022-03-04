@@ -4,6 +4,7 @@ declare interface Window {
   windowError: any;
   loadPluginEntry: any;
   __REDUX_DEVTOOLS_EXTENSION_COMPOSE__: any;
+  __load_plugin_entry__: any;
 }
 
 declare const K8S_TARGET_URL: string;
