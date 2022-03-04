@@ -27,6 +27,7 @@ const checkPath = (pathname, { path, exact }: RoutePage) => {
 };
 const DynamicRoute: React.FC<DynamicRouteProps> = ({ location }) => {
   const [Component, setComponent] = React.useState<React.ExoticComponent<any>>(React.Fragment);
+  const [currClassName, setCurrClassName] = React.useState<string>(null);
   const dynamicRoutePages = useExtensions<DynamicRoutePage>(isDynamicRoutePage);
   React.useEffect(() => {
     if (location) {
@@ -38,6 +39,7 @@ const DynamicRoute: React.FC<DynamicRouteProps> = ({ location }) => {
           return checkPath(location.pathname, properties as RoutePage);
         }) || {};
       if (currRoute) {
+        setCurrClassName(currRoute.className);
         setComponent(() =>
           React.lazy(async () => {
             try {
@@ -60,7 +62,7 @@ const DynamicRoute: React.FC<DynamicRouteProps> = ({ location }) => {
   }, [location, dynamicRoutePages]);
 
   return (
-    <Main>
+    <Main className={currClassName || ''}>
       {Component ? (
         <React.Suspense fallback={null}>
           <Component />
