@@ -1,6 +1,6 @@
 import { HttpError } from './httpError';
 
-const k8sBasePath = K8S_TARGET_URL || `/api/k8s`;
+const k8sBasePath = location.host.includes('foo.redhat.com:1337') ? `/api/k8s` : K8S_TARGET_URL;
 
 export const validateStatus = async (response: Response) => {
   if (response.ok) {
