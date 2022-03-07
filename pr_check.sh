@@ -6,7 +6,8 @@
 # name of app-sre "application" folder this component lives in; needs to match for quay
 export COMPONENT="hac-core"
 export APP_ROOT=$(pwd)
-export WORKSPACE=${WORKSPACE:-$APP_ROOT}/frontend # if running in jenkins, use the build's workspace
+export WORKSPACE=${WORKSPACE:-$APP_ROOT} # if running in jenkins, use the build's workspace
+export APP_DIR=/frontend
 export NODE_BUILD_VERSION=14
 COMMON_BUILDER=https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master
 

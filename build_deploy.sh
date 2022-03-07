@@ -8,6 +8,7 @@ export COMPONENT="hac-core"
 export APP_ROOT=$(pwd)
 export WORKSPACE=${WORKSPACE:-$APP_ROOT}/frontend # if running in jenkins, use the build's workspace
 export NODE_BUILD_VERSION=14
+export APP_DIR=/frontend
 COMMON_BUILDER=https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master
 
 set -exv
