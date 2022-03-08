@@ -43,9 +43,9 @@ export const validateStatus = async (response: Response) => {
 };
 
 export const commonFetch =
-  (token: Promise<string>) =>
+  (token: string) =>
   async (url: string, options: RequestInit): Promise<Response> => {
-    if (!(await token)) {
+    if (!token) {
       return Promise.reject('Could not make k8s call. Unable to find token.');
     }
 
@@ -54,7 +54,7 @@ export const commonFetch =
       headers: {
         ...options.headers,
         Accept: 'application/json',
-        Authorization: `Bearer ${await token}`,
+        Authorization: `Bearer ${token}`,
       },
     };
 

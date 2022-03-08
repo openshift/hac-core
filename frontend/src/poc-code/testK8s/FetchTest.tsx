@@ -5,39 +5,16 @@ import {
   k8sCreateResource,
   k8sDeleteResource,
   k8sGetResource,
-  k8sListResource,
-  // K8sModel,
   k8sPatchResource,
-  // K8sResourceCommon,
+  K8sResourceCommon,
   k8sUpdateResource,
 } from '@openshift/dynamic-plugin-sdk-utils';
+import { ApplicationModel } from './models';
 
-import type { K8sModel, K8sResourceCommon } from './dynamic-plugin-sdk';
 import PrintObject from './PrintObject';
-
-const ProjectModel: K8sModel = {
-  apiVersion: 'v1',
-  apiGroup: 'project.openshift.io',
-  kind: 'Project',
-  abbr: 'PR',
-  label: 'Project',
-  labelPlural: 'Projects',
-  plural: 'projects',
-};
-
-const ApplicationModel: K8sModel = {
-  apiVersion: 'v1alpha1',
-  kind: 'Application',
-  apiGroup: 'appstudio.redhat.com',
-  abbr: 'A',
-  label: 'Application',
-  labelPlural: 'Applications',
-  plural: 'applications',
-};
 
 // eslint-disable-next-line no-shadow
 enum ActionType {
-  LIST = 'list projects',
   CREATE = 'create',
   GET = 'get',
   PATCH = 'patch',
@@ -45,9 +22,12 @@ enum ActionType {
   DELETE = 'delete',
 }
 
-const FetchTest: React.FC = () => {
+type FetchTestProps = {
+  namespace: string;
+};
+
+const FetchTest: React.FC<FetchTestProps> = ({ namespace }) => {
   const [r, setR] = React.useState(null);
-  const [namespace, setNamespace] = React.useState<string>('default');
   const [name, setName] = React.useState<string>('test');
   const [status, setStatus] = React.useState<string>('');
   const [action, setAction] = React.useState<ActionType | null>(null);
@@ -69,29 +49,6 @@ const FetchTest: React.FC = () => {
 
     let promise = null;
     switch (action) {
-      case ActionType.LIST:
-        promise = k8sListResource({
-          model: ProjectModel,
-        }).then(({ items }: any) => {
-          let ns = null;
-          if (Array.isArray(items)) {
-            const namespaces = items.map((dataResource) => dataResource.metadata.name);
-            console.debug('++++available namespaces:', namespaces);
-            ns = namespaces[0];
-          } else if (items?.metadata?.namespace) {
-            ns = items.metadata.namespace;
-          }
-
-          if (ns) {
-            setAction(null); // prevent re-invoking this effect/call
-            setNamespace(ns);
-          } else {
-            // eslint-disable-next-line no-alert
-            alert('Could not find namespace; you are likely not able to do much as we are targeting "default"');
-          }
-          return items;
-        });
-        break;
       case ActionType.CREATE:
         promise = k8sCreateResource({
           model: ApplicationModel,
@@ -176,15 +133,11 @@ const FetchTest: React.FC = () => {
         <p>Test calls -- predefined data; use the above input to make/update/get multiple Applications</p>
         {Object.values(ActionType).map((v) => (
           <React.Fragment key={v}>
-            <Button
-              isDisabled={(v !== ActionType.LIST && namespace === 'default') || (v === ActionType.PUT && resourceVersion === null)}
-              onClick={() => setAction(v)}
-            >
+            <Button isDisabled={v === ActionType.PUT && resourceVersion === null} onClick={() => setAction(v)}>
               {v}
             </Button>{' '}
           </React.Fragment>
         ))}
-        In `{namespace}` namespace
       </div>
       <div>{status}</div>
       {r && <PrintObject object={r} />}

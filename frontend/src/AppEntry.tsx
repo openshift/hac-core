@@ -10,12 +10,14 @@ import { getActivePlugins, PluginType } from './Utils/plugins';
 import Loader from './Utils/Loader';
 import packageInfo from '../package.json';
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
-import { setUtilsConfig, getUtilsConfig } from '@openshift/dynamic-plugin-sdk-utils';
+import { setUtilsConfig, isUtilsConfigSet } from '@openshift/dynamic-plugin-sdk-utils';
 import { commonFetch } from './Utils/commonFetch';
+import { getWSTokenSubProtocols } from './Utils/wsConfigs';
 
 const AppEntry = () => {
   const { isBeta, auth } = useChrome();
   const [plugins, setPlugins] = React.useState<PluginType[]>([]);
+  const [token, setToken] = React.useState<string>();
   React.useEffect(() => {
     if (isBeta !== undefined) {
       getActivePlugins(isBeta(), packageInfo.insights.appname).then((data) => {
@@ -28,16 +30,23 @@ const AppEntry = () => {
   }, [isBeta]);
 
   React.useEffect(() => {
-    if (auth !== undefined) {
-      try {
-        getUtilsConfig();
-        return;
-      } catch (e) {
-        // not set
-        setUtilsConfig({ appFetch: commonFetch(auth.getToken()) });
-      }
-    }
+    auth.getToken().then((t: string) => {
+      setToken(t);
+    });
   }, [auth]);
+
+  React.useEffect(() => {
+    if (token && !isUtilsConfigSet()) {
+      setUtilsConfig({
+        appFetch: commonFetch(token),
+        wsAppSettings: {
+          host: K8S_WS_TARGET_URL,
+          subProtocols: getWSTokenSubProtocols(token),
+          urlAugment: (url) => `${url}?watch=true`,
+        },
+      });
+    }
+  }, [token]);
 
   return (
     <Provider store={init(process.env.NODE_ENV !== 'production' && logger).getStore()}>
