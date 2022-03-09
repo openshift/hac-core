@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { K8sResourceCommon } from './dynamic-plugin-sdk';
+import { K8sResourceCommon } from '@openshift/dynamic-plugin-sdk-utils';
 
 type PrintObjectProps = {
   object: K8sResourceCommon;

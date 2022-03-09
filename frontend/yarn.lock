@@ -551,10 +551,15 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@openshift/dynamic-plugin-sdk-utils@^1.0.0-alpha1":
-  version "1.0.0-alpha1"
-  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk-utils/-/dynamic-plugin-sdk-utils-1.0.0-alpha1.tgz#fa5d43d1072e2bfb7cf88400d2626e9d4fdad07e"
-  integrity sha512-mV53XRKyVB9mbokSbtnDl3vUwrWCxjqRJ3fYV891GkDtrQGV+foyTMdu4nD4VHjJcuayknZX46YtjGyyAKlpKA==
+"@openshift/dynamic-plugin-sdk-utils@^1.0.0-alpha3":
+  version "1.0.0-alpha3"
+  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk-utils/-/dynamic-plugin-sdk-utils-1.0.0-alpha3.tgz#6186f29fcdcb40855ef248d7ffa6f40d91243883"
+  integrity sha512-5VaaDbmC+m/hRJz9m0xjR+uLCV2iT6621QG9lFRpzuGm5Acqjd4wMwmGw7rfwFMoJT4uZyKGe15jHAa3T8kljw==
+  dependencies:
+    immutable "^3.8.2"
+    lodash-es "^4.17.21"
+    pluralize "^8.0.0"
+    typesafe-actions "^4.4.2"
 
 "@patternfly/patternfly@4.122.2":
   version "4.122.2"
@@ -4070,6 +4075,11 @@ ignore@^5.1.9:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-5.2.0.tgz#6d3bac8fa7fe0d45d9f9be7bac2fc279577e345a"
   integrity sha512-CmxgYGiEPCLhfLnpPp1MoRmifwEIOgjcHXxOBjv7mY96c+eWScsOP9c112ZyLdWHi0FxHjI+4uVhKYp/gcdRmQ==
 
+immutable@^3.8.2:
+  version "3.8.2"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
+  integrity sha1-wkOZUUVbs5kT2vKBN28VMOEErfM=
+
 import-fresh@^3.0.0, import-fresh@^3.2.1:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/import-fresh/-/import-fresh-3.3.0.tgz#37162c25fcb9ebaa2e6e53d5b4d88ce17d9e0c2b"
@@ -6113,6 +6123,11 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
   dependencies:
     find-up "^4.0.0"
 
+pluralize@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-8.0.0.tgz#1a6fa16a38d12a1901e0320fa017051c539ce3b1"
+  integrity sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==
+
 popper.js@^1.16.0:
   version "1.16.1"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.16.1.tgz#2a223cb3dc7b6213d740e40372be40de43e65b1b"
@@ -7798,6 +7813,11 @@ typedarray-to-buffer@^3.1.5:
   integrity sha512-zdu8XMNEDepKKR+XYOXAVPtWui0ly0NtohUscw+UmaHiAWT8hrV1rr//H6V+0DvJ3OQ19S979M0laLfX8rm82Q==
   dependencies:
     is-typedarray "^1.0.0"
+
+typesafe-actions@^4.4.2:
+  version "4.4.2"
+  resolved "https://registry.yarnpkg.com/typesafe-actions/-/typesafe-actions-4.4.2.tgz#8f817c479d12130b5ebb442032968b2a18929e1a"
+  integrity sha512-QW61P4cOX8dCNmrfpcUMjvU/MF/sFTC8/PlG9215W1gKDzZUBjRGdyYSO6ZcEUNsn491S2VpryJOHSIVSDqJrg==
 
 typesafe-actions@^5.1.0:
   version "5.1.0"
