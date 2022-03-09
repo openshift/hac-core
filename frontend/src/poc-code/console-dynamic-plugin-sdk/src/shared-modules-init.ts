@@ -15,6 +15,7 @@ const modules: SharedModuleResolution = {
   '@patternfly/react-core': async () => () => require('@patternfly/react-core'),
   '@patternfly/react-table': async () => () => require('@patternfly/react-table'),
   react: async () => () => require('react'),
+  redux: async () => () => require('redux'),
   'react-helmet': async () => () => require('react-helmet'),
   'react-i18next': async () => () => require('react-i18next'),
   'react-router': async () => () => require('react-router'),
