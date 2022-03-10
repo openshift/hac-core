@@ -59,14 +59,14 @@ const webpackProxy = {
     },
     {
       // if you want to host different plugin than `console-demo-plugin` locally adjust this line
-      context: ['/beta/api/plugins/console-demo-plugin', '/api/plugins/console-demo-plugin'],
+      context: ['/beta/api/plugins/hac-dev/', '/api/plugins/hac-dev/'],
       // In order to serve your plugin locally on your server change this line ↓
-      target: 'http://localhost:9000',
+      target: 'http://localhost:8003',
       secure: false,
       changeOrigin: true,
       pathRewrite: {
         // if you don't want to rewrite `/beta/api/plugins` to `/api/plugins` remove this line
-        '^/beta/api/plugins/console-demo-plugin': '/api/plugins/console-demo-plugin',
+        // '^/beta/api/plugins/console-demo-plugin': '/api/plugins/console-demo-plugin',
       },
     },
   ],

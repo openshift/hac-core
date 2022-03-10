@@ -1,10 +1,10 @@
 import * as React from 'react';
+import { matchPath } from 'react-router';
+import { isRoutePage as isDynamicRoutePage, RoutePage as DynamicRoutePage } from '@console/dynamic-plugin-sdk';
+import { useExtensions } from '@openshift/dynamic-plugin-sdk';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import { Main } from '@redhat-cloud-services/frontend-components/Main';
-import { useExtensions } from '@console/plugin-sdk/src';
 import { ErrorState } from '@redhat-cloud-services/frontend-components/ErrorState';
-import { isRoutePage as isDynamicRoutePage, RoutePage as DynamicRoutePage } from '@console/dynamic-plugin-sdk';
-import { matchPath } from 'react-router';
 
 const Loader = () => (
   <Bullseye>
@@ -28,6 +28,7 @@ const checkPath = (pathname, { path, exact }: RoutePage) => {
 const DynamicRoute: React.FC<DynamicRouteProps> = ({ location }) => {
   const [Component, setComponent] = React.useState<React.ExoticComponent<any>>(React.Fragment);
   const [currClassName, setCurrClassName] = React.useState<string>(null);
+  // TODO: This seems to get executed when the tree fails to have PluginStoreProvider and then explodes
   const dynamicRoutePages = useExtensions<DynamicRoutePage>(isDynamicRoutePage);
   React.useEffect(() => {
     if (location) {
