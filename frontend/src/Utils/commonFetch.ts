@@ -59,7 +59,12 @@ export const commonFetch =
     };
 
     try {
-      return validateStatus(await fetch(new Request(`${k8sBasePath}${url}`, { credentials: 'include' }), allOptions));
+      let safeURL = url;
+      if (/^\/\//.test(url)) {
+        // https://github.com/openshift/dynamic-plugin-sdk/pull/55
+        safeURL = url.slice(1);
+      }
+      return validateStatus(await fetch(new Request(`${k8sBasePath}${safeURL}`, { credentials: 'include' }), allOptions));
     } catch (e) {
       return Promise.reject(e);
     }
