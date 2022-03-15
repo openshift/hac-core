@@ -1,0 +1,139 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: clowder
+objects:
+- apiVersion: cloud.redhat.com/v1alpha1
+  kind: FrontendEnvironment
+  metadata:
+    name: ephem-hac
+  spec:
+    hostname: ephem-hac
+    ingressClass: nginx
+    sso: ${SSO_URL}
+- apiVersion: cloud.redhat.com/v1alpha1
+  kind: Bundle
+  metadata:
+    name: hac-navigation
+  spec:
+    appList:
+      - inventory
+      - hac-core
+    envName: ephem-hac
+    id: hac-navigation
+    title: RHEL
+- apiVersion: cloud.redhat.com/v1alpha1
+  kind: Bundle
+  metadata:
+    name: insights-navigation
+  spec:
+    appList:
+      - inventory
+      - hac-core
+    envName: ephem-hac
+    id: insights-navigation
+    title: RHEL
+- apiVersion: cloud.redhat.com/v1alpha1
+  kind: Bundle
+  metadata:
+    name: landing-navigation
+  spec:
+    customNav:
+      - appId: dashboard
+        href: /insights/inventory
+        title: Red Hat Enterprise Linux
+    envName: ephem-hac
+    id: landing-navigation
+- apiVersion: cloud.redhat.com/v1alpha1
+  kind: Frontend
+  metadata:
+    name: chrome
+  spec:
+    API:
+      versions:
+        - v1
+    deploymentRepo: 'http://test'
+    envName: ephem-hac
+    frontend:
+      paths:
+        - /
+        - /config/chrome
+    image: 'quay.io/psav/chrome:260122-2'
+    title: Chrome
+- apiVersion: cloud.redhat.com/v1alpha1
+  kind: Frontend
+  metadata:
+    name: hac-core
+  spec:
+    API:
+      versions:
+        - v1
+    deploymentRepo: 'http://test'
+    envName: ephem-hac
+    frontend:
+      paths:
+        - /apps/hac-core
+    image: ${IMAGE}:${IMAGE_TAG}
+    module:
+      manifestLocation: /apps/hac-core/fed-mods.json
+      moduleID: hacCore
+      modules:
+        - id: hacCore
+          module: ./RootApp
+          routes:
+            - pathname: /hac
+    navItems:
+      - appId: hacCore
+        href: /hac
+        product: Red Hat Insights
+        title: HAC
+      - dynamicNav: hacCore
+        title: Plugin navigation
+    title: hac-core
+- apiVersion: cloud.redhat.com/v1alpha1
+  kind: Frontend
+  metadata:
+    name: hac-dev
+  spec:
+    API:
+      versions:
+        - v1
+    assetsPrefix: api/plugins
+    deploymentRepo: 'http://test'
+    envName: ephem-hac
+    frontend:
+      paths:
+        - /api/plugins/hac-dev
+    image: >-
+      quay.io/redhat-cloud-services/hac-dev:0eb08569f5b76defd8e479abcadb3a39eccbe1a62
+    title: hac-dev
+- apiVersion: cloud.redhat.com/v1alpha1
+  kind: Frontend
+  metadata:
+    name: landing
+  spec:
+    API:
+      versions:
+        - v1
+    deploymentRepo: 'http://test'
+    envName: ephem-hac
+    frontend:
+      paths:
+        - /apps/landing
+    image: >-
+      quay.io/redhat-cloud-services/landing:3b067f63f54c7a9edd3c3e13156ec8aaa123a0c94
+    module:
+      manifestLocation: /apps/landing/fed-mods.json
+      modules:
+        - id: landing
+          module: ./RootApp
+          routes:
+            - exact: true
+              pathname: /
+    title: landing
+parameters:
+  - name: SSO_URL
+  - name: IMAGE_TAG
+    value: latest
+  - name: IMAGE
+    value: quay.io/cloudservices/hac-core-frontend
