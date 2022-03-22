@@ -2,6 +2,10 @@ import { HttpError } from './httpError';
 
 const k8sBasePath = location.host.includes('foo.redhat.com:1337') ? `/api/k8s` : K8S_TARGET_URL;
 
+type AuthConfig = {
+  getToken: () => Promise<String>;
+};
+
 export const validateStatus = async (response: Response) => {
   if (response.ok) {
     return response;
@@ -43,8 +47,9 @@ export const validateStatus = async (response: Response) => {
 };
 
 export const commonFetch =
-  (token: string) =>
+  (auth: AuthConfig) =>
   async (url: string, options: RequestInit): Promise<Response> => {
+    const token = await auth.getToken();
     if (!token) {
       return Promise.reject('Could not make k8s call. Unable to find token.');
     }
