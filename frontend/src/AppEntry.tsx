@@ -36,9 +36,9 @@ const AppEntry = () => {
   }, [auth]);
 
   React.useEffect(() => {
-    if (token && !isUtilsConfigSet()) {
+    if (auth && token && !isUtilsConfigSet()) {
       setUtilsConfig({
-        appFetch: commonFetch(token),
+        appFetch: commonFetch(auth),
         wsAppSettings: {
           host: K8S_WS_TARGET_URL,
           subProtocols: getWSTokenSubProtocols(token),
@@ -46,7 +46,7 @@ const AppEntry = () => {
         },
       });
     }
-  }, [token]);
+  }, [auth, token]);
 
   return (
     <Provider store={init(process.env.NODE_ENV !== 'production' && logger).getStore()}>
