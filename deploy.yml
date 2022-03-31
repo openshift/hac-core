@@ -26,10 +26,6 @@ objects:
           routes:
             - pathname: /hac
     navItems:
-      - appId: hacCore
-        href: /hac
-        product: Red Hat Insights
-        title: HAC
       - dynamicNav: hacCore
         title: Plugin navigation
     title: hac-core
