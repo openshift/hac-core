@@ -11,13 +11,9 @@ const AppEntry = () => {
   return (
     <Provider store={init(process.env.NODE_ENV !== 'production' && logger).getStore()}>
       <InitializeSDK>
-        {() => {
-          return (
-            <Router basename={getBaseName(window.location.pathname, 1)}>
-              <App />
-            </Router>
-          );
-        }}
+          <Router basename={getBaseName(window.location.pathname, 1)}>
+            <App />
+          </Router>
       </InitializeSDK>
     </Provider>
   );
