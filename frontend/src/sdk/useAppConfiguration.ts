@@ -17,7 +17,6 @@ const useAppConfiguration = (): AppConfigurations | null => {
     if (auth && token && !appConfigurations) {
       setAppConfigurations({
         appFetch: commonFetch(auth),
-        apiDiscovery: () => {},
         wsAppSettings: {
           host: K8S_WS_TARGET_URL,
           subProtocols: getWSTokenSubProtocols(token),
