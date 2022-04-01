@@ -3,8 +3,8 @@ import { matchPath } from 'react-router';
 import { isRoutePage as isDynamicRoutePage, RoutePage as DynamicRoutePage } from '@console/dynamic-plugin-sdk';
 import { useExtensions } from '@openshift/dynamic-plugin-sdk';
 import { Bullseye, Spinner } from '@patternfly/react-core';
-import { Main } from '@redhat-cloud-services/frontend-components/Main';
 import { ErrorState } from '@redhat-cloud-services/frontend-components/ErrorState';
+import camelCase from 'lodash/camelCase';
 
 const Loader = () => (
   <Bullseye>
@@ -40,7 +40,7 @@ const DynamicRoute: React.FC<DynamicRouteProps> = ({ location }) => {
           return checkPath(location.pathname, properties as RoutePage);
         }) || {};
       if (currRoute) {
-        setCurrClassName(currRoute.className);
+        setCurrClassName(camelCase(pluginName));
         setComponent(() =>
           React.lazy(async () => {
             try {
@@ -63,7 +63,7 @@ const DynamicRoute: React.FC<DynamicRouteProps> = ({ location }) => {
   }, [location, dynamicRoutePages]);
 
   return (
-    <Main className={currClassName || ''}>
+    <section className={currClassName || ''}>
       {Component ? (
         <React.Suspense fallback={null}>
           <Component />
@@ -71,7 +71,7 @@ const DynamicRoute: React.FC<DynamicRouteProps> = ({ location }) => {
       ) : (
         <Loader />
       )}
-    </Main>
+    </section>
   );
 };
 

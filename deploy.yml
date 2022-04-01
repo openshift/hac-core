@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: hac-core
+objects:
+- apiVersion: cloud.redhat.com/v1alpha1
+  kind: Frontend
+  metadata:
+    name: hac-core
+  spec:
+    API:
+      versions:
+        - v1
+    deploymentRepo: 'http://test'
+    envName: ephem-hac
+    frontend:
+      paths:
+        - /apps/hac-core
+    image: ${IMAGE}:${IMAGE_TAG}
+    module:
+      manifestLocation: /apps/hac-core/fed-mods.json
+      moduleID: hacCore
+      modules:
+        - id: hacCore
+          module: ./RootApp
+          routes:
+            - pathname: /hac
+    navItems:
+      - dynamicNav: hacCore
+        title: Plugin navigation
+    title: hac-core
+parameters:
+  - name: IMAGE_TAG
+    value: latest
+  - name: IMAGE
+    value: quay.io/cloudservices/hac-core-frontend
