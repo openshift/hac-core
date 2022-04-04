@@ -11,8 +11,8 @@
     "src/poc-code/console-plugin-sdk"
   ],
   "scripts": {
-    "analyze": "NODE_ENV=production webpack --config config/prod.webpack.config.js --env analyze=true",
-    "build": "yarn build-sdk && NODE_ENV=production webpack --config config/prod.webpack.config.js",
+    "analyze": "NODE_ENV=dev webpack --config config/prod.webpack.config.js --env analyze=true",
+    "build": "yarn build-sdk && NODE_ENV=dev webpack --config config/prod.webpack.config.js",
     "deploy": "yarn build && yarn lint && yarn test",
     "lint": "yarn lint:ts && yarn lint:sass",
     "lint:ts": "eslint . --ext .js,.jsx,.ts,.tsx --color",
