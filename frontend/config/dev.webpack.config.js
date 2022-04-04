@@ -63,15 +63,17 @@ const webpackProxy = {
   },
   customProxy: [
     {
-      context: (path) => path.includes('/api/k8s'),
-      target: 'https://api-toolchain-host-operator.apps.appstudio-stage.x99m.p1.openshiftapps.com:443',
+      // if you want to host different plugin than `console-demo-plugin` locally adjust this line
+      context: ['/beta/api/plugins/console-demo-plugin', '/api/plugins/console-demo-plugin'],
+      // In order to serve your plugin locally on your server change this line ↓
+      target: 'http://localhost:9000',
       secure: false,
       changeOrigin: true,
-      autoRewrite: true,
-      ws: true,
-      pathRewrite: { '^/api/k8s': '' },
+      pathRewrite: {
+        // if you don't want to rewrite `/beta/api/plugins` to `/api/plugins` remove this line
+        '^/beta/api/plugins/console-demo-plugin': '/api/plugins/console-demo-plugin',
+      },
     },
-    pluginProxy('hac-dev'),
   ],
 };
 
