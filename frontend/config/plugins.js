@@ -32,7 +32,9 @@ const plugins = [
         : '/api/k8s',
     ),
     K8S_WS_TARGET_URL: JSON.stringify(
-      process.env.K8S_WS_TARGET_URL ?? 'wss://api-toolchain-host-operator.apps.appstudio-stage.x99m.p1.openshiftapps.com:443',
+      process.env.NODE_ENV === 'production'
+        ? process.env.K8S_WS_TARGET_URL ?? 'wss://api-toolchain-host-operator.apps.appstudio-stage.x99m.p1.openshiftapps.com:443'
+        : '/api/k8s',
     ),
   }),
 ];
