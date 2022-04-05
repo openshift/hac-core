@@ -6,7 +6,6 @@ reviewers:
   - karelhala
 approvers:
   - andrewballantyne
-  - christianvogt
+  - florkbr
   - karelhala
-  - spadgett
 component: HAC Core
