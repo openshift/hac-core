@@ -3,10 +3,8 @@ import packageInfo from '../../package.json';
 import { PluginLoader, PluginLoaderOptions, PluginStore } from '@openshift/dynamic-plugin-sdk';
 
 const modules = {
-  '@openshift/dynamic-plugin-sdk-utils': async () => () =>
-    require('@openshift/dynamic-plugin-sdk-utils'),
-  '@openshift/dynamic-plugin-sdk': async () => () =>
-    require('@openshift/dynamic-plugin-sdk'),
+  '@openshift/dynamic-plugin-sdk-utils': async () => () => require('@openshift/dynamic-plugin-sdk-utils'),
+  '@openshift/dynamic-plugin-sdk': async () => () => require('@openshift/dynamic-plugin-sdk'),
   '@patternfly/react-core': async () => () => require('@patternfly/react-core'),
   '@patternfly/react-table': async () => () => require('@patternfly/react-table'),
   react: async () => () => require('react'),
@@ -35,7 +33,6 @@ const sharedScope = Object.keys(modules).reduce(
 );
 
 export const createStore = () => {
-  console.log('Was I called?');
   const fetchImpl: PluginLoaderOptions['fetchImpl'] = (url, requestInit) => {
     return fetch(url, requestInit);
   };
