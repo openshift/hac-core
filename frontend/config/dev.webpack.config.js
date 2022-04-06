@@ -13,6 +13,20 @@ const betaOrStable = process.env.BETA ? 'beta' : 'stable';
 // for accessing prod-beta change this to 'prod-beta'
 const env = `${environment}-${betaOrStable}`;
 
+const pluginProxy = (name, port = 8003, pathRewrite = false) => ({
+  context: [`/beta/api/plugins/${name}`, `/api/plugins/${name}`],
+  // In order to serve your plugin locally on your server change this line ↓
+  target: `http://localhost:${port}`,
+  secure: false,
+  changeOrigin: true,
+  ...(pathRewrite && {
+    pathRewrite: {
+      // if you don't want to rewrite `/beta/api/plugins` to `/api/plugins` remove this line
+      [`^/beta/api/plugins/${name}`]: `/api/plugins/${name}`,
+    },
+  }),
+});
+
 const calculateRemoteConfig = (remoteConfig) => {
   if (remoteConfig === 'stage') {
     return 'https://console.stage.redhat.com';
@@ -57,18 +71,7 @@ const webpackProxy = {
       ws: true,
       pathRewrite: { '^/api/k8s': '' },
     },
-    {
-      // if you want to host different plugin than `console-demo-plugin` locally adjust this line
-      context: ['/beta/api/plugins/hac-dev', '/api/plugins/hac-dev'],
-      // In order to serve your plugin locally on your server change this line ↓
-      target: 'http://localhost:8003',
-      secure: false,
-      changeOrigin: true,
-      // pathRewrite: {
-      //   // if you don't want to rewrite `/beta/api/plugins` to `/api/plugins` remove this line
-      //   '^/beta/api/plugins/console-demo-plugin': '/api/plugins/console-demo-plugin',
-      // },
-    },
+    pluginProxy('hac-dev'),
   ],
 };
 
