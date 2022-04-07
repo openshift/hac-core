@@ -1,6 +1,6 @@
 import * as React from 'react';
 import noop from 'lodash/noop';
-import { initConsolePlugins } from '@console/dynamic-plugin-sdk/src/runtime/plugin-init';
+// import { initConsolePlugins } from '@console/dynamic-plugin-sdk/src/runtime/plugin-init';
 import { /* ActivePlugin, */ PluginStore } from '@console/plugin-sdk';
 import { useReduxStore } from '../../redux';
 import { getEnabledDynamicPluginNames } from './utils';
@@ -44,7 +44,7 @@ const IncludePlugins = ({ enabledPlugins, onPluginRegister = noop, base }: Plugi
       const dynamicPluginNames = getEnabledDynamicPluginNames();
       const initialPluginStore = new PluginStore(activePlugins, dynamicPluginNames);
 
-      initConsolePlugins(initialPluginStore, store, onPluginRegister);
+      // initConsolePlugins(initialPluginStore, store, onPluginRegister);
       setPluginStore(initialPluginStore);
     }
   }, [onPluginRegister, store]);

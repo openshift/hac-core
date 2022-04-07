@@ -1,1 +1,1 @@
-[{ "name": "console-demo-plugin" }, { "name": "hac-infra" }, { "name": "hac-dev" }, { "name": "sources", "pathPrefix": "/apps" }]
+[{ "name": "hac-dev" }]
