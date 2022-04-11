@@ -74,6 +74,7 @@ const webpackProxy = {
         '^/beta/api/plugins/console-demo-plugin': '/api/plugins/console-demo-plugin',
       },
     },
+    pluginProxy('hac-dev'),
   ],
 };
 
