@@ -35,10 +35,10 @@ const HookTest: React.FC<HookTestProps> = ({ namespace }) => {
   //   }
   // };
 
-  const [data, loaded, error] = useK8sWatchResource(watchedResource)
+  const [data, loaded, error] = useK8sWatchResource(watchedResource);
   const isResourceLoaded = loaded || !!error;
   if (isResourceLoaded) {
-    console.log("data from useK8sWatchResource: ", data);
+    console.log('data from useK8sWatchResource: ', data);
   }
 
   // TODO: The following code can be uncommented when we are ready to test the useK8sWatchResources hook

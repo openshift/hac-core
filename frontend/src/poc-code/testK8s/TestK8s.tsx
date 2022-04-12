@@ -17,7 +17,7 @@ const TestK8s: React.FC = () => {
           <hr style={{ margin: 20 }} />
           <FetchTest namespace={namespace} />
           <hr style={{ margin: 20 }} />
-          <HookTest namespace={namespace}/>
+          <HookTest namespace={namespace} />
           <hr style={{ margin: 20 }} />
           <WSTest namespace={namespace} />
         </>
