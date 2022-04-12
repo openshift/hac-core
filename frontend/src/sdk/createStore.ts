@@ -11,6 +11,7 @@ const modules = {
   redux: async () => () => require('redux'),
   'react-helmet': async () => () => require('react-helmet'),
   'react-i18next': async () => () => require('react-i18next'),
+  '@scalprum/react-core': async () => () => require('@scalprum/react-core'),
   'react-redux': async () => () => require('react-redux'),
   'react-router': async () => () => require('react-router'),
   'react-router-dom': async () => () => require('react-router-dom'),
