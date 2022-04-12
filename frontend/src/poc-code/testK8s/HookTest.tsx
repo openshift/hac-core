@@ -22,7 +22,6 @@ const HookTest: React.FC<HookTestProps> = ({ namespace }) => {
   };
 
   // TODO: The following code can be uncommented when we are ready to test the useK8sWatchResources hook
-  // Only watching 'application' for now
   // const watchedResources = {
   //   application: {
   //     isList: false,
@@ -47,9 +46,9 @@ const HookTest: React.FC<HookTestProps> = ({ namespace }) => {
   // const areResourcesLoaded =
   //   Object.keys(resources).length > 0 &&
   //   Object.values(resources).every((value) => value.loaded || !!value.loadError);
-  // const { resourcesData } = resources.application;
+  // const { data: resourceData } = resources.application;
   // if (areResourcesLoaded) {
-  //   console.log("data from useK8sWatchResources: ", resourcesData);
+  //   console.log("data from useK8sWatchResources: ", resourceData);
   // }
 
   return (
@@ -66,7 +65,7 @@ const HookTest: React.FC<HookTestProps> = ({ namespace }) => {
         <p>Test useK8sWatchResources (watch Application)</p>
         {!areResourcesLoaded && <p>Loading resource...</p>}
         {areResourcesLoaded && <p>Resource loaded</p>}
-      </div>       */}
+      </div> */}
     </>
   );
 };
