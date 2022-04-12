@@ -4,6 +4,7 @@ import { PageSection } from '@patternfly/react-core';
 import WSTest from './WSTest';
 import FetchTest from './FetchTest';
 import DetermineNamespace from './DetermineNamespace';
+import HookTest from './HookTest';
 
 const TestK8s: React.FC = () => {
   const [namespace, setNamespace] = React.useState<string>();
@@ -15,6 +16,8 @@ const TestK8s: React.FC = () => {
         <>
           <hr style={{ margin: 20 }} />
           <FetchTest namespace={namespace} />
+          <hr style={{ margin: 20 }} />
+          <HookTest namespace={namespace}/>
           <hr style={{ margin: 20 }} />
           <WSTest namespace={namespace} />
         </>
