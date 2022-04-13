@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import * as React from 'react';
-import { Title } from '@patternfly/react-core';
+import { Title, TextInput } from '@patternfly/react-core';
 import { useK8sWatchResource } from '@openshift/dynamic-plugin-sdk-utils';
 
 /* This component is currently used to verify the useK8sWatchResource hook. */
@@ -10,6 +10,8 @@ type HookTestProps = {
 };
 
 const HookTest: React.FC<HookTestProps> = ({ namespace }) => {
+  const [name, setName] = React.useState<string>('test');
+
   const watchedResource = {
     isList: false,
     groupVersionKind: {
@@ -17,7 +19,7 @@ const HookTest: React.FC<HookTestProps> = ({ namespace }) => {
       version: 'v1alpha1',
       kind: 'Application',
     },
-    name: 'test',
+    name,
     namespace,
   };
 
@@ -54,12 +56,14 @@ const HookTest: React.FC<HookTestProps> = ({ namespace }) => {
   return (
     <>
       <Title headingLevel="h2" size="xl">
-        Test hooks
+        Test hooks to watch Application
       </Title>
+      <TextInput placeholder="Application name" onChange={(v) => setName(v)} value={name} />
       <div>
-        <p>Test useK8sWatchResource (watch Application)</p>
+        <p>Test useK8sWatchResource (watch Application: {name})</p>
         {!isResourceLoaded && <p>Loading resource...</p>}
-        {isResourceLoaded && <p>Resource loaded</p>}
+        {isResourceLoaded && data && <p>Resource loaded</p>}
+        {isResourceLoaded && !data && <p>No data -- did you create the Application?</p>}
       </div>
       {/* <div> TODO: This can be uncommented when we are ready to test the useK8sWatchResource hook
         <p>Test useK8sWatchResources (watch Application)</p>
