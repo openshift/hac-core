@@ -11,7 +11,7 @@ type HookTestProps = {
 
 const HookTest: React.FC<HookTestProps> = ({ namespace }) => {
   const watchedResource = {
-    isList: true,
+    isList: false,
     groupVersionKind: {
       group: 'appstudio.redhat.com',
       version: 'v1alpha1',
