@@ -67,7 +67,7 @@ const HookTest: React.FC<HookTestProps> = ({ namespace }) => {
       <TextContent>
         <Text component={TextVariants.h4}>useK8sWatchResources (watch Application: {name})</Text>
         {!areResourcesLoaded && <Text component={TextVariants.p}>Loading resource...</Text>}
-        {areResourcesLoaded && <Text component={TextVariants.p}>Resource loaded</Text>}
+        {areResourcesLoaded && resourceData && <Text component={TextVariants.p}>Resource loaded</Text>}
         {areResourcesLoaded && !resourceData && <Text component={TextVariants.p}>No data -- did you create the Application?</Text>}
       </TextContent>
     </>
