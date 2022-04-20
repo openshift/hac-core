@@ -44,11 +44,11 @@ const HookTest: React.FC<HookTestProps> = ({ namespace }) => {
     console.log('data from useK8sWatchResource: ', data);
   }
 
-  const resources = useK8sWatchResources(watchedResources);
-  const areResourcesLoaded = Object.keys(resources).length > 0 && Object.values(resources).every((value) => value.loaded || !!value.loadError);
-  const { data: resourceData } = resources.application;
-  if (areResourcesLoaded) {
-    console.log('data from useK8sWatchResources: ', resourceData);
+  const { application } = useK8sWatchResources(watchedResources);
+  const isAppResourceLoaded = application.loaded || !!application.loadError;
+  const { data: appResourceData } = application;
+  if (isAppResourceLoaded) {
+    console.log('data from useK8sWatchResources: ', appResourceData);
   }
 
   return (
@@ -66,9 +66,9 @@ const HookTest: React.FC<HookTestProps> = ({ namespace }) => {
       <br />
       <TextContent>
         <Text component={TextVariants.h4}>useK8sWatchResources (watch Application: {name})</Text>
-        {!areResourcesLoaded && <Text component={TextVariants.p}>Loading resource...</Text>}
-        {areResourcesLoaded && resourceData && <Text component={TextVariants.p}>Resource loaded</Text>}
-        {areResourcesLoaded && !resourceData && <Text component={TextVariants.p}>No data -- did you create the Application?</Text>}
+        {!isAppResourceLoaded && <Text component={TextVariants.p}>Loading resource...</Text>}
+        {isAppResourceLoaded && appResourceData && <Text component={TextVariants.p}>Resource loaded</Text>}
+        {isAppResourceLoaded && !appResourceData && <Text component={TextVariants.p}>No data -- did you create the Application?</Text>}
       </TextContent>
     </>
   );
