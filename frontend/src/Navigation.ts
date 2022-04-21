@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { getActivePlugins } from './Utils/plugins';
-import { HrefNavItem, NavSection } from '@console/dynamic-plugin-sdk/src';
-import { EnabledPlugin } from '@console/mount/src/components/plugins/IncludePlugins';
-import { Extension } from '@console/dynamic-plugin-sdk/src/types';
-import { ConsolePluginManifestJSON } from '@console/dynamic-plugin-sdk/src/schema/plugin-manifest';
+import { HrefNavItem, PluginManifest, Extension, NavSection, isNavSection } from '@openshift/dynamic-plugin-sdk';
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 import packageInfo from '../package.json';
+
+export type EnabledPlugin = {
+  name: string;
+  pathPrefix?: string;
+};
 
 export interface RouteProps {
   isHidden?: boolean;
@@ -52,7 +54,7 @@ const getAllExtensions: GetAllExtensions = async (base = '', isBeta = () => fals
         console.error(msg);
         throw new Error(msg);
       }
-      const manifest: ConsolePluginManifestJSON = await response.json();
+      const manifest: PluginManifest = await response.json();
       return manifest.extensions;
     }),
   );
@@ -89,8 +91,7 @@ const calculateNavigation = async ({ dynamicNav, currentNamespace, base, isBeta 
     // eslint-disable-next-line no-console
     console.error('Problem fetching extensions', e);
   }
-  const { properties: currSection } =
-    allExtensions.find(({ type, properties }: NavSection) => type === 'console.navigation/section' && properties.id === navSection) || {};
+  const { properties: currSection } = allExtensions.find((extension: NavSection) => isNavSection(extension)) || {};
   return currSection
     ? {
         expandable: true,
