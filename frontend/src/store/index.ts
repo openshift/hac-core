@@ -7,12 +7,11 @@ import thunk from 'redux-thunk';
 let registry;
 
 export function init(...middleware) {
-  registry = getRegistry({}, [
-    thunk,
-    promiseMiddleware,
-    notificationsMiddleware({ errorDescriptionKey: ['detail', 'stack'] }),
-    ...middleware.filter(Boolean),
-  ]);
+  registry = getRegistry(
+    {},
+    [thunk, promiseMiddleware, notificationsMiddleware({ errorDescriptionKey: ['detail', 'stack'] }), ...middleware.filter(Boolean)],
+    undefined,
+  );
   registry.register(SDKReducers);
   return registry;
 }

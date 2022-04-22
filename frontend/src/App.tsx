@@ -16,7 +16,7 @@ const App: React.FC = () => {
   const store = useStore();
 
   React.useEffect(() => {
-    const registry = getRegistry();
+    const registry = getRegistry(undefined, undefined, undefined);
     registry.register({ notifications: notificationsReducer });
     const { on: onChromeEvent } = chrome?.init();
 
