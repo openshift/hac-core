@@ -1,4 +1,4 @@
-const { DefinePlugin, NormalModuleReplacementPlugin } = require('webpack');
+const { NormalModuleReplacementPlugin } = require('webpack');
 const { resolve } = require('path');
 const fedModulePlugin = require('@redhat-cloud-services/frontend-components-config/federated-modules');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -24,16 +24,6 @@ const plugins = [
   }),
   new CopyWebpackPlugin({
     patterns: [{ from: 'static' }],
-  }),
-  new DefinePlugin({
-    K8S_TARGET_URL: JSON.stringify(
-      process.env.NODE_ENV === 'production'
-        ? process.env.K8S_TARGET_URL ?? 'https://api-toolchain-host-operator.apps.appstudio-stage.x99m.p1.openshiftapps.com:443'
-        : '/api/k8s',
-    ),
-    K8S_WS_TARGET_URL: JSON.stringify(
-      process.env.K8S_WS_TARGET_URL ?? 'wss://api-toolchain-host-operator.apps.appstudio-stage.x99m.p1.openshiftapps.com:443',
-    ),
   }),
 ];
 

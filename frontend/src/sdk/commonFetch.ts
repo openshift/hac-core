@@ -1,6 +1,6 @@
 import { HttpError } from './httpError';
 
-const k8sBasePath = location.host.includes('foo.redhat.com:1337') ? `/api/k8s` : K8S_TARGET_URL;
+const k8sBasePath = `/api/k8s`;
 
 type AuthConfig = {
   getToken: () => Promise<String>;

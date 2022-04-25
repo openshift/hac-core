@@ -18,7 +18,7 @@ const useAppConfiguration = (): AppConfigurations | null => {
         wsAppSettings: async () => {
           const token = await auth.getToken();
           return {
-            host: K8S_WS_TARGET_URL,
+            host: `wss://${location.host}/wss/k8s`,
             subProtocols: getWSTokenSubProtocols(token),
             // TODO: check for `?` and use '&'
             urlAugment: (url) => `${url}?watch=true`,
