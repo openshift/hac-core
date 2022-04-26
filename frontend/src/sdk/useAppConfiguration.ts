@@ -24,6 +24,7 @@ const useAppConfiguration = (): AppConfigurations | null => {
             urlAugment: (url) => `${url}?watch=true`,
           };
         },
+        apiPriorityList: ['appstudio.redhat.com'],
         pluginStore,
       });
     }
