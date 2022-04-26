@@ -48,7 +48,7 @@ export const validateStatus = async (response: Response) => {
 
 export const commonFetch =
   (auth: AuthConfig) =>
-  async (url: string, options: RequestInit): Promise<Response> => {
+  async (url: string, { pathPrefix, ...options }: RequestInit & { pathPrefix?: string }): Promise<Response> => {
     const token = await auth.getToken();
     if (!token) {
       return Promise.reject('Could not make k8s call. Unable to find token.');
@@ -63,13 +63,15 @@ export const commonFetch =
       },
     };
 
+    const prefix = `${(pathPrefix ?? k8sBasePath).indexOf('/') === 0 ? '' : '/'}${pathPrefix ?? k8sBasePath}`;
+
     try {
       let safeURL = url;
       if (/^\/\//.test(url)) {
         // https://github.com/openshift/dynamic-plugin-sdk/pull/55
         safeURL = url.slice(1);
       }
-      return validateStatus(await fetch(new Request(`${k8sBasePath}${safeURL}`, { credentials: 'include' }), allOptions));
+      return validateStatus(await fetch(new Request(`${prefix}${safeURL}`, { credentials: 'include' }), allOptions));
     } catch (e) {
       return Promise.reject(e);
     }
