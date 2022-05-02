@@ -38,7 +38,7 @@ export const createStore = () => {
     return fetch(url, requestInit);
   };
 
-  const pluginLoader = new PluginLoader({ fetchImpl, getSharedScope: () => sharedScope });
+  const pluginLoader = new PluginLoader({ fetchImpl, sharedScope });
   pluginLoader.registerPluginEntryCallback();
   const pluginStore = new PluginStore();
   pluginStore.setLoader(pluginLoader);
