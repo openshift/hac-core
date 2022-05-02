@@ -4,7 +4,8 @@
 # Export vars for helper scripts to use
 # --------------------------------------------
 # name of app-sre "application" folder this component lives in; needs to match for quay
-export COMPONENT="hac-core"
+export COMPONENT="hac"
+export IMAGE="quay.io/cloudservices/hac-core-frontend"
 export APP_ROOT=$(pwd)
 export WORKSPACE=${WORKSPACE:-$APP_ROOT} # if running in jenkins, use the build's workspace
 export APP_DIR=/frontend
