@@ -20,8 +20,14 @@ const useAppConfiguration = (): AppConfigurations | null => {
           return {
             host: `wss://${location.host}/wss/k8s`,
             subProtocols: getWSTokenSubProtocols(token),
-            // TODO: check for `?` and use '&'
-            urlAugment: (url) => `${url}?watch=true`,
+            urlAugment: (url: string) => {
+              const [origUrl, query] = url.split('?') || [];
+              const queryParams = new URLSearchParams(query);
+              if (!queryParams.get('watch')) {
+                queryParams.set('watch', 'true');
+              }
+              return `${origUrl}?${queryParams.toString()}`;
+            },
           };
         },
         apiPriorityList: ['appstudio.redhat.com'],
