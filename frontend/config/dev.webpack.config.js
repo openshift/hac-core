@@ -42,6 +42,7 @@ const webpackProxy = {
   useProxy: true,
   env,
   appUrl: process.env.BETA ? '/beta/hac' : '/hac',
+  sassPrefix: '.hacCore',
   standalone: Boolean(process.env.STANDALONE),
   ...(process.env.INSIGHTS_CHROME && {
     localChrome: process.env.INSIGHTS_CHROME,
