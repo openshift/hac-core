@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "analyze": "NODE_ENV=production webpack --config config/prod.webpack.config.js --env analyze=true",
-    "build": "yarn build-sdk && NODE_ENV=production webpack --config config/prod.webpack.config.js",
+    "build": "NODE_ENV=production webpack --config config/prod.webpack.config.js",
     "deploy": "yarn build && yarn lint && yarn test",
     "lint": "yarn lint:ts && yarn lint:sass",
     "lint:ts": "eslint . --ext .js,.jsx,.ts,.tsx --color",
@@ -22,11 +22,10 @@
     "dev": "yarn start:proxy:beta",
     "start": "webpack serve --config config/dev.webpack.config.js",
     "start:k8s": "ENVIRONMENT=prod BETA=true PROXY=true yarn start",
-    "start:proxy": "yarn build-sdk && PROXY=true BETA=true webpack serve --config config/dev.webpack.config.js",
-    "start:proxy:beta": "yarn build-sdk && PROXY=true BETA=true webpack serve --config config/dev.webpack.config.js",
+    "start:proxy": "PROXY=true BETA=true webpack serve --config config/dev.webpack.config.js",
+    "start:proxy:beta": "PROXY=true BETA=true webpack serve --config config/dev.webpack.config.js",
     "start:beta": "BETA=true npm start",
     "start:standalone": "STANDALONE=true npm start",
-    "build-sdk": "yarn --cwd src/poc-code/console-dynamic-plugin-sdk build",
     "test": "exit 0",
     "verify": "yarn build && yarn lint && yarn test"
   },
