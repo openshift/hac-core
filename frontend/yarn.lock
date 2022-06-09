@@ -566,10 +566,10 @@
     pluralize "^8.0.0"
     typesafe-actions "^4.4.2"
 
-"@openshift/dynamic-plugin-sdk@^1.0.0-alpha7":
-  version "1.0.0-alpha7"
-  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk/-/dynamic-plugin-sdk-1.0.0-alpha7.tgz#5351ec12e24da4d3171dbb4dfe59edffdc80ea23"
-  integrity sha512-X8O1YzPdjprygxb1nK/HiPP+0lpNKXH2KsFli9ncgYM3xqArtysphctb3/5hLIzxwmVKZxvr/M/4ohcIEPiwvw==
+"@openshift/dynamic-plugin-sdk@^1.0.0-alpha8":
+  version "1.0.0-alpha8"
+  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk/-/dynamic-plugin-sdk-1.0.0-alpha8.tgz#f2585ca087128040042a0ae3cb8a7ebc1e2cb4d7"
+  integrity sha512-F3uDzfOZ2NC4itViyL82L8fRHkAThCG3M8jl6WmVjp2y1//FF/RpHlR0iy6fOUHliD/roTTBNGsx0ov0wVvlFw==
   dependencies:
     lodash-es "^4.17.21"
     yup "^0.32.11"
