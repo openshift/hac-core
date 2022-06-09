@@ -30,8 +30,8 @@
     "verify": "yarn build && yarn lint && yarn test"
   },
   "dependencies": {
-    "@openshift/dynamic-plugin-sdk": "^1.0.0-alpha7",
-    "@openshift/dynamic-plugin-sdk-utils": "^1.0.0-alpha10",
+    "@openshift/dynamic-plugin-sdk": "^1.0.0-alpha9",
+    "@openshift/dynamic-plugin-sdk-utils": "^1.0.0-alpha11",
     "@patternfly/patternfly": "^4.185.1",
     "@patternfly/quickstarts": "^2.2.1",
     "@patternfly/react-catalog-view-extension": "^4.53.16",
