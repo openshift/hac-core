@@ -8,3 +8,6 @@ pushd frontend
 yarn lint
 yarn test
 popd
+
+# Upload code coverage
+./prow-codecov.sh 2>/dev/null
