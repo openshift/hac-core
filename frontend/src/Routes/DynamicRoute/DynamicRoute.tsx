@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { matchPath } from 'react-router';
+import { Route } from 'react-router-dom';
 import { useExtensions, isRoutePage as isDynamicRoutePage, RoutePage as DynamicRoutePage } from '@openshift/dynamic-plugin-sdk';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import { ErrorState } from '@redhat-cloud-services/frontend-components/ErrorState';
@@ -15,38 +15,24 @@ type DynamicRouteProps = {
   location?: Location;
 };
 
-type RoutePage = {
-  path: string;
-  exact?: boolean;
-};
-
-const checkPath = (pathname, { path, exact }: RoutePage) => {
-  const [, section] = pathname.split('/');
-  return matchPath(pathname, { path, exact }) || matchPath(pathname, { path: `/${section}${path}`, exact });
-};
-const DynamicRoute: React.FC<DynamicRouteProps> = ({ location }) => {
-  const [Component, setComponent] = React.useState<React.ExoticComponent<any>>(React.Fragment);
-  const [currClassName, setCurrClassName] = React.useState<string>(null);
-  // TODO: This seems to get executed when the tree fails to have PluginStoreProvider and then explodes
+const DynamicRoute: React.FC<DynamicRouteProps> = () => {
   const dynamicRoutePages = useExtensions<DynamicRoutePage>(isDynamicRoutePage);
-  React.useEffect(() => {
-    if (location) {
-      const { properties: currRoute, pluginName } =
-        dynamicRoutePages.find(({ properties }) => {
-          if (Array.isArray(properties.path)) {
-            return properties.path.some((path) => checkPath(location.pathname, { ...properties, path }));
-          }
-          return checkPath(location.pathname, properties as RoutePage);
-        }) || {};
-      if (currRoute) {
-        setCurrClassName(camelCase(pluginName));
-        setComponent(() =>
-          React.lazy(async () => {
+
+  const routes = React.useMemo(
+    () =>
+      dynamicRoutePages.map(({ properties: { component, ...currRoute }, pluginName, uid }) => {
+        return {
+          ...currRoute,
+          uid,
+          className: camelCase(pluginName),
+          Component: React.lazy(async () => {
             try {
               return {
-                default: (await currRoute.component()) || Loader,
+                default: (await component()) || Loader,
               };
             } catch (e) {
+              // eslint-disable-next-line no-console
+              console.error(e);
               return {
                 default: () => (
                   <Bullseye>
@@ -56,21 +42,25 @@ const DynamicRoute: React.FC<DynamicRouteProps> = ({ location }) => {
               };
             }
           }),
-        );
-      }
-    }
-  }, [location, dynamicRoutePages]);
+        };
+      }),
+    [dynamicRoutePages],
+  );
 
   return (
-    <section className={currClassName || ''}>
-      {Component ? (
-        <React.Suspense fallback={null}>
-          <Component />
-        </React.Suspense>
-      ) : (
-        <Loader />
-      )}
-    </section>
+    <React.Suspense fallback={null}>
+      {routes.map(({ className, Component, uid, ...currCoute }) => (
+        <Route
+          {...currCoute}
+          key={uid}
+          render={() => (
+            <article className={className}>
+              <Component />
+            </article>
+          )}
+        />
+      ))}
+    </React.Suspense>
   );
 };
 
