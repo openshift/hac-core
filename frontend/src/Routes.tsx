@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Redirect, Route, Switch } from 'react-router-dom';
+import { Route, Routes as DomRoutes } from 'react-router-dom';
 
 import { Bullseye, Spinner } from '@patternfly/react-core';
 
 const DynamicRoute = React.lazy(() => import(/* webpackChunkName: "DynamicRoute" */ './Routes/DynamicRoute/DynamicRoute'));
-const EmptyRoute = React.lazy(() => import(/* webpackChunkName: "EmptyRoute" */ './Routes/EmptyRoute'));
 const TestK8s = React.lazy(() => import(/* webpackChunkName: "TestK8s" */ './Routes/testK8s/TestK8s'));
 
 export const Routes: React.FC = () => (
@@ -15,13 +14,9 @@ export const Routes: React.FC = () => (
       </Bullseye>
     }
   >
-    <Switch>
-      <Route exact path="/testK8s" component={TestK8s} />
-      <Route path="/:dynamicPath" component={DynamicRoute} />
-      <Route exact path="/" component={EmptyRoute} />
-      <Route>
-        <Redirect to="/" />
-      </Route>
-    </Switch>
+    <DomRoutes>
+      <Route path="/*" element={<DynamicRoute />} />
+      <Route path="/testK8s" element={<TestK8s />} />
+    </DomRoutes>
   </React.Suspense>
 );

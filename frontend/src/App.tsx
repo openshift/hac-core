@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Routes } from './Routes';
 import './App.scss';
 
@@ -10,7 +10,7 @@ import { useStore } from 'react-redux';
 import { RegistryContext } from './store';
 
 const App: React.FC = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { getRegistry } = React.useContext(RegistryContext);
 
   const chrome = useChrome();
@@ -22,7 +22,7 @@ const App: React.FC = () => {
 
     const unregister = onChromeEvent('APP_NAVIGATION', (event) => {
       if (event.domEvent) {
-        history.push(`${event.domEvent.href.replace('/hac', '')}`);
+        navigate(`${event.domEvent.href.replace('/hac', '')}`);
       }
     });
     return () => {

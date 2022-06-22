@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { useExtensions, isRoutePage as isDynamicRoutePage, RoutePage as DynamicRoutePage } from '@openshift/dynamic-plugin-sdk';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import { ErrorState } from '@redhat-cloud-services/frontend-components/ErrorState';
@@ -21,6 +21,7 @@ const DynamicRoute: React.FC<DynamicRouteProps> = () => {
   const routes = React.useMemo(
     () =>
       dynamicRoutePages.map(({ properties: { component, ...currRoute }, pluginName, uid }) => {
+        delete currRoute.exact;
         return {
           ...currRoute,
           uid,
@@ -49,17 +50,19 @@ const DynamicRoute: React.FC<DynamicRouteProps> = () => {
 
   return (
     <React.Suspense fallback={null}>
-      {routes.map(({ className, Component, uid, ...currCoute }) => (
-        <Route
-          {...currCoute}
-          key={uid}
-          render={() => (
-            <article className={className}>
-              <Component />
-            </article>
-          )}
-        />
-      ))}
+      <Routes>
+        {routes.map(({ className, Component, uid, ...currCoute }) => (
+          <Route
+            {...currCoute}
+            key={uid}
+            element={
+              <article className={className}>
+                <Component />
+              </article>
+            }
+          />
+        ))}
+      </Routes>
     </React.Suspense>
   );
 };
