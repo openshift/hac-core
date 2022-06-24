@@ -20,10 +20,10 @@ const DynamicRoute: React.FC<DynamicRouteProps> = () => {
 
   const routes = React.useMemo(
     () =>
-      dynamicRoutePages.map(({ properties: { component, ...currRoute }, pluginName, uid }) => {
-        delete currRoute.exact;
-        return {
+      dynamicRoutePages.flatMap(({ properties: { component, path, exact, ...currRoute }, pluginName, uid }) => {
+        return (Array.isArray(path) ? path : [path]).map((currPath) => ({
           ...currRoute,
+          path: !exact ? `${currPath}/*` : currPath,
           uid,
           className: camelCase(pluginName),
           Component: React.lazy(async () => {
@@ -43,7 +43,7 @@ const DynamicRoute: React.FC<DynamicRouteProps> = () => {
               };
             }
           }),
-        };
+        }));
       }),
     [dynamicRoutePages],
   );
