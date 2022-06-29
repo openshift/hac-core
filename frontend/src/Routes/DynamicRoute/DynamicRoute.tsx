@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 import { useExtensions, isRoutePage as isDynamicRoutePage, RoutePage as DynamicRoutePage } from '@openshift/dynamic-plugin-sdk';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import { ErrorState } from '@redhat-cloud-services/frontend-components/ErrorState';
@@ -20,9 +20,10 @@ const DynamicRoute: React.FC<DynamicRouteProps> = () => {
 
   const routes = React.useMemo(
     () =>
-      dynamicRoutePages.map(({ properties: { component, ...currRoute }, pluginName, uid }) => {
-        return {
+      dynamicRoutePages.flatMap(({ properties: { component, path, exact, ...currRoute }, pluginName, uid }) => {
+        return (Array.isArray(path) ? path : [path]).map((currPath) => ({
           ...currRoute,
+          path: !exact ? `${currPath}/*` : currPath,
           uid,
           className: camelCase(pluginName),
           Component: React.lazy(async () => {
@@ -42,24 +43,26 @@ const DynamicRoute: React.FC<DynamicRouteProps> = () => {
               };
             }
           }),
-        };
+        }));
       }),
     [dynamicRoutePages],
   );
 
   return (
     <React.Suspense fallback={null}>
-      {routes.map(({ className, Component, uid, ...currCoute }) => (
-        <Route
-          {...currCoute}
-          key={uid}
-          render={() => (
-            <article className={className}>
-              <Component />
-            </article>
-          )}
-        />
-      ))}
+      <Routes>
+        {routes.map(({ className, Component, uid, ...currCoute }) => (
+          <Route
+            {...currCoute}
+            key={uid}
+            element={
+              <article className={className}>
+                <Component />
+              </article>
+            }
+          />
+        ))}
+      </Routes>
     </React.Suspense>
   );
 };
