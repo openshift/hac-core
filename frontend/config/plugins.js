@@ -15,7 +15,7 @@ const plugins = [
       './Navigation': resolve(__dirname, '../src/Navigation'),
     },
     shared: [
-      { 'react-router-dom': { requiredVersion: package.dependencies['react-router-dom'] } },
+      { 'react-router-dom': { singleton: true, requiredVersion: package.dependencies['react-router-dom'] } },
       { 'react-redux': { singleton: true, requiredVersion: package.dependencies['react-redux'] } },
       { '@openshift/dynamic-plugin-sdk-utils': { singleton: true, requiredVersion: package.dependencies['@openshift/dynamic-plugin-sdk-utils'] } },
       { '@openshift/dynamic-plugin-sdk': { singleton: true, requiredVersion: package.dependencies['@openshift/dynamic-plugin-sdk'] } },
