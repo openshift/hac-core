@@ -23,7 +23,7 @@ export interface DynamicNav {
   isBeta?: () => boolean;
 }
 
-const navExtensionTypes = ['console.navigation/href', 'console.navigation/section'];
+const navExtensionTypes = ['core.navigation/href', 'core.navigation/section'];
 type NavExtension = HrefNavItem | NavSection;
 
 export type GetAllExtensions = (base?: string, isBeta?: () => boolean) => Promise<NavExtension[]>;
@@ -68,7 +68,7 @@ const getAllExtensions: GetAllExtensions = async (base = '', isBeta = () => fals
 
 const calculateRoutes: CalculateRoutes = ([appId, navSection], currentNamespace, extensions) => {
   return extensions
-    .filter(({ type, properties }: HrefNavItem) => type.includes('console.navigation/href') && properties.section === navSection)
+    .filter(({ type, properties }: HrefNavItem) => type.includes('core.navigation/href') && properties.section === navSection)
     .map((extension: HrefNavItem) => ({
       appId,
       href: `/${currentNamespace}${navSection ? `/${navSection}` : ''}${extension.properties.href}`,
