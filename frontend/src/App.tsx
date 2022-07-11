@@ -8,10 +8,13 @@ import { notificationsReducer } from '@redhat-cloud-services/frontend-components
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 import { useStore } from 'react-redux';
 import { RegistryContext } from './store';
+import { isFeatureFlag, useResolvedExtensions } from '@openshift/dynamic-plugin-sdk';
+import FeatureFlagLoader from './Utils/FeatureFlagLoader';
 
 const App: React.FC = () => {
   const navigate = useNavigate();
   const { getRegistry } = React.useContext(RegistryContext);
+  const [featureExtension] = useResolvedExtensions(isFeatureFlag);
 
   const chrome = useChrome();
   const store = useStore();
@@ -32,6 +35,9 @@ const App: React.FC = () => {
 
   return (
     <React.Fragment>
+      {featureExtension.map((extension) => (
+        <FeatureFlagLoader {...extension.properties} key={extension.uid} />
+      ))}
       <NotificationsPortal store={store} />
       <Routes />
     </React.Fragment>
