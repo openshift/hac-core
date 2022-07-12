@@ -26,8 +26,8 @@
     "verify": "yarn build && yarn lint && yarn test"
   },
   "dependencies": {
-    "@openshift/dynamic-plugin-sdk": "^1.0.0-alpha10",
-    "@openshift/dynamic-plugin-sdk-utils": "^1.0.0-alpha12",
+    "@openshift/dynamic-plugin-sdk": "^1.0.0-alpha11",
+    "@openshift/dynamic-plugin-sdk-utils": "^1.0.0-alpha13",
     "@patternfly/patternfly": "^4.185.1",
     "@patternfly/quickstarts": "^2.2.1",
     "@patternfly/react-catalog-view-extension": "^4.53.16",
@@ -90,7 +90,10 @@
     "ts-node": "10.8.0",
     "typesafe-actions": "^5.1.0",
     "typescript": "4.4.4",
-    "webpack-bundle-analyzer": "4.4.2"
+    "webpack-bundle-analyzer": "4.4.2",
+    "@patternfly/react-virtualized-extension": "^4.53.2",
+    "react-virtualized": "^9.22.3",
+    "@types/react-virtualized": "^9.21.21"
   },
   "insights": {
     "appname": "hac-core",
