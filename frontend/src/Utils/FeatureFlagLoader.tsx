@@ -10,7 +10,7 @@ export type ModelFeatureFlagLoaderProps = {
  * @param function function that accepts single argmunet of type SetFeatureFlag callback.
  * @returns null
  */
-const FeatureFlagLoader = ({ handler }) => {
+const FeatureFlagLoader: React.FC<ModelFeatureFlagLoaderProps> = ({ handler }) => {
   const pluginStore = usePluginStore();
   const setFlagCallback = React.useCallback(
     (name, value) => {

@@ -6,7 +6,7 @@ import { CustomError } from './customError';
  * Usage: throw HttpError.fromCode(404)
  */
 export class HttpError extends CustomError {
-  protected static messages = {
+  protected static messages: { [code: number]: string } = {
     400: 'Bad Request',
     401: 'Unauthorized',
     402: 'Payment Required',

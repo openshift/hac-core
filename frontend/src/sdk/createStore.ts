@@ -2,7 +2,7 @@ import { getActivePlugins } from '../Utils/plugins';
 import packageInfo from '../../package.json';
 import { PluginLoader, PluginLoaderOptions, PluginStore } from '@openshift/dynamic-plugin-sdk';
 
-const modules = {
+const modules: { [name: string]: () => Promise<() => any> } = {
   '@openshift/dynamic-plugin-sdk-utils': async () => () => require('@openshift/dynamic-plugin-sdk-utils'),
   '@openshift/dynamic-plugin-sdk': async () => () => require('@openshift/dynamic-plugin-sdk'),
   '@patternfly/react-core': async () => () => require('@patternfly/react-core'),

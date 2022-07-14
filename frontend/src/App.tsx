@@ -23,7 +23,7 @@ const App: React.FC = () => {
     getRegistry().register({ notifications: notificationsReducer });
     const { on: onChromeEvent } = chrome?.init();
 
-    const unregister = onChromeEvent('APP_NAVIGATION', (event) => {
+    const unregister = onChromeEvent('APP_NAVIGATION', (event: any) => {
       if (event.domEvent) {
         navigate(`${event.domEvent.href.replace('/hac', '')}`);
       }
@@ -31,7 +31,7 @@ const App: React.FC = () => {
     return () => {
       unregister();
     };
-  }, [history, chrome]);
+  }, [chrome, getRegistry, navigate]);
 
   return (
     <React.Fragment>

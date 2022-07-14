@@ -48,7 +48,7 @@ export const validateStatus = async (response: Response) => {
 
 export const commonFetch =
   (auth: AuthConfig) =>
-  async (url: string, { pathPrefix, ...options }: RequestInit & { pathPrefix?: string }): Promise<Response> => {
+  async (url: string, { pathPrefix, ...options }: RequestInit & { pathPrefix?: string } = {}): Promise<Response> => {
     const token = await auth.getToken();
     if (!token) {
       return Promise.reject('Could not make k8s call. Unable to find token.');

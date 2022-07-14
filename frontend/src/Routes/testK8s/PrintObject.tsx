@@ -8,24 +8,15 @@ type PrintObjectProps = {
 const PrintObject: React.FC<PrintObjectProps> = ({ object }) => {
   const [expanded, setExpanded] = React.useState(false);
 
-  const sanitize = (resourceOrResourceList) => {
-    if (Array.isArray(resourceOrResourceList)) {
-      return resourceOrResourceList.map(sanitize);
-    }
-
+  const sanitize = (resourceOrResourceList: K8sResourceCommon): K8sResourceCommon => {
     const {
-      apiVersion,
-      kind,
-      apiGroup,
+      // @ts-ignore add `managedFields` to K8sResourceCommon
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       metadata: { managedFields, ...metadata }, // drop managedFields
       ...resource
     } = resourceOrResourceList;
 
     return {
-      apiVersion,
-      kind,
-      apiGroup,
       metadata,
       ...resource,
     };

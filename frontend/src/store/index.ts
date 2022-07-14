@@ -4,7 +4,7 @@ import promiseMiddleware from 'redux-promise-middleware';
 import { notificationsMiddleware } from '@redhat-cloud-services/frontend-components-notifications/notificationsMiddleware';
 import { SDKReducers } from '@openshift/dynamic-plugin-sdk-utils';
 import thunk from 'redux-thunk';
-import type { Store } from 'redux';
+import type { Middleware, Store } from 'redux';
 
 export type Registry = {
   getStore: () => Store;
@@ -15,11 +15,11 @@ export type ContextRegistry = {
   getRegistry: () => Registry;
 };
 
-export const RegistryContext = createContext<ContextRegistry>(undefined);
+export const RegistryContext = createContext<ContextRegistry>({} as ContextRegistry);
 
 let registry: Registry;
 
-export function init(...middleware): Registry {
+export function init(...middleware: Middleware[]): Registry {
   registry = getRegistry(
     {},
     [thunk, promiseMiddleware, notificationsMiddleware({ errorDescriptionKey: ['detail', 'stack'] }), ...middleware.filter(Boolean)],
