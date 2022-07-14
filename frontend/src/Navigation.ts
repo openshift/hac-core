@@ -23,7 +23,7 @@ export interface DynamicNav {
   isBeta?: () => boolean;
 }
 
-const navExtensionTypes = ['console.navigation/href', 'console.navigation/section'];
+const navExtensionTypes = ['console.navigation/href', 'console.navigation/section', 'core.navigation/href', 'core.navigation/section'];
 type NavExtension = HrefNavItem | NavSection;
 
 export type GetAllExtensions = (base?: string, isBeta?: () => boolean) => Promise<NavExtension[]>;
@@ -66,9 +66,16 @@ const getAllExtensions: GetAllExtensions = async (base = '', isBeta = () => fals
     .filter(isNavItem);
 };
 
+const isNavigation = (type) => ['console.navigation/href', 'core.navigation/href'].includes(type);
+
+const isCurrNavigation = (array, idx, properties) => array.findIndex(({ properties: { href } }: HrefNavItem) => href === properties.href) === idx;
+
 const calculateRoutes: CalculateRoutes = ([appId, navSection], currentNamespace, extensions) => {
   return extensions
-    .filter(({ type, properties }: HrefNavItem) => type.includes('console.navigation/href') && properties.section === navSection)
+    .filter(
+      ({ type, properties }: HrefNavItem, idx, array) =>
+        isNavigation(type) && properties.section === navSection && isCurrNavigation(array, idx, properties),
+    )
     .map((extension: HrefNavItem) => ({
       appId,
       href: `/${currentNamespace}${navSection ? `/${navSection}` : ''}${extension.properties.href}`,
