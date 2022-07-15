@@ -1,9 +1,16 @@
 import * as React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { useExtensions, isRoutePage as isDynamicRoutePage, RoutePage as DynamicRoutePage } from '@openshift/dynamic-plugin-sdk';
+import {
+  useExtensions,
+  isRoutePage as isDynamicRoutePage,
+  RoutePage as DynamicRoutePage,
+  isContextProvider,
+  useResolvedExtensions,
+} from '@openshift/dynamic-plugin-sdk';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import { ErrorState } from '@redhat-cloud-services/frontend-components/ErrorState';
 import camelCase from 'lodash/camelCase';
+import ProviderWrapper from '../../Utils/ProviderWrapper';
 
 const Loader = () => (
   <Bullseye>
@@ -17,6 +24,7 @@ type DynamicRouteProps = {
 
 const DynamicRoute: React.FC<DynamicRouteProps> = () => {
   const dynamicRoutePages = useExtensions<DynamicRoutePage>(isDynamicRoutePage);
+  const [contextProviderExtensions, providersResolved] = useResolvedExtensions(isContextProvider);
 
   const routes = React.useMemo(
     () =>
@@ -57,7 +65,15 @@ const DynamicRoute: React.FC<DynamicRouteProps> = () => {
             key={uid}
             element={
               <article className={className}>
-                <Component />
+                {providersResolved &&
+                  contextProviderExtensions.reduce(
+                    (children, extension) => (
+                      <ProviderWrapper key={extension.uid} {...extension.properties}>
+                        {children}
+                      </ProviderWrapper>
+                    ),
+                    <Component />,
+                  )}
               </article>
             }
           />
