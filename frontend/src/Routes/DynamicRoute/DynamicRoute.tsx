@@ -58,27 +58,27 @@ const DynamicRoute: React.FC<DynamicRouteProps> = () => {
 
   return (
     <React.Suspense fallback={null}>
-      <Routes>
-        {routes.map(({ className, Component, uid, ...currCoute }) => (
-          <Route
-            {...currCoute}
-            key={uid}
-            element={
-              <article className={className}>
-                {providersResolved &&
-                  contextProviderExtensions.reduce(
-                    (children, extension) => (
-                      <ProviderWrapper key={extension.uid} {...extension.properties}>
-                        {children}
-                      </ProviderWrapper>
-                    ),
-                    <Component />,
-                  )}
-              </article>
-            }
-          />
-        ))}
-      </Routes>
+      {providersResolved &&
+        contextProviderExtensions.reduce(
+          (children, extension) => (
+            <ProviderWrapper key={extension.uid} {...extension.properties}>
+              {children}
+            </ProviderWrapper>
+          ),
+          <Routes>
+            {routes.map(({ className, Component, uid, ...currCoute }) => (
+              <Route
+                {...currCoute}
+                key={uid}
+                element={
+                  <article className={className}>
+                    <Component />
+                  </article>
+                }
+              />
+            ))}
+          </Routes>,
+        )}
     </React.Suspense>
   );
 };
