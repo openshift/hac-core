@@ -34,7 +34,7 @@ const useAppConfiguration = (): AppConfigurations | null => {
         pluginStore,
       });
     }
-  }, [appConfigurations, pluginStore, auth]);
+  }, [appConfigurations, auth]);
 
   return appConfigurations;
 };

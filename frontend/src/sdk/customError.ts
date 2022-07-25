@@ -16,8 +16,6 @@
  * ```
  */
 export class CustomError extends Error {
-  name: string;
-
   constructor(message?: string) {
     super(message);
     // set error name as constructor name, make it not enumerable to keep native Error behavior

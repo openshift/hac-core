@@ -27,11 +27,11 @@ type FetchTestProps = {
 };
 
 const FetchTest: React.FC<FetchTestProps> = ({ namespace }) => {
-  const [r, setR] = React.useState(null);
+  const [r, setR] = React.useState<K8sResourceCommon>();
   const [name, setName] = React.useState<string>('test');
   const [status, setStatus] = React.useState<string>('');
-  const [action, setAction] = React.useState<ActionType | null>(null);
-  const [resourceVersion, setResourceVersion] = React.useState<string>(null);
+  const [action, setAction] = React.useState<ActionType>();
+  const [resourceVersion, setResourceVersion] = React.useState<string>();
 
   React.useEffect(() => {
     const testApplicationMetadata = {
@@ -116,10 +116,10 @@ const FetchTest: React.FC<FetchTestProps> = ({ namespace }) => {
       .catch((err) => {
         console.error(`++++failed ${action}`, err);
         setStatus(`failed call: ${err.message}`);
-        setR(null);
+        setR(undefined);
       })
       .finally(() => {
-        setAction(null); // prevent the hook for re-firing on name change
+        setAction(undefined); // prevent the hook for re-firing on name change
       });
   }, [action, name, namespace, resourceVersion]);
 

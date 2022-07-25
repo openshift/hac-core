@@ -12,19 +12,18 @@ type WSTestProps = {
 
 const WSTest: React.FC<WSTestProps> = ({ namespace }) => {
   const [r, setR] = React.useState(null);
-  const [error, setError] = React.useState(null);
+  const [error, setError] = React.useState<string | null>(null);
   const [isOpen, setOpen] = React.useState(false);
   const [path, setPath] = React.useState<string>();
 
   React.useEffect(() => {
-    let ws: WebSocketFactory;
     if (path) {
       let safePath = path;
       if (/^\/\//.test(path)) {
         // https://github.com/openshift/dynamic-plugin-sdk/pull/55
         safePath = path.slice(1);
       }
-      ws = new WebSocketFactory('sample websocket', {
+      const ws = new WebSocketFactory('sample websocket', {
         path: safePath,
       });
       ws.onOpen(() => {
@@ -64,12 +63,10 @@ const WSTest: React.FC<WSTestProps> = ({ namespace }) => {
         // 1006: https://stackoverflow.com/a/19305172
         console.debug('close', data, 'code:', data.code);
       });
+      return () => {
+        ws.destroy();
+      };
     }
-
-    return () => {
-      ws?.destroy();
-      ws = null;
-    };
   }, [path]);
 
   return (

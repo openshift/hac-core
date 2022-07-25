@@ -4,12 +4,12 @@ import { ProjectModel } from './models';
 import { Alert, Spinner } from '@patternfly/react-core';
 
 type DetermineNamespaceProps = {
-  namespace: string;
+  namespace?: string;
   setNamespace: (namespace: string) => void;
 };
 
 const DetermineNamespace: React.FC<DetermineNamespaceProps> = ({ namespace, setNamespace }) => {
-  const [error, setError] = React.useState<string>(null);
+  const [error, setError] = React.useState<string>();
 
   const hasConfig = isUtilsConfigSet();
   React.useEffect(() => {
@@ -18,7 +18,7 @@ const DetermineNamespace: React.FC<DetermineNamespaceProps> = ({ namespace, setN
         model: ProjectModel,
       })
         .then((items) => {
-          const ns = items[0]?.metadata.name;
+          const ns = items[0]?.metadata?.name;
 
           if (ns) {
             setNamespace(ns);
