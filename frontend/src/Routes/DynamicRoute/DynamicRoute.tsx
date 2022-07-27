@@ -1,9 +1,16 @@
 import * as React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import { useExtensions, isRoutePage as isDynamicRoutePage, RoutePage as DynamicRoutePage } from '@openshift/dynamic-plugin-sdk';
+import {
+  useExtensions,
+  isRoutePage as isDynamicRoutePage,
+  RoutePage as DynamicRoutePage,
+  isContextProvider,
+  useResolvedExtensions,
+} from '@openshift/dynamic-plugin-sdk';
 import { Bullseye, Spinner } from '@patternfly/react-core';
 import { ErrorState } from '@redhat-cloud-services/frontend-components/ErrorState';
 import camelCase from 'lodash/camelCase';
+import ProviderWrapper from '../../Utils/ProviderWrapper';
 
 const Loader = () => (
   <Bullseye>
@@ -17,6 +24,7 @@ type DynamicRouteProps = {
 
 const DynamicRoute: React.FC<DynamicRouteProps> = () => {
   const dynamicRoutePages = useExtensions<DynamicRoutePage>(isDynamicRoutePage);
+  const [contextProviderExtensions, providersResolved] = useResolvedExtensions(isContextProvider);
 
   const routes = React.useMemo(
     () =>
@@ -50,19 +58,27 @@ const DynamicRoute: React.FC<DynamicRouteProps> = () => {
 
   return (
     <React.Suspense fallback={null}>
-      <Routes>
-        {routes.map(({ className, Component, uid, ...currCoute }) => (
-          <Route
-            {...currCoute}
-            key={uid}
-            element={
-              <article className={className}>
-                <Component />
-              </article>
-            }
-          />
-        ))}
-      </Routes>
+      {providersResolved &&
+        contextProviderExtensions.reduce(
+          (children, extension) => (
+            <ProviderWrapper key={extension.uid} {...extension.properties}>
+              {children}
+            </ProviderWrapper>
+          ),
+          <Routes>
+            {routes.map(({ className, Component, uid, ...currCoute }) => (
+              <Route
+                {...currCoute}
+                key={uid}
+                element={
+                  <article className={className}>
+                    <Component />
+                  </article>
+                }
+              />
+            ))}
+          </Routes>,
+        )}
     </React.Suspense>
   );
 };
