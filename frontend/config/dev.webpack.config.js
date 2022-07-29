@@ -73,7 +73,6 @@ const webpackProxy = {
       pathRewrite: { '^/api/k8s': '' },
     },
     pluginProxy('hac-dev'),
-    pluginProxy('hac-build-service'),
     pluginProxy('hac-infra'),
     {
       context: (path) => path.includes('/wss/k8s'),
