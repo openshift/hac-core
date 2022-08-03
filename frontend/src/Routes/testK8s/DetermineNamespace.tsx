@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { isUtilsConfigSet, k8sListResourceItems } from '@openshift/dynamic-plugin-sdk-utils';
-import { ProjectModel } from './models';
 import { Alert, Spinner } from '@patternfly/react-core';
+import { ProjectModel } from '../../Utils/types';
 
 type DetermineNamespaceProps = {
   namespace?: string;
