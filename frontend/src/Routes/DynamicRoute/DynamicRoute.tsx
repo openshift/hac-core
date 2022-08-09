@@ -7,7 +7,7 @@ import {
   isContextProvider,
   useResolvedExtensions,
 } from '@openshift/dynamic-plugin-sdk';
-import { Bullseye, Spinner } from '@patternfly/react-core';
+import { Bullseye, Spinner, PageSection } from '@patternfly/react-core';
 import { ErrorState } from '@redhat-cloud-services/frontend-components/ErrorState';
 import camelCase from 'lodash/camelCase';
 import ProviderWrapper from '../../Utils/ProviderWrapper';
@@ -71,9 +71,9 @@ const DynamicRoute: React.FC<DynamicRouteProps> = () => {
                 {...currCoute}
                 key={uid}
                 element={
-                  <article className={className}>
+                  <PageSection className={`${className} pf-m-no-padding`}>
                     <Component />
-                  </article>
+                  </PageSection>
                 }
               />
             ))}
