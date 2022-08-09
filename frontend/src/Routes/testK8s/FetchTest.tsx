@@ -30,7 +30,7 @@ const FetchTest: React.FC<FetchTestProps> = ({ namespace }) => {
   const [r, setR] = React.useState<K8sResourceCommon>();
   const [name, setName] = React.useState<string>('test');
   const [status, setStatus] = React.useState<string>('');
-  const [action, setAction] = React.useState<ActionType>();
+  const [action, setAction] = React.useState<ActionType | undefined | null>(null);
   const [resourceVersion, setResourceVersion] = React.useState<string>();
 
   React.useEffect(() => {
