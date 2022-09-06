@@ -15,10 +15,11 @@ const useAppConfiguration = (): AppConfigurations | null => {
     if (auth && !appConfigurations) {
       setAppConfigurations({
         appFetch: commonFetch(auth),
-        wsAppSettings: async () => {
+        wsAppSettings: async (options: { wsPrefix?: string; pathPrefix?: string }) => {
+          const prefix = (options?.wsPrefix || options?.pathPrefix || '/wss/k8s') as string;
           const token = await auth.getToken();
           return {
-            host: `wss://${location.host}/wss/k8s`,
+            host: `wss://${location.host}${prefix.indexOf('/') === 0 ? '' : '/'}${prefix}`,
             subProtocols: getWSTokenSubProtocols(token),
             urlAugment: (url: string) => {
               const [origUrl, query] = url.split('?') || [];
