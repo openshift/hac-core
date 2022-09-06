@@ -1,5 +1,6 @@
-FROM registry.access.redhat.com/ubi8/nginx-118
-COPY ./nginx.conf /opt/app-root/etc/nginx/conf.d/default.conf
-COPY ./frontend/dist /opt/app-root/src
-ADD ./nginx.conf "${NGINX_CONFIGURATION_PATH}"
-CMD ["nginx", "-g", "daemon off;"]
+FROM quay.io/cloudservices/caddy-ubi:357c825
+COPY ./Caddyfile /opt/app-root/src/Caddyfile
+COPY ./frontend/dist /opt/app-root/src/dist
+COPY ./frontend/package.json /opt/app-root/src
+WORKDIR /opt/app-root/src
+CMD ["caddy", "run", "--config", "/opt/app-root/src/Caddyfile"]
