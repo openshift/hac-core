@@ -1,6 +1,6 @@
 # hac-core
 
-Core repo for the Hybrid Application Console (HAC) project. Manages the connectivity between the ConsoleDot Chrome & the HAC Dynamic Plugins.
+Core repo for the Hybrid Application Console (HAC) project. Manages the connectivity between the ConsoleDot Chrome & the HAC Dynamic Plugins. Foobar.
 
 ## Dynamic Plugins
 
