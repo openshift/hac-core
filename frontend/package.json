@@ -83,6 +83,7 @@
     "eslint-plugin-react-hooks": "^4.2.0",
     "identity-obj-proxy": "3.0.0",
     "jest": "27.0.5",
+    "jest-fetch-mock": "^3.0.3",
     "prop-types": "15.7.2",
     "stylelint": "13.13.1",
     "stylelint-config-recommended-scss": "4.2.0",
