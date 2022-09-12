@@ -42,7 +42,7 @@ export const createStore = () => {
   pluginLoader.registerPluginEntryCallback();
   const pluginStore = new PluginStore();
   pluginStore.setLoader(pluginLoader);
-  getActivePlugins(true, packageInfo.insights.appname).then((data) => {
+  getActivePlugins(window.insights.chrome.isBeta(), packageInfo.insights.appname).then((data) => {
     data.forEach(({ name: item, pathPrefix = '/api/plugins' }) => {
       const url = `/beta${pathPrefix}/${item}/`;
       pluginStore.loadPlugin(url);
