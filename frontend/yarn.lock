@@ -607,15 +607,16 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@openshift/dynamic-plugin-sdk-utils@^1.0.0-alpha16":
-  version "1.0.0-alpha16"
-  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk-utils/-/dynamic-plugin-sdk-utils-1.0.0-alpha16.tgz#1d7099b40f65951000ac9758ab6ecc35f05aec83"
-  integrity sha512-J1m8f2ZIVmxTTXARmAybQL1pmqzL8YxLDF4hFKHBhk3DOvNuGt6Tgd3N4CMCI7dvpvA22hfpwRBKjVzm01S1Jg==
+"@openshift/dynamic-plugin-sdk-utils@^1.0.0-alpha17":
+  version "1.0.0-alpha17"
+  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk-utils/-/dynamic-plugin-sdk-utils-1.0.0-alpha17.tgz#e3baca61503634bd2fba00e1f5892e4261f47d52"
+  integrity sha512-IravFesEE+BNBQgSDq6kAkAPh1U/HbFqefuyE+85gANygcPzzY5AXVOIZC3LoysKMjPOtwYidwpc3nENUZKWGg==
   dependencies:
     immutable "^3.8.2"
     lodash-es "^4.17.21"
     pluralize "^8.0.0"
     typesafe-actions "^4.4.2"
+    uuid "^8.3.2"
 
 "@openshift/dynamic-plugin-sdk@^1.0.0-alpha13":
   version "1.0.0-alpha13"
@@ -8315,6 +8316,11 @@ uuid@^3.4.0:
   version "3.4.0"
   resolved "https://registry.npmjs.org/uuid/-/uuid-3.4.0.tgz"
   integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
+
+uuid@^8.3.2:
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
+  integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 v8-compile-cache-lib@^3.0.1:
   version "3.0.1"
