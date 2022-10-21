@@ -607,10 +607,10 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@openshift/dynamic-plugin-sdk-utils@^1.0.0-alpha18":
-  version "1.0.0-alpha18"
-  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk-utils/-/dynamic-plugin-sdk-utils-1.0.0-alpha18.tgz#bce9ad7d1468d90e55fda3e4e34016610214d45f"
-  integrity sha512-9jyP/R4mrQgd36Vgaj7+0RQqCrcCnwSidt3I2A0Tebm2B0e1LUQzDhKA1w2VXg7xhtmZbPMvrH4JnIAac1JR0w==
+"@openshift/dynamic-plugin-sdk-utils@^1.0.0-alpha19":
+  version "1.0.0-alpha19"
+  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk-utils/-/dynamic-plugin-sdk-utils-1.0.0-alpha19.tgz#94edcf335b627033426fa8b679e68d957492a832"
+  integrity sha512-iVJsvgUw+dJRS72Ox7W03yg94w15GqMd4KdIvwaqDQPBJHygml5lcPi0gRIah3Wj7CaGFhaa3lfd+XNwIan1TQ==
   dependencies:
     immutable "^3.8.2"
     lodash-es "^4.17.21"
