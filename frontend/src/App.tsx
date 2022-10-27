@@ -6,7 +6,9 @@ import { notificationsReducer } from '@redhat-cloud-services/frontend-components
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 import { useStore } from 'react-redux';
 import { RegistryContext } from './store';
-import { isFeatureFlag, isModelFeatureFlag, useExtensions, useResolvedExtensions } from '@openshift/dynamic-plugin-sdk';
+import { useExtensions, useResolvedExtensions } from '@openshift/dynamic-plugin-sdk';
+import { isFeatureFlag, isModelFeatureFlag } from '@openshift/dynamic-plugin-sdk-extensions';
+
 import FeatureFlagLoader from './Utils/FeatureFlagLoader';
 import ModelFeatureFlagLoader from './Utils/ModelFeatureFlagLoader';
 

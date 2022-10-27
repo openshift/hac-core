@@ -1,12 +1,7 @@
 import * as React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import {
-  useExtensions,
-  isRoutePage as isDynamicRoutePage,
-  RoutePage as DynamicRoutePage,
-  isContextProvider,
-  useResolvedExtensions,
-} from '@openshift/dynamic-plugin-sdk';
+import { useExtensions, useResolvedExtensions } from '@openshift/dynamic-plugin-sdk';
+import { isRoutePage as isDynamicRoutePage, RoutePage as DynamicRoutePage, isContextProvider } from '@openshift/dynamic-plugin-sdk-extensions';
 import { Bullseye, Spinner, PageSection } from '@patternfly/react-core';
 import { ErrorState } from '@redhat-cloud-services/frontend-components/ErrorState';
 import camelCase from 'lodash/camelCase';

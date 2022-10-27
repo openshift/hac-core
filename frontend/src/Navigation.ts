@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { getActivePlugins } from './Utils/plugins';
-import { HrefNavItem, PluginManifest, Extension, NavSection, isNavSection } from '@openshift/dynamic-plugin-sdk';
+import { Extension, PluginManifest } from '@openshift/dynamic-plugin-sdk';
+import { HrefNavItem, NavSection, isNavSection } from '@openshift/dynamic-plugin-sdk-extensions';
+
 import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
 import packageInfo from '../package.json';
 
