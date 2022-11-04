@@ -3,9 +3,9 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { init, RegistryContext } from './store';
 import App from './App';
-import { getBaseName } from '@redhat-cloud-services/frontend-components-utilities/helpers';
 import logger from 'redux-logger';
 import { InitializeSDK } from './sdk';
+import { getBaseName } from '@redhat-cloud-services/frontend-components-utilities/helpers';
 
 const AppEntry = () => {
   const registry = process.env.NODE_ENV !== 'production' ? init(logger) : init();
@@ -17,7 +17,7 @@ const AppEntry = () => {
     >
       <Provider store={registry.getStore()}>
         <InitializeSDK>
-          <Router basename={getBaseName(window.location.pathname, 1)}>
+          <Router basename={getBaseName(window.location.pathname, 0)}>
             <App />
           </Router>
         </InitializeSDK>
