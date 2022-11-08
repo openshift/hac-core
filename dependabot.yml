@@ -2,5 +2,14 @@ version: 2
 updates:
   - package-ecosystem: "npm" 
     directory: "/"
+    allow:
+      - dependency-name: "@redhat-cloud-services/frontend*"
+      - dependency-name: "@openshift/*"
+      - dependency-name: "@patternfly/*"
+        dependency-type: "direct"
+    reviewers:
+      - "khala"
+      - "florkbr"
+      - "BlakeHolifield"
     schedule:
       interval: "weekly"
