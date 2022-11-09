@@ -4,7 +4,7 @@ import { PluginLoader, PluginLoaderOptions, PluginStore } from '@openshift/dynam
 import type { To, NavigateOptions } from 'react-router-dom';
 
 const calculateTo = (to: To) => {
-  if (typeof to === 'string' && !to.startsWith('/hac')) {
+  if (typeof to === 'string' && !to.startsWith('/hac') && to.startsWith('/')) {
     return `/hac${to}`;
   } else if (typeof to !== 'string' && to.pathname && !to.pathname.startsWith('/hac')) {
     return {
@@ -43,8 +43,7 @@ const modules: { [name: string]: () => Promise<() => any> } = {
       Link: (props: any) => {
         const react = require('react');
         const Cmp = reactRouter.Link;
-        const to = props.to.startsWith('/hac') ? props.to : `/hac${props.to}`;
-        return react.createElement(Cmp, { ...props, to });
+        return react.createElement(Cmp, { ...props, to: calculateTo(props.to) });
       },
       Navigate: (props: any) => {
         const react = require('react');
