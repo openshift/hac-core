@@ -1,6 +1,7 @@
 import { HttpError } from './httpError';
 
 const k8sBasePath = `/api/k8s`;
+const kcpBasePath = `/api/kcp/clusters/`;
 
 type AuthConfig = {
   getToken: () => Promise<String>;
@@ -47,8 +48,7 @@ export const validateStatus = async (response: Response) => {
 };
 
 export const commonFetch =
-  (auth: AuthConfig) =>
-  async (url: string, { pathPrefix, ...options }: RequestInit & { pathPrefix?: string } = {}): Promise<Response> => {
+  (auth: AuthConfig, activeWorkspace?: string | null) => async (url: string, { pathPrefix, ...options }: RequestInit & { pathPrefix?: string } = {}): Promise<Response> => {
     const token = await auth.getToken();
     if (!token) {
       return Promise.reject('Could not make k8s call. Unable to find token.');
@@ -62,8 +62,11 @@ export const commonFetch =
         Authorization: `Bearer ${token}`,
       },
     };
-
-    const prefix = `${(pathPrefix ?? k8sBasePath).indexOf('/') === 0 ? '' : '/'}${pathPrefix ?? k8sBasePath}`;
+    
+    let prefix = `${kcpBasePath}${activeWorkspace}`;
+    if (!activeWorkspace) {
+      prefix = `${(pathPrefix ?? k8sBasePath).indexOf('/') === 0 ? '' : '/'}${pathPrefix ?? k8sBasePath}`;
+    }
 
     try {
       let safeURL = url;

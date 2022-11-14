@@ -2,6 +2,7 @@ import * as React from 'react';
 import { AppInitSDK } from '@openshift/dynamic-plugin-sdk-utils';
 import Loader from '../Utils/Loader';
 import useAppConfiguration from './useAppConfiguration';
+import { WorkspaceProvider } from '../Utils/WorkspaceProvider';
 
 const InitializeSDK: React.FC = ({ children }) => {
   const appConfigurations = useAppConfiguration();
@@ -16,4 +17,9 @@ const InitializeSDK: React.FC = ({ children }) => {
   return <AppInitSDK configurations={appConfigurations}>{children as any}</AppInitSDK>;
 };
 
-export default InitializeSDK;
+const SDKWrapper: React.FC = ({ children }) => {
+  const { activeWorkspace } = React.useContext(WorkspaceProvider);
+  return <InitializeSDK key={activeWorkspace}>{children as any}</InitializeSDK>
+}
+
+export default SDKWrapper;

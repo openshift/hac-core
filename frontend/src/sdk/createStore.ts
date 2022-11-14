@@ -2,6 +2,7 @@ import { getActivePlugins } from '../Utils/plugins';
 import packageInfo from '../../package.json';
 import { PluginLoader, PluginLoaderOptions, PluginStore } from '@openshift/dynamic-plugin-sdk';
 import type { To, NavigateOptions } from 'react-router-dom';
+import { WorkspaceProvider } from '../Utils/WorkspaceProvider';
 
 const calculateTo = (to: To) => {
   if (typeof to === 'string' && !to.startsWith('/hac')) {
@@ -91,6 +92,15 @@ export const createStore = () => {
       pluginStore.loadPlugin(url);
     });
   });
+  pluginStore.addPlugin({ name: 'hac-core', version: '0.0.1' }, [{
+    type: 'custom/active-workspace',
+    properties: {
+      getProvider: () => WorkspaceProvider
+    },
+    pluginName: 'hac-core',
+    uid: 'hac-core-active-workspace'
+  }]);
+  pluginStore.enablePlugins(['hac-core']);
   return pluginStore;
 };
 export const pluginStore = createStore();

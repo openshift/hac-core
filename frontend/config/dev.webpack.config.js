@@ -64,6 +64,15 @@ const webpackProxy = {
   },
   customProxy: [
     {
+      context: (path) => path.includes('/api/kcp'),
+      target: 'https://api-toolchain-host-operator.apps.appstudio-stage.x99m.p1.openshiftapps.com:443',
+      secure: false,
+      changeOrigin: true,
+      autoRewrite: true,
+      ws: true,
+      pathRewrite: { '^/api/kcp': '' },
+    },
+    {
       context: (path) => path.includes('/api/k8s/registration'),
       target: 'https://registration-service-toolchain-host-operator.apps.appstudio-stage.x99m.p1.openshiftapps.com',
       secure: false,
