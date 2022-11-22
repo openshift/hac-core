@@ -3,7 +3,7 @@ import { commonFetch } from './commonFetch';
 import { getWSTokenSubProtocols } from './wsConfigs';
 import { AppInitSDK } from '@openshift/dynamic-plugin-sdk-utils';
 import { pluginStore } from 'Sdk/createStore';
-import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
+import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 
 type AppConfigurations = React.ComponentProps<typeof AppInitSDK>['configurations'];
 

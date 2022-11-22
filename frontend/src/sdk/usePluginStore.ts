@@ -1,5 +1,5 @@
 import { PluginLoader, PluginStore } from '@openshift/dynamic-plugin-sdk';
-import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
+import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 import useActivePlugins from './useActivePlugins';
 
 // TODO(SDK): Expose

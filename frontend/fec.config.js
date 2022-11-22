@@ -1,17 +1,7 @@
 const { resolve } = require('path');
-const config = require('@redhat-cloud-services/frontend-components-config');
-const commonPlugins = require('./plugins');
-const mergeTsConfigAliases = require('./mergeTsConfigAliases');
-
-const insightsProxy = {
-  https: false,
-  ...(process.env.BETA && { deployment: 'beta/apps' }),
-};
-
-const environment = process.env.ENVIRONMENT || 'stage';
-const betaOrStable = process.env.BETA ? 'beta' : 'stable';
-// for accessing prod-beta change this to 'prod-beta'
-const env = `${environment}-${betaOrStable}`;
+const { tsConfigAliases } = require('./config/mergeTsConfigAliases');
+const commonPlugins = require('./config/plugins');
+const package = require('./package.json');
 
 const pluginProxy = (name, port = 8003, pathRewrite = false) => ({
   context: [`/beta/api/plugins/${name}`, `/api/plugins/${name}`],
@@ -37,13 +27,16 @@ const calculateRemoteConfig = (remoteConfig) => {
   return `https://${remoteConfig}.console.redhat.com`;
 };
 
-const webpackProxy = {
-  deployment: process.env.BETA ? 'beta/apps' : 'apps',
+module.exports = {
+  appUrl: '/hac',
+  debug: true,
   useProxy: true,
-  env,
-  appUrl: process.env.BETA ? '/beta/hac' : '/hac',
+  proxyVerbose: true,
+  /**
+   * Change to false after your app is registered in configuration files
+   */
+  interceptChromeConfig: false,
   sassPrefix: '.hacCore',
-  standalone: Boolean(process.env.STANDALONE),
   ...(process.env.INSIGHTS_CHROME && {
     localChrome: process.env.INSIGHTS_CHROME,
   }),
@@ -93,20 +86,32 @@ const webpackProxy = {
       pathRewrite: { '^/wss/k8s': '' },
     },
   ],
+  plugins: commonPlugins,
+  moduleFederation: {
+    root: resolve(__dirname, './'),
+    debug: true,
+    exposes: {
+      // Application root
+      './RootApp': resolve(__dirname, './src/AppEntry'),
+      // System detail
+      './Navigation': resolve(__dirname, './src/Navigation'),
+    },
+    shared: [
+      { 'react-router-dom': { requiredVersion: package.dependencies['react-router-dom'] } },
+      { 'react-redux': { singleton: true, requiredVersion: package.dependencies['react-redux'] } },
+      { '@openshift/dynamic-plugin-sdk-utils': { singleton: true, requiredVersion: package.dependencies['@openshift/dynamic-plugin-sdk-utils'] } },
+      { '@openshift/dynamic-plugin-sdk': { singleton: true, requiredVersion: package.dependencies['@openshift/dynamic-plugin-sdk'] } },
+      {
+        '@openshift/dynamic-plugin-sdk-extensions': {
+          singleton: true,
+          requiredVersion: package.dependencies['@openshift/dynamic-plugin-sdk-extensions'],
+        },
+      },
+      { '@patternfly/quickstarts': { singleton: true, requiredVersion: '*' } },
+      { 'Sdk/createStore': { singleton: true, requiredVersion: '*' } },
+    ],
+  },
+  resolve: {
+    alias: tsConfigAliases,
+  },
 };
-
-const { config: webpackConfig, plugins } = config({
-  rootFolder: resolve(__dirname, '../'),
-  debug: true,
-  useFileHash: false,
-  ...(process.env.PROXY ? webpackProxy : insightsProxy),
-});
-
-plugins.push(...commonPlugins);
-
-webpackConfig.devServer.client.overlay = false;
-
-module.exports = mergeTsConfigAliases({
-  ...webpackConfig,
-  plugins,
-});

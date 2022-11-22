@@ -34,4 +34,6 @@ const mergeTsConfigAliases = (webpackConfig) => ({
   },
 });
 
+mergeTsConfigAliases.tsConfigAliases = tsConfigAliases;
+
 module.exports = mergeTsConfigAliases;

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Routes } from './Routes';
 import NotificationsPortal from '@redhat-cloud-services/frontend-components-notifications/NotificationPortal';
 import { notificationsReducer } from '@redhat-cloud-services/frontend-components-notifications/redux';
-import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
+import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 import { useStore } from 'react-redux';
 import { RegistryContext } from './store';
 import { useExtensions, useResolvedExtensions } from '@openshift/dynamic-plugin-sdk';
@@ -31,7 +31,7 @@ const App: React.FC = () => {
       }
     });
     return () => {
-      unregister();
+      unregister && unregister();
     };
   }, [chrome, getRegistry, navigate]);
 
