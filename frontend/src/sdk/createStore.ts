@@ -28,6 +28,7 @@ const modules: { [name: string]: () => Promise<() => any> } = {
   '@scalprum/react-core': async () => () => require('@scalprum/react-core'),
   'react-redux': async () => () => require('react-redux'),
   'react-router': async () => () => require('react-router'),
+  '@patternfly/quickstarts': async () => () => require('@patternfly/quickstarts'),
   'react-router-dom': async () => () => {
     // We have to hack our way around react-router-dom
     // Since we are no longer using basename we have to include `/hac` prefix
