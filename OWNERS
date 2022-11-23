@@ -1,11 +1,9 @@
 reviewers:
-  - andrewballantyne
   - BlakeHolifield
   - florkbr
   - fhlavac
   - karelhala
 approvers:
-  - andrewballantyne
   - florkbr
   - karelhala
 component: HAC Core
