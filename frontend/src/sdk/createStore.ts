@@ -29,6 +29,7 @@ const modules: { [name: string]: () => Promise<() => any> } = {
   'react-redux': async () => () => require('react-redux'),
   'react-router': async () => () => require('react-router'),
   '@patternfly/quickstarts': async () => () => require('@patternfly/quickstarts'),
+  '@unleash/proxy-client-react': async () => () => require('@unleash/proxy-client-react'),
   'react-router-dom': async () => () => {
     // We have to hack our way around react-router-dom
     // Since we are no longer using basename we have to include `/hac` prefix
