@@ -1499,6 +1499,11 @@
     "@typescript-eslint/types" "4.33.0"
     eslint-visitor-keys "^2.0.0"
 
+"@unleash/proxy-client-react@^3.4.1":
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/@unleash/proxy-client-react/-/proxy-client-react-3.4.1.tgz#8f11ee805b3d8a432e87d20d318b9383d5a320d0"
+  integrity sha512-X7OXsR3k2KpH9FZ/4QYy+SeUoL1g+w5IIiv//fVH4IyGp0M7CCLsF+8eYdfC7xHGk0w7/xbcIyVINmGsXfb04w==
+
 "@webassemblyjs/ast@1.11.1":
   version "1.11.1"
   resolved "https://registry.npmjs.org/@webassemblyjs/ast/-/ast-1.11.1.tgz"
@@ -7932,6 +7937,11 @@ thunky@^1.0.2:
   resolved "https://registry.npmjs.org/thunky/-/thunky-1.1.0.tgz"
   integrity sha512-eHY7nBftgThBqOyHGVN+l8gF0BucP09fMo0oO/Lb0w1OF80dJv+lDVpXG60WMQvkcxAkNybKsrEIE3ZtKGmPrA==
 
+tiny-emitter@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/tiny-emitter/-/tiny-emitter-2.1.0.tgz#1d1a56edfc51c43e863cbb5382a72330e3555423"
+  integrity sha512-NB6Dk1A9xgQPMoGqC5CVXn123gWyte215ONT5Pp5a0yt4nlEoO1ZWeCwpncaekPHXO60i47ihFnZPiRPjRMq4Q==
+
 tippy.js@5.1.2:
   version "5.1.2"
   resolved "https://registry.npmjs.org/tippy.js/-/tippy.js-5.1.2.tgz"
@@ -8211,6 +8221,14 @@ universalify@^0.1.0, universalify@^0.1.2:
   version "0.1.2"
   resolved "https://registry.npmjs.org/universalify/-/universalify-0.1.2.tgz"
   integrity sha512-rBJeI5CXAlmy1pV+617WB9J63U6XcazHHF2f2dbJix4XzpUF0RS3Zbj0FGIOCAva5P/d/GBOYaACQ1w+0azUkg==
+
+unleash-proxy-client@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/unleash-proxy-client/-/unleash-proxy-client-2.3.0.tgz#30937d782a99ada6b9cb3012e824c232c64dab9c"
+  integrity sha512-UYDZjjsIF+n01LnijR8t/FXOM5XPnjZkE5K/E+SInFzBfL1SckYZHiuzii1/4QmiRo/x+vjx9LJjAzE8JRas4Q==
+  dependencies:
+    tiny-emitter "^2.1.0"
+    uuid "^8.3.2"
 
 unpipe@1.0.0, unpipe@~1.0.0:
   version "1.0.0"
