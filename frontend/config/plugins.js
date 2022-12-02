@@ -25,7 +25,8 @@ const plugins = [
           requiredVersion: package.dependencies['@openshift/dynamic-plugin-sdk-extensions'],
         },
       },
-      { 'Sdk/createStore': { singleton: true } },
+      { '@patternfly/quickstarts': { singleton: true, requiredVersion: '*' } },
+      { 'Sdk/createStore': { singleton: true, requiredVersion: '*' } },
     ],
   }),
   new CopyWebpackPlugin({

@@ -1,6 +1,20 @@
 import { getActivePlugins } from '../Utils/plugins';
 import packageInfo from '../../package.json';
 import { PluginLoader, PluginLoaderOptions, PluginStore } from '@openshift/dynamic-plugin-sdk';
+import type { To, NavigateOptions } from 'react-router-dom';
+
+const calculateTo = (to: To) => {
+  if (typeof to === 'string' && !to.startsWith('/hac') && to.startsWith('/')) {
+    return `/hac${to}`;
+  } else if (typeof to !== 'string' && to.pathname && !to.pathname.startsWith('/hac')) {
+    return {
+      ...to,
+      pathname: `/hac${to.pathname}`,
+    };
+  }
+
+  return to;
+};
 
 const modules: { [name: string]: () => Promise<() => any> } = {
   '@openshift/dynamic-plugin-sdk-utils': async () => () => require('@openshift/dynamic-plugin-sdk-utils'),
@@ -14,7 +28,37 @@ const modules: { [name: string]: () => Promise<() => any> } = {
   '@scalprum/react-core': async () => () => require('@scalprum/react-core'),
   'react-redux': async () => () => require('react-redux'),
   'react-router': async () => () => require('react-router'),
-  'react-router-dom': async () => () => require('react-router-dom'),
+  '@patternfly/quickstarts': async () => () => require('@patternfly/quickstarts'),
+  '@unleash/proxy-client-react': async () => () => require('@unleash/proxy-client-react'),
+  'react-router-dom': async () => () => {
+    // We have to hack our way around react-router-dom
+    // Since we are no longer using basename we have to include `/hac` prefix
+    const reactRouter = require('react-router-dom');
+    return {
+      ...reactRouter,
+      useNavigate: () => {
+        const oldNavigate = reactRouter.useNavigate();
+        return (to: To, options?: NavigateOptions) => {
+          oldNavigate(calculateTo(to), options);
+        };
+      },
+      Link: (props: any) => {
+        const react = require('react');
+        const Cmp = reactRouter.Link;
+        return react.createElement(Cmp, { ...props, to: calculateTo(props.to) });
+      },
+      Navigate: (props: any) => {
+        const react = require('react');
+        const Cmp = reactRouter.Navigate;
+        return react.createElement(Cmp, { ...props, to: calculateTo(props.to) });
+      },
+      NavLink: (props: any) => {
+        const react = require('react');
+        const Cmp = reactRouter.NavLink;
+        return react.createElement(Cmp, { ...props, to: calculateTo(props.to) });
+      },
+    };
+  },
 };
 
 const sharedScope = Object.keys(modules).reduce(

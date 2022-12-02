@@ -15,8 +15,10 @@ export const Routes: React.FC = () => (
     }
   >
     <DomRoutes>
-      <Route path="/*" element={<DynamicRoute />} />
+      <Route path="/hac/testK8s" element={<TestK8s />} />
       <Route path="/testK8s" element={<TestK8s />} />
+      <Route path="/hac/*" element={<DynamicRoute />} />
+      <Route path="/*" element={<DynamicRoute />} />
     </DomRoutes>
   </React.Suspense>
 );
