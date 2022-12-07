@@ -19,6 +19,12 @@ const plugins = [
       { 'react-redux': { singleton: true, requiredVersion: package.dependencies['react-redux'] } },
       { '@openshift/dynamic-plugin-sdk-utils': { singleton: true, requiredVersion: package.dependencies['@openshift/dynamic-plugin-sdk-utils'] } },
       { '@openshift/dynamic-plugin-sdk': { singleton: true, requiredVersion: package.dependencies['@openshift/dynamic-plugin-sdk'] } },
+      {
+        '@openshift/dynamic-plugin-sdk-extensions': {
+          singleton: true,
+          requiredVersion: package.dependencies['@openshift/dynamic-plugin-sdk-extensions'],
+        },
+      },
       { '@patternfly/quickstarts': { singleton: true, requiredVersion: '*' } },
       { 'Sdk/createStore': { singleton: true, requiredVersion: '*' } },
     ],

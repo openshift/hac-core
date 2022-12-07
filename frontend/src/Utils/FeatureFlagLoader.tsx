@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { usePluginStore } from '@openshift/dynamic-plugin-sdk';
-import type { SetFeatureFlag } from '@openshift/dynamic-plugin-sdk';
+import type { SetFeatureFlag } from '@openshift/dynamic-plugin-sdk-extensions';
 
 export type ModelFeatureFlagLoaderProps = {
   handler: (callback: SetFeatureFlag) => void;
