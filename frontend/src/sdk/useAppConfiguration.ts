@@ -3,14 +3,14 @@ import { commonFetch } from './commonFetch';
 import { getWSTokenSubProtocols } from './wsConfigs';
 import { AppInitSDK } from '@openshift/dynamic-plugin-sdk-utils';
 import { pluginStore } from 'Sdk/createStore';
-import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
+import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
+import { core, apps, configOs, appsOs } from './staticModels';
 
 type AppConfigurations = React.ComponentProps<typeof AppInitSDK>['configurations'];
 
 const useAppConfiguration = (): AppConfigurations | null => {
   const { auth } = useChrome();
   const [appConfigurations, setAppConfigurations] = React.useState<AppConfigurations | null>(null);
-
   React.useEffect(() => {
     if (auth && !appConfigurations) {
       setAppConfigurations({
@@ -32,6 +32,12 @@ const useAppConfiguration = (): AppConfigurations | null => {
           };
         },
         apiPriorityList: ['appstudio.redhat.com'],
+        staticAPIModels: {
+          '/api/v1': core,
+          '/apis/apps/v1': apps,
+          '/apis/config.openshift.io/v1': configOs,
+          '/apis/apps.openshift.io/v1': appsOs,
+        },
         pluginStore,
       });
     }
