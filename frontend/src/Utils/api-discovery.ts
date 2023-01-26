@@ -1,4 +1,4 @@
-import { commonFetchJSON, K8sGroupVersionKind, K8sModelCommon } from '@openshift/dynamic-plugin-sdk-utils';
+import { commonFetchJSON, K8sGroupVersionKind, K8sModelCommon, createAPIActions } from '@openshift/dynamic-plugin-sdk-utils';
 import { ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 import mergeWith from 'lodash/mergeWith';
@@ -7,7 +7,6 @@ import keyBy from 'lodash/keyBy';
 import chunk from 'lodash/chunk';
 import startCase from 'lodash/startCase';
 import { plural } from 'pluralize';
-import { receivedResources, setResourcesInFlight, setBatchesInFlight } from '../store/actions';
 import {
   AnyObject,
   APIResourceData,
@@ -182,16 +181,17 @@ const getResources = async (preferenceList: string[]): Promise<[(string | string
 
 const startAPIDiscovery = async (preferenceList: string[], dispatch: ThunkDispatch<SDKStoreState, undefined, AnyAction>) => {
   try {
-    dispatch(setResourcesInFlight(true));
-    dispatch(setBatchesInFlight(true));
+    const actions = createAPIActions(dispatch);
+    actions.setResourcesInFlight(true);
+    actions.setBatchesInFlight(true);
     const [batches, groupVersionMap] = await getResources(preferenceList);
     for (const batch of batches) {
       const resources = await Promise.all(batchResourcesRequest(batch as string[]));
       cacheResources(resources as DiscoveryResources[]);
-      resources.map((resource: DiscoveryResources) => dispatch(receivedResources({ ...resource, ...groupVersionMap })));
+      resources.map((resource: DiscoveryResources) => actions.receivedResources({ ...resource, ...groupVersionMap }));
     }
-    dispatch(setBatchesInFlight(false));
-    dispatch(setResourcesInFlight(false));
+    actions.setBatchesInFlight(false);
+    actions.setResourcesInFlight(false);
   } catch (e) {
     // eslint-disable-next-line no-console
     console.error('API discovery startAPIDiscovery failed:', e);
@@ -201,12 +201,10 @@ const startAPIDiscovery = async (preferenceList: string[], dispatch: ThunkDispat
 export const initAPIDiscovery: InitAPIDiscovery = (storeInstance, preferenceList = []) => {
   const resources = getCachedResources();
   if (resources) {
-    storeInstance.dispatch(receivedResources(resources));
+    createAPIActions(storeInstance.dispatch).receivedResources(resources);
   }
 
   // eslint-disable-next-line no-console
   console.info(`API discovery waiting ${API_DISCOVERY_INIT_DELAY} ms before initializing`);
-  window.setTimeout(() => {
-    startAPIDiscovery(preferenceList, storeInstance.dispatch);
-  }, API_DISCOVERY_INIT_DELAY);
+  window.setTimeout(() => startAPIDiscovery(preferenceList, storeInstance.dispatch), API_DISCOVERY_INIT_DELAY);
 };
