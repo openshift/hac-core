@@ -600,15 +600,15 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@openshift/dynamic-plugin-sdk-extensions@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk-extensions/-/dynamic-plugin-sdk-extensions-1.0.0.tgz#23e9eed8df2542df1e169903b5a3b68f2db3e955"
-  integrity sha512-9LFORXrFN/GFnATfh2J/7HnER7cr51RPHFblBnijnu5CzkabY7xfE8JcJN7lCho7o+LDkSBLBMnyc9HRQsTfbw==
+"@openshift/dynamic-plugin-sdk-extensions@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk-extensions/-/dynamic-plugin-sdk-extensions-1.1.0.tgz#c8d480998ba6df6edc2c18a1c34438d541cc78f7"
+  integrity sha512-hjwhOkkVLoW5FSJ6zAlbcSpKkycTDlqxvlPJeRCSSRYXQpXDtG409RQTL5c73g7kgFJWojUPxNz5UXkw9+qzSw==
 
-"@openshift/dynamic-plugin-sdk-utils@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/@openshift/dynamic-plugin-sdk-utils/-/dynamic-plugin-sdk-utils-1.0.0.tgz"
-  integrity sha512-ZXEJFFGixA1rQj6HKsFJ2q/xeumxCKvmITGIlgMtJwlXbPJQZZ2X5dWv2xazSbjsZotGqM1NX8okH1q5Xwv4oQ==
+"@openshift/dynamic-plugin-sdk-utils@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk-utils/-/dynamic-plugin-sdk-utils-1.1.0.tgz#eddebdeadae385c62aca92b01137ff835c0aa4f3"
+  integrity sha512-j9YF6QJJflyhighJIbDEKtly0qVGkfRaV5GxxIy0ocMLFdy5yNp/+GiceDtmt4+674HbCNB4ifVeSI69qZ06jw==
   dependencies:
     immutable "^3.8.2"
     lodash-es "^4.17.21"
@@ -616,13 +616,14 @@
     typesafe-actions "^4.4.2"
     uuid "^8.3.2"
 
-"@openshift/dynamic-plugin-sdk@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk/-/dynamic-plugin-sdk-1.0.0.tgz#7f05f7023a3eff7973067541fa0c23dcbcefd765"
-  integrity sha512-lkb2ZlbFXziPzVWOykfSAzeA1siGxMlzIDzd1wBh0RikjVr7a07U6gjrOcByaeC45AdUc2SNGRTERWoobj4THQ==
+"@openshift/dynamic-plugin-sdk@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk/-/dynamic-plugin-sdk-2.0.1.tgz#5bf81b224171c982c32f6cfa2bd8034077b18327"
+  integrity sha512-fiSPxk8ghs/aEp7UasDBhjdXrQ5/IQl+QuCB8FHz6IhAkN5mB/aQ7GcBHfW+ITK4g0eb6ydb4x2IaKP8iZeBJw==
   dependencies:
     lodash-es "^4.17.21"
     semver "^7.3.7"
+    uuid "^8.3.2"
     yup "^0.32.11"
 
 "@patternfly/patternfly@4.122.2":
@@ -4384,8 +4385,8 @@ ignore@^5.1.4, ignore@^5.1.8, ignore@^5.1.9:
 
 immutable@^3.8.2:
   version "3.8.2"
-  resolved "https://registry.npmjs.org/immutable/-/immutable-3.8.2.tgz"
-  integrity "sha1-wkOZUUVbs5kT2vKBN28VMOEErfM=sha512-15gZoQ38eYjEjxkorfbcgBKBL6R7T459OuK+CpcWt7O3KF4uPCx2tD0uFETlUDIyo+1789crbMhTvQBSR5yBMg== sha512-15gZoQ38eYjEjxkorfbcgBKBL6R7T459OuK+CpcWt7O3KF4uPCx2tD0uFETlUDIyo+1789crbMhTvQBSR5yBMg=="
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-3.8.2.tgz#c2439951455bb39913daf281376f1530e104adf3"
+  integrity sha512-15gZoQ38eYjEjxkorfbcgBKBL6R7T459OuK+CpcWt7O3KF4uPCx2tD0uFETlUDIyo+1789crbMhTvQBSR5yBMg==
 
 import-fresh@^3.0.0, import-fresh@^3.2.1:
   version "3.3.0"
@@ -6418,7 +6419,7 @@ pkg-dir@^4.1.0, pkg-dir@^4.2.0:
 
 pluralize@^8.0.0:
   version "8.0.0"
-  resolved "https://registry.npmjs.org/pluralize/-/pluralize-8.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/pluralize/-/pluralize-8.0.0.tgz#1a6fa16a38d12a1901e0320fa017051c539ce3b1"
   integrity sha512-Nc3IT5yHzflTfbjgqWcCPpo7DaKy4FnpB0l/zCAW0Tc7jxAiuqSxHasntB3D7887LSrA93kDJ9IXovxJYxyLCA==
 
 popper.js@^1.16.0:
@@ -8161,7 +8162,7 @@ typedarray-to-buffer@^3.1.5:
 
 typesafe-actions@^4.4.2:
   version "4.4.2"
-  resolved "https://registry.npmjs.org/typesafe-actions/-/typesafe-actions-4.4.2.tgz"
+  resolved "https://registry.yarnpkg.com/typesafe-actions/-/typesafe-actions-4.4.2.tgz#8f817c479d12130b5ebb442032968b2a18929e1a"
   integrity sha512-QW61P4cOX8dCNmrfpcUMjvU/MF/sFTC8/PlG9215W1gKDzZUBjRGdyYSO6ZcEUNsn491S2VpryJOHSIVSDqJrg==
 
 typesafe-actions@^5.1.0:
@@ -8294,7 +8295,7 @@ uuid@^3.4.0:
 
 uuid@^8.3.2:
   version "8.3.2"
-  resolved "https://registry.npmjs.org/uuid/-/uuid-8.3.2.tgz"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
 v8-compile-cache-lib@^3.0.1:
