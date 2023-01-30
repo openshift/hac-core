@@ -82,7 +82,16 @@ export const createStore = () => {
     return fetch(url, requestInit);
   };
 
-  const pluginLoader = new PluginLoader({ fetchImpl, sharedScope });
+  // TODO: Remove postProcessManifest once all plugins have defaults for loadScripts and registrationMethod
+  const pluginLoader = new PluginLoader({
+    fetchImpl,
+    sharedScope,
+    postProcessManifest: (manifest) => ({
+      ...manifest,
+      loadScripts: manifest.loadScripts ?? ['plugin-entry.js'],
+      registrationMethod: manifest.registrationMethod ?? 'callback',
+    }),
+  });
   pluginLoader.registerPluginEntryCallback();
   const pluginStore = new PluginStore();
   pluginStore.setLoader(pluginLoader);
