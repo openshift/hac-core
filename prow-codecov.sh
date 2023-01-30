@@ -14,5 +14,5 @@ fi
 if [[ "${JOB_TYPE}" != "local" ]]; then
   curl -Os https://uploader.codecov.io/latest/linux/codecov
   chmod +x codecov
-  ./codecov -t ${CODECOV_TOKEN} -r "openshift/hac-core" ${REF_FLAGS} --dir ./frontend/coverage
+  ./codecov -t ${CODECOV_TOKEN} -r "openshift/hac-core" ${REF_FLAGS} --dir ./coverage
 fi
