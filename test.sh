@@ -10,4 +10,4 @@ yarn test
 popd
 
 # Upload code coverage
-./prow-codecov.sh 2>/dev/null
+./prow-codecov.sh
