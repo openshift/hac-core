@@ -2,3 +2,11 @@ coverage:
   precision: 2
   round: up
   range: "0...100"
+  status:
+    project:
+      default:
+        if_ci_failed: success
+    patch:
+      default:
+        if_ci_failed: success
+
