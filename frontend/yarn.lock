@@ -823,10 +823,26 @@
   resolved "https://registry.npmjs.org/@redhat-cloud-services/types/-/types-0.0.1.tgz"
   integrity sha512-UgHgLf8LkqaD9PXjiVyYycMRlbvmVdJyoJfersCUwnzDMgp+DEoYlLQAa9kn/s4c1JvSt5MM+hEN+DRvwtCQGA==
 
+"@scalprum/core@0.4.0-beta.6":
+  version "0.4.0-beta.6"
+  resolved "https://registry.yarnpkg.com/@scalprum/core/-/core-0.4.0-beta.6.tgz#318df0a14b72be11834385915e50040f97ae3fe8"
+  integrity sha512-wPKUm8fVdd7OIkDKZfx7fdAeCtTqN9HQXCemrvVHQKQUPG/szwtq+t8Wo+chytfZJ0aPgaMfu/2TtPRdWQDdRg==
+  dependencies:
+    "@openshift/dynamic-plugin-sdk" "^2.0.1"
+
 "@scalprum/core@^0.1.1", "@scalprum/core@^0.1.2":
   version "0.1.2"
   resolved "https://registry.npmjs.org/@scalprum/core/-/core-0.1.2.tgz"
   integrity sha512-dupFyb1niBpyy1Mb6+bSbhZhNGYGQ4T32iNNdLB6Pvey64bApSnXl7AFl2D8468xO1YTb4Bah1libovLWvZovQ==
+
+"@scalprum/react-core@0.4.0-beta.6":
+  version "0.4.0-beta.6"
+  resolved "https://registry.yarnpkg.com/@scalprum/react-core/-/react-core-0.4.0-beta.6.tgz#5fa617bdbca2167afd0684fb3e96eb9d383998a0"
+  integrity sha512-wtu43yWWXBbm7fFmSY0a9KPXjAxLe5z16e7FOBOCGZIS0x3/llWFRi5KWXcQKkqhIdry3hpAHVtBu3xXqBXCnw==
+  dependencies:
+    "@openshift/dynamic-plugin-sdk" "^2.0.1"
+    "@scalprum/core" "0.4.0-beta.6"
+    lodash "^4.17.0"
 
 "@scalprum/react-core@^0.1.7":
   version "0.1.9"
