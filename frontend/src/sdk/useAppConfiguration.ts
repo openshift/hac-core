@@ -16,10 +16,14 @@ const useAppConfiguration = (): AppConfigurations | null => {
       setAppConfigurations({
         appFetch: commonFetch(auth),
         wsAppSettings: async (options: { wsPrefix?: string; pathPrefix?: string }) => {
-          const prefix = (options?.wsPrefix || options?.pathPrefix || '/wss/k8s') as string;
+          const prefix = (options?.wsPrefix || options?.pathPrefix || '') as string;
           const token = await auth.getToken();
+          const host =
+            localStorage.getItem('hac/proxy-ws') !== undefined
+              ? `wss://${location.host}${prefix || '/wss/k8s'}`
+              : `wss://api-toolchain-host-operator.apps.appstudio-stage.x99m.p1.openshiftapps.com:443${prefix}`;
           return {
-            host: `wss://${location.host}${prefix.indexOf('/') === 0 ? '' : '/'}${prefix}`,
+            host,
             subProtocols: getWSTokenSubProtocols(token),
             urlAugment: (url: string) => {
               const [origUrl, query] = url.split('?') || [];
