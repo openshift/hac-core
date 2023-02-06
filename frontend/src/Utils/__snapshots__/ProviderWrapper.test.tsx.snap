@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProviderWrapper should render correctly 1`] = `
+<body>
+  <div>
+    foo
+  </div>
+</body>
+`;

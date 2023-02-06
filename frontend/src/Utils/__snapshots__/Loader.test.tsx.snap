@@ -1,0 +1,28 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Loader should render correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="pf-l-bullseye"
+    >
+      <span
+        aria-label="Contents"
+        aria-valuetext="Loading..."
+        class="pf-c-spinner pf-m-xl"
+        role="progressbar"
+      >
+        <span
+          class="pf-c-spinner__clipper"
+        />
+        <span
+          class="pf-c-spinner__lead-ball"
+        />
+        <span
+          class="pf-c-spinner__tail-ball"
+        />
+      </span>
+    </div>
+  </div>
+</body>
+`;
