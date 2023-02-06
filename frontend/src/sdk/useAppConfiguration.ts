@@ -19,7 +19,7 @@ const useAppConfiguration = (): AppConfigurations | null => {
           const prefix = (options?.wsPrefix || options?.pathPrefix || '') as string;
           const token = await auth.getToken();
           const host =
-            localStorage.getItem('hac/proxy-ws') !== undefined
+            localStorage.getItem('hac/proxy-ws') !== null
               ? `wss://${location.host}${prefix || '/wss/k8s'}`
               : `wss://api-toolchain-host-operator.apps.appstudio-stage.x99m.p1.openshiftapps.com:443${prefix}`;
           return {
