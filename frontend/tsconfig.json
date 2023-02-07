@@ -13,6 +13,7 @@
     "sourceMap": true,
     "noUnusedLocals": true,
     "resolveJsonModule": true,
+    "esModuleInterop": true,
     "paths": {
       "Sdk": ["src/sdk"],
       "Sdk/*": ["src/sdk/*"]

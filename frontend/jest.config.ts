@@ -20,6 +20,7 @@ const config: Config.InitialOptions = {
     '!src/**/types.ts',
     '!src/entry.ts',
     '!src/bootstrap.tsx',
+    '!src/**/*.types.ts',
   ],
   setupFilesAfterEnv: ['./config/setupTests.ts'],
   testRegex: '.*\\.test\\.(ts|tsx|js|jsx)$',
