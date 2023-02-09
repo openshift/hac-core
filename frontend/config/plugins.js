@@ -15,6 +15,7 @@ const plugins = [
       './Navigation': resolve(__dirname, '../src/Navigation'),
     },
     shared: [
+      { redux: { singleton: true, requiredVersion: package.dependencies.redux } },
       { 'react-router-dom': { singleton: true, import: false, requiredVersion: package.dependencies['react-router-dom'] } },
       { 'react-redux': { singleton: true, requiredVersion: package.dependencies['react-redux'] } },
       { '@scalprum/core': { singleton: true } },
