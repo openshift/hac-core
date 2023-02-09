@@ -605,10 +605,10 @@
   resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk-extensions/-/dynamic-plugin-sdk-extensions-1.1.0.tgz#c8d480998ba6df6edc2c18a1c34438d541cc78f7"
   integrity sha512-hjwhOkkVLoW5FSJ6zAlbcSpKkycTDlqxvlPJeRCSSRYXQpXDtG409RQTL5c73g7kgFJWojUPxNz5UXkw9+qzSw==
 
-"@openshift/dynamic-plugin-sdk-utils@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk-utils/-/dynamic-plugin-sdk-utils-1.1.0.tgz#eddebdeadae385c62aca92b01137ff835c0aa4f3"
-  integrity sha512-j9YF6QJJflyhighJIbDEKtly0qVGkfRaV5GxxIy0ocMLFdy5yNp/+GiceDtmt4+674HbCNB4ifVeSI69qZ06jw==
+"@openshift/dynamic-plugin-sdk-utils@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@openshift/dynamic-plugin-sdk-utils/-/dynamic-plugin-sdk-utils-1.1.1.tgz#b1b73d44a06228142b0beaf133cbf2176de6fb0d"
+  integrity sha512-VOV2VSSkpch9FnwRsxUNg2jvAAVNNz5Ee87vylIHZy4ZYzRt7TZV18A5ry0/RPJ+MgD0NJHBxBeepoqpEJLd+w==
   dependencies:
     immutable "^3.8.2"
     lodash-es "^4.17.21"
