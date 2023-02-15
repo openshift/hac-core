@@ -32,5 +32,5 @@ export const initAPIDiscovery: InitAPIDiscovery = (storeInstance, preferenceList
 
   // eslint-disable-next-line no-console
   console.info(`API discovery waiting ${API_DISCOVERY_INIT_DELAY} ms before initializing`);
-  window.setTimeout(() => startAPIDiscovery(preferenceList, storeInstance.dispatch), API_DISCOVERY_INIT_DELAY);
+  window.setTimeout(() => startAPIDiscovery(preferenceList, storeInstance.dispatch), resources ? API_DISCOVERY_INIT_DELAY : 0);
 };
