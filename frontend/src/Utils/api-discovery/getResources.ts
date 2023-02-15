@@ -4,6 +4,7 @@ import chunk from 'lodash/chunk';
 import { API_DISCOVERY_REQUEST_BATCH_SIZE, coreResources } from './consts';
 import { kindToAbbr, pluralizeKind } from './utils';
 import type { APIResourceData, APIResourceList, GroupVersion } from '../api-discovery.types';
+import staticAPIModels from './staticModels';
 
 export const defineModels = (list: APIResourceList): K8sModelCommon[] => {
   const { groupVersion = '' } = list;
@@ -35,7 +36,8 @@ export const defineModels = (list: APIResourceList): K8sModelCommon[] => {
 
 export const batchResourcesRequest = (batch: string[]): Promise<DiscoveryResources>[] => {
   return batch.map<Promise<DiscoveryResources>>(async (p: string) => {
-    const resourceList = await commonFetchJSON<APIResourceList>(p);
+    const [, staticresourceList] = Object.entries(staticAPIModels).find(([key]) => key === p) || [];
+    const resourceList = staticresourceList || (await commonFetchJSON<APIResourceList>(p));
     const resourceSet = new Set<string>();
     const namespacedSet = new Set<string>();
     (resourceList || {}).resources?.forEach(({ namespaced, name }) => {
