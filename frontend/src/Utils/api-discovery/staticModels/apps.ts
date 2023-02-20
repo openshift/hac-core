@@ -1,6 +1,6 @@
 import { APIResourceList } from 'src/Utils/api-discovery.types';
 
-export default {
+const model: APIResourceList = {
   plural: '',
   kind: 'APIResourceList',
   apiVersion: 'v1',
@@ -110,4 +110,6 @@ export default {
       verbs: ['get', 'patch', 'update'],
     },
   ],
-} as APIResourceList;
+};
+
+export default model;

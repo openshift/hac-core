@@ -11,6 +11,10 @@ export type APIResourceList = K8sModelCommon & {
     kind: string;
     verbs: K8sVerb[];
     shortNames?: string[];
+    categories?: string[];
+    storageVersionHash?: string;
+    group?: string;
+    version?: string;
   }[];
 };
 
