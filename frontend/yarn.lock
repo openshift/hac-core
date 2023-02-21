@@ -823,6 +823,13 @@
   resolved "https://registry.npmjs.org/@redhat-cloud-services/types/-/types-0.0.1.tgz"
   integrity sha512-UgHgLf8LkqaD9PXjiVyYycMRlbvmVdJyoJfersCUwnzDMgp+DEoYlLQAa9kn/s4c1JvSt5MM+hEN+DRvwtCQGA==
 
+"@scalprum/core@0.4.0":
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/@scalprum/core/-/core-0.4.0.tgz#074db53ae2bb91e327d47cd5d4504c3ea1079b95"
+  integrity sha512-MZ1tyCQdFV60X7i0cb85oAFpJluWgyrKlekaJO2uGLLKgyWbY0eNq/m3kTwIasEsTLPEFsDbmaPCCKvsIV9abw==
+  dependencies:
+    "@openshift/dynamic-plugin-sdk" "^2.0.1"
+
 "@scalprum/core@0.4.0-beta.6":
   version "0.4.0-beta.6"
   resolved "https://registry.yarnpkg.com/@scalprum/core/-/core-0.4.0-beta.6.tgz#318df0a14b72be11834385915e50040f97ae3fe8"
