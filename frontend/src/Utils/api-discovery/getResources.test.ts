@@ -6,6 +6,7 @@ const utils = {
 
 import { APIResourceData, APIResourceList } from '../api-discovery.types';
 import { defineModels, getResources, batchResourcesRequest } from './getResources';
+import staticCore from './__mocks__/staticCore';
 
 jest.mock('@openshift/dynamic-plugin-sdk-utils', () => common);
 jest.mock('./utils', () => utils);
@@ -53,8 +54,6 @@ describe('getResources', () => {
     expect(value).toStrictEqual([[['/api/v1', '/apis/foo-1', '/apis/baz-1']], groupVersion]);
   });
 });
-
-describe('batchResourcesRequest', () => {});
 
 describe('defineModels', () => {
   const apiResouceList: APIResourceList = {
@@ -302,5 +301,11 @@ describe('batchResourcesRequest', () => {
         models: [currModel],
       },
     ]);
+  });
+
+  test('should not call commonFetch for static model', async () => {
+    const result = await Promise.all(batchResourcesRequest(['/api/v1']));
+    expect(common.commonFetchJSON).not.toHaveBeenCalled();
+    expect(result).toStrictEqual(staticCore);
   });
 });
