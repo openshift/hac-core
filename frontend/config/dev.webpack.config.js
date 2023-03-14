@@ -66,8 +66,8 @@ const webpackProxy = {
     {
       context: (path) => path.includes('/api/k8s/registration'),
       target: process.env.STAGE
-        ? 'https://registration-service-toolchain-host-operator.apps.stone-stg-host1.hjvn.p1.openshiftapps.com'
-        : 'https://registration-service-toolchain-host-operator.apps.appstudio-stage.x99m.p1.openshiftapps.com',
+        ? 'https://registration-service-toolchain-host-operator.apps.stone-stg-host.qc0p.p1.openshiftapps.com'
+        : 'https://registration-service-toolchain-host-operator.apps.stone-prd-host1.wdlc.p1.openshiftapps.com',
       secure: false,
       changeOrigin: true,
       autoRewrite: true,
@@ -77,8 +77,8 @@ const webpackProxy = {
     {
       context: (path) => path.includes('/api/k8s'),
       target: process.env.STAGE
-        ? 'https://api-toolchain-host-operator.apps.stone-stg-host1.hjvn.p1.openshiftapps.com'
-        : 'https://api-toolchain-host-operator.apps.appstudio-stage.x99m.p1.openshiftapps.com:443',
+        ? 'https://api-toolchain-host-operator.apps.stone-stg-host.qc0p.p1.openshiftapps.com'
+        : 'https://api-toolchain-host-operator.apps.stone-prd-host1.wdlc.p1.openshiftapps.com:443',
       secure: false,
       changeOrigin: true,
       autoRewrite: true,
@@ -89,7 +89,7 @@ const webpackProxy = {
     pluginProxy('hac-infra'),
     {
       context: (path) => path.includes('/wss/k8s'),
-      target: 'wss://api-toolchain-host-operator.apps.appstudio-stage.x99m.p1.openshiftapps.com:443',
+      target: 'wss://api-toolchain-host-operator.apps.stone-prd-host1.wdlc.p1.openshiftapps.com:443',
       secure: false,
       changeOrigin: true,
       autoRewrite: true,
