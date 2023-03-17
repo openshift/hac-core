@@ -26,7 +26,7 @@
     "verify": "yarn build && yarn lint && yarn test"
   },
   "dependencies": {
-    "@openshift/dynamic-plugin-sdk": "^2.0.1",
+    "@openshift/dynamic-plugin-sdk": "^3.0.0",
     "@openshift/dynamic-plugin-sdk-extensions": "^1.1.0",
     "@openshift/dynamic-plugin-sdk-utils": "^1.1.1",
     "@patternfly/patternfly": "^4.185.1",
@@ -66,8 +66,8 @@
     "@patternfly/react-virtualized-extension": "^4.53.2",
     "@redhat-cloud-services/eslint-config-redhat-cloud-services": "^1.2.3",
     "@redhat-cloud-services/frontend-components-config": "^4.6.14",
-    "@scalprum/core": "0.4.0",
-    "@scalprum/react-core": "0.4.0-beta.6",
+    "@scalprum/core": "0.5.1",
+    "@scalprum/react-core": "0.5.1",
     "@testing-library/dom": "^8.13.0",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "12.1.5",
