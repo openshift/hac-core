@@ -1,8 +1,8 @@
 :9000 {
     metrics /metrics
-  }
+}
   
-  :8000 {
+:8000 {
     log
 
     # Setup the regex for an app match
@@ -17,7 +17,43 @@
             browse
         }
     }
+
+    # Setup the regex for an beta match
+    @app_match {
+        path_regexp /beta/apps/hac-core(.*)
+    }
+    handle @app_match {
+        # Substitution for alias from nginx
+        uri strip_prefix /beta/apps/hac-core
+        file_server * {
+            root /opt/app-root/src/dist 
+            browse
+        }
+    }
+
+    # Setup the regex for an beta match
+    @app_match {
+        path_regexp /preview/apps/hac-core(.*)
+    }
+    handle @app_match {
+        # Substitution for alias from nginx
+        uri strip_prefix /preview/apps/hac-core
+        file_server * {
+            root /opt/app-root/src/dist 
+            browse
+        }
+    }
+
     handle / {
         redir /apps/chrome/index.html permanent
     }
+
+    handle /preview/ {
+        redir /preview/apps/chrome/index.html permanent
+    }
+
+    handle /beta/ {
+        redir /beta/apps/chrome/index.html permanent
+    }
+
 }
