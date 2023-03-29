@@ -12,31 +12,7 @@
     handle @app_match {
         # Substitution for alias from nginx
         uri strip_prefix /apps/hac-core
-        file_server * {
-            root /opt/app-root/src/dist 
-            browse
-        }
-    }
-
-    # Setup the regex for an beta match
-    @app_match {
-        path_regexp /beta/apps/hac-core(.*)
-    }
-    handle @app_match {
-        # Substitution for alias from nginx
         uri strip_prefix /beta/apps/hac-core
-        file_server * {
-            root /opt/app-root/src/dist 
-            browse
-        }
-    }
-
-    # Setup the regex for an beta match
-    @app_match {
-        path_regexp /preview/apps/hac-core(.*)
-    }
-    handle @app_match {
-        # Substitution for alias from nginx
         uri strip_prefix /preview/apps/hac-core
         file_server * {
             root /opt/app-root/src/dist 
