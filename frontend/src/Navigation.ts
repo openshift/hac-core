@@ -20,7 +20,6 @@ export interface RouteProps {
 
 export interface DynamicNav {
   dynamicNav: string;
-  currentNamespace: string;
   base?: string;
   isBeta?: () => boolean;
 }
@@ -29,7 +28,7 @@ const navExtensionTypes = ['console.navigation/href', 'console.navigation/sectio
 type NavExtension = HrefNavItem | NavSection;
 
 export type GetAllExtensions = (base?: string, isBeta?: () => boolean) => Promise<NavExtension[]>;
-export type CalculateRoutes = (navIdentifier: [string, string], currentNamespace: string, extensions: (HrefNavItem | NavSection)[]) => RouteProps[];
+export type CalculateRoutes = (navIdentifier: [string, string], extensions: (HrefNavItem | NavSection)[]) => RouteProps[];
 export type Navigation = {
   expandable: boolean;
   title: string;
@@ -74,24 +73,24 @@ const isNavigation = (extension: NavExtension): extension is HrefNavItem =>
 const isCurrNavigation = (array: HrefNavItem[], idx: number, currHref: string): boolean =>
   array.findIndex(({ properties: { href } }: HrefNavItem) => href === currHref) === idx;
 
-const calculateRoutes: CalculateRoutes = ([appId, navSection], currentNamespace, extensions) => {
+const calculateRoutes: CalculateRoutes = ([appId, navSection], extensions) => {
   return extensions
     .filter(isNavigation)
     .filter(({ properties: { section, href } }, idx, array) => section === navSection && isCurrNavigation(array, idx, href))
     .map(({ properties: { name, href } }) => ({
       appId,
-      href: `/${currentNamespace}${navSection ? `/${navSection}` : ''}${href}`,
+      href: `${navSection ? `/${navSection}` : ''}${href}`,
       title: name,
     }));
 };
 
-const calculateNavigation = async ({ dynamicNav, currentNamespace, base, isBeta }: DynamicNav): Promise<Navigation | RouteProps[]> => {
+const calculateNavigation = async ({ dynamicNav, base, isBeta }: DynamicNav): Promise<Navigation | RouteProps[]> => {
   const [appId, navSection] = dynamicNav.split('/');
   let allExtensions: NavExtension[] = [];
   let routes: RouteProps | RouteProps[] = [];
   try {
     allExtensions = await getAllExtensions(base, isBeta);
-    routes = calculateRoutes([appId, navSection], currentNamespace, allExtensions);
+    routes = calculateRoutes([appId, navSection], allExtensions);
     if (routes.length === 0) {
       routes = [{ isHidden: true }];
     }
@@ -117,14 +116,14 @@ const calculateNavigation = async ({ dynamicNav, currentNamespace, base, isBeta 
  *  * currentNamespace - current app namespace
  * @returns either navigation object for nested items or array of navigation object for multiple entries.
  */
-export const useNavigation = ({ dynamicNav, currentNamespace }: DynamicNav): Navigation | RouteProps[] | undefined => {
+export const useNavigation = ({ dynamicNav }: DynamicNav): Navigation | RouteProps[] | undefined => {
   const [navigation, setNavigation] = React.useState<Navigation | RouteProps[]>();
   const unmounted = React.useRef<boolean>(false);
   const { isBeta } = useChrome();
   React.useEffect(() => {
     if (dynamicNav) {
       // this is just one off for now, but we can start building on this
-      calculateNavigation({ dynamicNav, currentNamespace, base: isBeta() ? `/beta` : '', isBeta }).then((data: Navigation | RouteProps[]) => {
+      calculateNavigation({ dynamicNav, base: isBeta() ? `/beta` : '', isBeta }).then((data: Navigation | RouteProps[]) => {
         if (!unmounted.current) {
           setNavigation(data);
         }
@@ -134,7 +133,7 @@ export const useNavigation = ({ dynamicNav, currentNamespace }: DynamicNav): Nav
     return () => {
       unmounted.current = true;
     };
-  }, [dynamicNav, currentNamespace, isBeta]);
+  }, [dynamicNav, isBeta]);
 
   return navigation;
 };
