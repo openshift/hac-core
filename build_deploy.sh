@@ -8,7 +8,7 @@ export COMPONENT="hac"
 export IMAGE="quay.io/cloudservices/hac-core-frontend"
 export APP_ROOT=$(pwd)
 export WORKSPACE=${WORKSPACE:-$APP_ROOT} # if running in jenkins, use the build's workspace
-export NODE_BUILD_VERSION=14
+export NODE_BUILD_VERSION=16
 export APP_DIR=/frontend
 COMMON_BUILDER=https://raw.githubusercontent.com/RedHatInsights/insights-frontend-builder-common/master
 
