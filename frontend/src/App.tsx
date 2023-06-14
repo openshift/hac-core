@@ -1,39 +1,27 @@
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Routes } from './Routes';
+import { Bullseye, Spinner } from '@patternfly/react-core';
 import NotificationsPortal from '@redhat-cloud-services/frontend-components-notifications/NotificationPortal';
 import { notificationsReducer } from '@redhat-cloud-services/frontend-components-notifications/redux';
-import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 import { useStore } from 'react-redux';
 import { RegistryContext } from './store';
 import { useExtensions, useResolvedExtensions } from '@openshift/dynamic-plugin-sdk';
 import { isFeatureFlag, isModelFeatureFlag } from '@openshift/dynamic-plugin-sdk-extensions';
 
+const DynamicRoute = React.lazy(() => import(/* webpackChunkName: "DynamicRoute" */ './Routes/DynamicRoute/DynamicRoute'));
+
 import FeatureFlagLoader from './Utils/FeatureFlagLoader';
 import ModelFeatureFlagLoader from './Utils/ModelFeatureFlagLoader';
 
 const App: React.FC = () => {
-  const navigate = useNavigate();
   const { getRegistry } = React.useContext(RegistryContext);
   const [featureExtension] = useResolvedExtensions(isFeatureFlag);
   const extensions = useExtensions(isModelFeatureFlag);
 
-  const chrome = useChrome();
   const store = useStore();
 
   React.useEffect(() => {
     getRegistry().register({ notifications: notificationsReducer });
-    const { on: onChromeEvent } = chrome;
-
-    const unregister = onChromeEvent('APP_NAVIGATION', (event: any) => {
-      if (event.domEvent) {
-        navigate(`${event.domEvent.href.replace('/hac', '')}`);
-      }
-    });
-    return () => {
-      unregister();
-    };
-  }, [chrome, getRegistry, navigate]);
+  }, [getRegistry]);
 
   return (
     <React.Fragment>
@@ -44,7 +32,15 @@ const App: React.FC = () => {
         <ModelFeatureFlagLoader {...extension.properties} key={extension.uid} />
       ))}
       <NotificationsPortal store={store} />
-      <Routes />
+      <React.Suspense
+        fallback={
+          <Bullseye>
+            <Spinner />
+          </Bullseye>
+        }
+      >
+        <DynamicRoute />
+      </React.Suspense>
     </React.Fragment>
   );
 };

@@ -13,6 +13,8 @@ Alternatively you can pick from one of the start scripts in the [package.json](p
 
 ### ENV variables
 
+* `LOCAL_HAC_DEV=true` if you want to run hac-core with hac-dev application locally
+* `LOCAL_HAC_INFRA=true` if you want to run hac-core with hac-infra application locally
 * `BETA=true` if you want to run hac-core app on beta environment
 * `ENVIRONMENT=stage|prod` choose which environment you want hac-core to run on
 * `REMOTE_CONFIG=stage|prod` choose from which environment you want to pull navigation connfig

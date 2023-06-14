@@ -41,7 +41,7 @@ const webpackProxy = {
   deployment: process.env.BETA ? 'beta/apps' : 'apps',
   useProxy: true,
   env,
-  appUrl: process.env.BETA ? '/beta/hac' : '/hac',
+  appUrl: process.env.BETA ? '/beta/application-pipeline' : '/application-pipeline',
   sassPrefix: '.hacCore',
   standalone: Boolean(process.env.STANDALONE),
   ...(process.env.INSIGHTS_CHROME && {
@@ -57,6 +57,9 @@ const webpackProxy = {
       },
     }),
     ...(process.env.CONFIG_PORT && {
+      '/api/chrome-service/v1/static': {
+        host: `http://localhost:${process.env.CONFIG_PORT}`,
+      },
       [`${process.env.BETA ? '/beta' : ''}/config`]: {
         host: `http://localhost:${process.env.CONFIG_PORT}`,
       },
@@ -85,8 +88,8 @@ const webpackProxy = {
       ws: true,
       pathRewrite: { '^/api/k8s': '' },
     },
-    pluginProxy('hac-dev'),
-    pluginProxy('hac-infra'),
+    process.env.LOCAL_HAC_DEV ? pluginProxy('hac-dev') : {},
+    process.env.LOCAL_HAC_INFRA ? pluginProxy('hac-infra') : {},
     {
       context: (path) => path.includes('/wss/k8s'),
       target: 'wss://api-toolchain-host-operator.apps.stone-prd-host1.wdlc.p1.openshiftapps.com:443',

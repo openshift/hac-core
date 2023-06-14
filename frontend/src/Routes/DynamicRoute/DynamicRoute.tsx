@@ -26,7 +26,7 @@ const DynamicRoute: React.FC<DynamicRouteProps> = () => {
       dynamicRoutePages.flatMap(({ properties: { component, path, exact, ...currRoute }, pluginName, uid }) => {
         return (Array.isArray(path) ? path : [path]).map((currPath) => ({
           ...currRoute,
-          path: !exact ? `${currPath}/*` : currPath,
+          path: !exact ? `${currPath.replace('/application-pipeline', '')}/*` : currPath.replace('/application-pipeline', ''),
           uid,
           className: camelCase(pluginName),
           Component: React.lazy(async () => {
