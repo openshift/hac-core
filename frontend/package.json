@@ -18,7 +18,7 @@
     "dev": "yarn start:proxy:beta",
     "start": "webpack serve --config config/dev.webpack.config.js",
     "start:k8s": "ENVIRONMENT=prod BETA=true PROXY=true yarn start",
-    "start:proxy": "PROXY=true BETA=true webpack serve --config config/dev.webpack.config.js",
+    "start:proxy": "PROXY=true webpack serve --config config/dev.webpack.config.js",
     "start:proxy:beta": "PROXY=true BETA=true webpack serve --config config/dev.webpack.config.js",
     "start:beta": "BETA=true npm start",
     "start:standalone": "STANDALONE=true npm start",
