@@ -41,7 +41,7 @@ const webpackProxy = {
   deployment: process.env.BETA ? 'beta/apps' : 'apps',
   useProxy: true,
   env,
-  appUrl: process.env.BETA ? '/beta/application-pipeline' : '/application-pipeline',
+  appUrl: process.env.BETA ? '/preview/application-pipeline' : '/application-pipeline',
   sassPrefix: '.hacCore',
   standalone: Boolean(process.env.STANDALONE),
   ...(process.env.INSIGHTS_CHROME && {

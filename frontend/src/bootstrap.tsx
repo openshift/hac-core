@@ -1,7 +1,17 @@
 import * as React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import AppEntry from './AppEntry';
 
-const root = document.getElementById('root');
+const container = document.getElementById('root') as Element;
+const root = createRoot(container);
 
-render(<AppEntry />, root, () => root!.setAttribute('data-ouia-safe', 'true'));
+// After
+function AppWithCallbackAfterRender() {
+  React.useEffect(() => {
+    container!.setAttribute('data-ouia-safe', 'true');
+  });
+
+  return <AppEntry />;
+}
+
+root.render(AppWithCallbackAfterRender);

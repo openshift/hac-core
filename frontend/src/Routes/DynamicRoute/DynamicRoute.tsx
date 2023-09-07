@@ -2,8 +2,10 @@ import * as React from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { useExtensions, useResolvedExtensions } from '@openshift/dynamic-plugin-sdk';
 import { isRoutePage as isDynamicRoutePage, RoutePage as DynamicRoutePage, isContextProvider } from '@openshift/dynamic-plugin-sdk-extensions';
-import { Bullseye, Spinner, PageSection } from '@patternfly/react-core';
-import { ErrorState } from '@redhat-cloud-services/frontend-components/ErrorState';
+import { Bullseye } from '@patternfly/react-core/dist/dynamic/layouts/Bullseye';
+import { Spinner } from '@patternfly/react-core/dist/dynamic/components/Spinner';
+import { PageSection } from '@patternfly/react-core/dist/dynamic/components/Page';
+import { ErrorState } from '@patternfly/react-component-groups';
 import camelCase from 'lodash/camelCase';
 import ProviderWrapper from '../../Utils/ProviderWrapper';
 

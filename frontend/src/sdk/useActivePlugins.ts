@@ -1,5 +1,5 @@
 import * as React from 'react';
-import useChrome from '@redhat-cloud-services/frontend-components/useChrome';
+import { useChrome } from '@redhat-cloud-services/frontend-components/useChrome';
 import { getActivePlugins, PluginType } from '../Utils/plugins';
 import packageInfo from '../../package.json';
 
