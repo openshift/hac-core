@@ -28,7 +28,7 @@ const useAppConfiguration = (): AppConfigurations | null => {
           const token = await auth.getToken();
           return {
             host: getWsURL(options),
-            subProtocols: getWSTokenSubProtocols(token),
+            subProtocols: getWSTokenSubProtocols(token as string),
             urlAugment: (url: string) => {
               const [origUrl, query] = url.split('?') || [];
               const queryParams = new URLSearchParams(query);

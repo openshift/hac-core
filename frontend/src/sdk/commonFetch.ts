@@ -3,7 +3,7 @@ import { HttpError } from './httpError';
 const k8sBasePath = `/api/k8s`;
 
 type AuthConfig = {
-  getToken: () => Promise<String>;
+  getToken: () => Promise<String | undefined>;
 };
 
 export const validateStatus = async (response: Response) => {

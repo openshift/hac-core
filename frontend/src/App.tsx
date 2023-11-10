@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Bullseye, Spinner } from '@patternfly/react-core';
+import { Bullseye } from '@patternfly/react-core/dist/dynamic/layouts/Bullseye';
+import { Spinner } from '@patternfly/react-core/dist/dynamic/components/Spinner';
 import NotificationsPortal from '@redhat-cloud-services/frontend-components-notifications/NotificationPortal';
 import { notificationsReducer } from '@redhat-cloud-services/frontend-components-notifications/redux';
 import { useStore } from 'react-redux';
